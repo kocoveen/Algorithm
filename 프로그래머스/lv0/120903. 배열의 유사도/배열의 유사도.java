@@ -4,12 +4,10 @@ class Solution {
         
         int answer = 0;
         
-        for (int i = 0; i < s1.length; i++){
-            for (int j = 0; j < s2.length; j++){
-                if (s1[i].equals(s2[j])){
-                    System.out.print(j);
-                    answer = answer + 1;
-                    break;
+        for (String i : s1){
+            for (String j : s2){
+                if (i.equals(j)){
+                    answer += 1;
                 }
             }
         }
