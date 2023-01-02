@@ -1,24 +1,16 @@
 import re
 
 def solution(dartResult):
-    dartResult = re.split('(\d+)(\w)', dartResult)
-    lst = []
-    for i in range(len(dartResult)):
-        if dartResult[i] == 'S':
-            lst.append(int(dartResult[i-1]))
-        elif dartResult[i] == 'D':
-            lst.append(int(dartResult[i-1]) ** 2)
-        elif dartResult[i] == 'T':
-            lst.append(int(dartResult[i-1]) ** 3)
-        elif dartResult[i] == '*':
-            if len(lst) != 1:
-                lst[int((i/3)-1)-1] *= 2
-                lst[int((i/3)-1)] *= 2
-            else:
-                lst[int((i/3)-1)] *= 2
-        elif dartResult[i] == '#':
-            lst[int((i/3)-1)] *= -1
-            
-        print(i, dartResult[i], lst)
+    bonus = {'S':1, 'D':2, 'T':3}
+    option = {'':1, '*':2, '#':-1}
+    
+    
+    p = re.compile('(\d+)(\w)([*#]?)')
+    dart = p.findall(dartResult)
+    print(dart)
 
-    return sum(lst)
+    for i in range(len(dart)):
+        if dart[i][2] == '*' and i > 0:
+            dart[i-1] *= 2
+        dart[i] = int(dart[i][0]) ** bonus[dart[i][1]] * option[dart[i][2]]
+    return sum(dart)
