@@ -4,10 +4,8 @@ def solution(dartResult):
     bonus = {'S':1, 'D':2, 'T':3}
     option = {'':1, '*':2, '#':-1}
     
-    
     p = re.compile('(\d+)(\w)([*#]?)')
     dart = p.findall(dartResult)
-    print(dart)
 
     for i in range(len(dart)):
         if dart[i][2] == '*' and i > 0:
