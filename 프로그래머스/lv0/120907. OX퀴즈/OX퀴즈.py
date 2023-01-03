@@ -1,10 +1,13 @@
 def solution(quiz):
-    a = [i.split(" = ") for i in quiz]
-    b = []
-    for i in a:
-        if eval(i[0]) == int(i[1]):
-            b.append("O")
-        else:
-            b.append("X")
-            
-    return b
+    answer = []
+    for q in quiz:
+        L, R = q.split(" = ")
+        a, op, b = L.split()
+        if op == '+':
+            result = 'O' if int(a) + int(b) == int(R) else "X"
+            answer.append(result)
+        elif op == '-':
+            result = 'O' if int(a) - int(b) == int(R) else "X"
+            answer.append(result)
+
+    return answer
