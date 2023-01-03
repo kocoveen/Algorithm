@@ -1,14 +1,7 @@
+numbers = ['zero','one','two','three','four','five','six','seven','eight','nine']
+
 def solution(s):
-    answer = ''
-    c = ''
-    num = ['zero','one','two','three','four','five','six','seven','eight','nine']
-    for i in s:
-        if i.isalpha():
-            c += i
-            if c in num:
-                answer += str(num.index(c))
-                c = ''
-        else:
-            answer += i
-            
+    answer = s
+    for i, num in enumerate(numbers):
+        answer = answer.replace(str(num), str(i))
     return int(answer)
