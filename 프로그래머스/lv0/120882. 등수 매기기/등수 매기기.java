@@ -5,8 +5,8 @@ class Solution {
         int[] answer = new int[score.length];
         
         for (int i = 0; i < score.length; i++) {
-            avgScore[i] = (score[i][0] + score[i][1])* 100/2;
-            avgScoreSort[i] = (score[i][0] + score[i][1])* 100/2;
+            avgScore[i] = (score[i][0] + score[i][1]);
+            avgScoreSort[i] = (score[i][0] + score[i][1]);
         }
         
         for (int i = 0; i < avgScoreSort.length; i++) {
@@ -17,17 +17,8 @@ class Solution {
                     avgScoreSort[j] = avgScoreSort[j] - avgScoreSort[j+1];
                 }
             }
-        }
+        }           
 
-        for (int asd : avgScore) {
-            System.out.printf("[%d]", asd);
-        } System.out.println("");
-        
-        for (int asd : avgScoreSort) {
-            System.out.printf("[%d]", asd);
-        }                
-
-        
         for (int j = 0; j < avgScoreSort.length; j++) {
             
             if (j > 0 && avgScoreSort[j] == avgScoreSort[j-1]) {
