@@ -1,12 +1,11 @@
 class Solution {
     public int solution(int i, int j, int k) {
-        int answer = 0;
+        String answer = "";
         
-        for (int a = i; a <= j; a++){
-            if(String.valueOf(a).contains(String.valueOf(k))) {
-                answer += String.valueOf(a).length() - String.valueOf(a).replace(String.valueOf(k), "").length();
-            }
+        for (int a = i; a <= j; a++) {
+            answer += a + "";
         }
-        return answer;
+        
+        return answer.length() - answer.replace(k + "", "").length();
     }
 }
