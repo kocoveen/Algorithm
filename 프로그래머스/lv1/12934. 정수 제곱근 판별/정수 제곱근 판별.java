@@ -1,18 +1,9 @@
-import java.lang.Math;
-
 class Solution {
-    public long solution(long n) {
-        long answer = 0;
-        
-        for (long i = 1; i <= n; i++) {
-            if (i * i == n) {
-                answer = (i+1)*(i+1);
-                break;
-            } else {
-                answer = -1;
-            }
+  public long solution(long n) {
+      if (Math.pow((int)Math.sqrt(n), 2) == n) {
+            return (long) Math.pow(Math.sqrt(n) + 1, 2);
         }
-        
-        return answer;
-    }
+
+        return -1;
+  }
 }
