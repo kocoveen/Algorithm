@@ -2,15 +2,11 @@ class Solution {
     public long solution(int a, int b) {
         long answer = 0;
         
-        if (a > b) {
-            a = a + b;
-            b = a - b;
-            a = a - b;
-        }
+        long k = Math.min(a, b);
+        long l = Math.max(a, b);
         
-        for (int i = a; i <= b; i++ ) {
-            answer += i;
-        }
+        answer = (l - k + 1) * (k + l) / 2;
+        
         return answer;
     }
 }
