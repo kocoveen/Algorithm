@@ -1,8 +1,6 @@
 class Solution {
-    public long solution(int price, int money, int count) {        
-        long total = (long) count * ( (long) count + 1) *  (long) price / 2;
-        System.out.println(total);
-        System.out.println(money);
+    public long solution(long price, long money, long count) {        
+        long total = count * (count + 1) * price / 2;
         return total - money > 0 ? total - money : 0;
     }
 }
