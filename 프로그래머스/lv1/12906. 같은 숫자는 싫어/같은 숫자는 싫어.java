@@ -3,13 +3,13 @@ import java.util.*;
 public class Solution {
     public int[] solution(int []arr) {
         List<Integer> list = new ArrayList<>();
-
-        for (int i = 0; i < arr.length; i++) {
-            if (i == 0)
-                list.add(arr[i]);
-            else if (arr[i-1] != arr[i])
-                list.add(arr[i]);
-        }
+        int preNum = 10;
+        
+        for(int num : arr) {
+            if(preNum != num)
+                list.add(num);
+            preNum = num;
+        } 
         
         int[] answer = new int[list.size()];
         
