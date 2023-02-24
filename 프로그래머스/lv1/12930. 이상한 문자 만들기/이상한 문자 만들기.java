@@ -1,26 +1,15 @@
-public class Solution {
+class Solution {
     public String solution(String s) {
-        String answer = "";
-        char[] sBits = s.toCharArray();
-        
-        int tokenLength = 0;
-        for(int i = 0; i < sBits.length; i++) {
+        String answer;
+        answer = s.toUpperCase();
+        char[] chars = answer.toCharArray();
 
-            if (sBits[i] == ' ') {
-                tokenLength = 0;
-                continue;
+        for (int i = 1; i < chars.length; i++) {
+            if (62 <= chars[i - 1] && chars[i - 1] <= 90) {
+                chars[i] = Character.toLowerCase(chars[i]);
             }
-
-            if (tokenLength % 2 == 0 && ('a' <= sBits[i] && sBits[i] <= 'z')) {
-                sBits[i] -= 32;
-            }
-            
-            if (tokenLength % 2 != 0 && ('A' <= sBits[i] && sBits[i] <= 'Z')) {
-                sBits[i] += 32;
-            }
-            tokenLength++;
         }
-        
-        return String.valueOf(sBits);
+        answer = String.valueOf(chars);
+        return answer;
     }
 }
