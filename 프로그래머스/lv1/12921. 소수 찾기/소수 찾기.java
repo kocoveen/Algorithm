@@ -14,7 +14,9 @@ class Solution {
             i = 2;
             if (prime[k] == true) {
                 while(i * k <= n) {
-                    prime[i * k] = false;
+                    if(prime[i * k] == true) {
+                        prime[i * k] = false;
+                    }
                     i++;
                 }
             }
