@@ -5,7 +5,7 @@ class Solution {
         int answer = 0;
         Arrays.sort(score);
         
-        for (int i = score.length-m; i >= 0; i = i - m) {
+        for (int i = score.length-m; i >= 0; i -= m) {
             answer += score[i] * m;
         }
         
