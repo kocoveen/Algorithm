@@ -1,20 +1,19 @@
-import java.util.*;
+import java.util.HashMap;
 
 class Solution {
     public String solution(String[] participant, String[] completion) {
         String answer = "";
-        int pIndex = 0;
+        HashMap<String, Integer> hm = new HashMap<>();
+        for (String player : participant) hm.put(player, hm.getOrDefault(player, 0) + 1);
+        for (String player : completion) hm.put(player, hm.get(player) - 1);
         
-        Arrays.sort(participant);
-        Arrays.sort(completion);
         
-        for (int i = 0; i < participant.length - 1; i++) {
-            if (!participant[i].equals(completion[i])) {
-                return participant[i];
+        for (HashMap.Entry<String, Integer> entry : hm.entrySet()) {
+            if (entry.getValue() == 1) {
+                answer = entry.getKey();
             }
-            
-            pIndex = i + 1;
         }
-        return participant[pIndex];
+        
+        return answer;
     }
 }
