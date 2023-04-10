@@ -5,11 +5,9 @@ class Solution {
 
         Loop1:
         for (String b : babbling) {
-            boolean a = false;
             Loop2:
             for(String p : pron) {
                 if(b.contains(p.repeat(2))) {
-                    a = true;
                     continue Loop1;
                 }
             }
