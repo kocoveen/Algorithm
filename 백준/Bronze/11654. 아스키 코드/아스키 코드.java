@@ -6,7 +6,7 @@ public class Main {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
         int c = br.read();
-        System.out.println(c);
+        bw.write(c  + "");
 
         br.close();
         bw.flush();
