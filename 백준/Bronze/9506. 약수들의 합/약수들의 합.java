@@ -1,41 +1,30 @@
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
-
     public static void main(String[] args) {
-        Scanner scan = new Scanner(System.in);
+        Scanner sc = new Scanner(System.in);
+        while (true) {
+            int N = sc.nextInt();
+            if (N == -1) break;
+            int a[] = new int[N];
 
-        while(true) {
-            int n = scan.nextInt();
-            if(n == -1)
-                break;
-
-            int[] arr = new int[n];
-            int sum = 0;
-            int index = 0;
-            for(int i=1; i<n; i++) {
-                if(n%i == 0) {
-                    arr[index++] = i;
+            int sum = 0; int j = 0;
+            for (int i = 1; i <= N / 2; i++) {
+                if (N % i == 0) {
                     sum += i;
+                    a[j++] = i;
                 }
             }
 
-            if(sum != n) {
-                System.out.println(n + " is NOT perfect.");
-                continue;
-            }
-
-            System.out.print(n + " = ");
-            for(int i=0; i<index; i++) {
-                if(i == index-1)
-                    System.out.print(arr[i]);
-                else
-                    System.out.print(arr[i] + " + ");
-            }
+            System.out.print(N);
+            if (sum == N) {
+                System.out.print(" = ");
+                for (int k = 0; k < j-1; k++)
+                    System.out.printf("%d + ", a[k]);
+                System.out.printf("%d", a[j-1]);
+            } else
+                System.out.print(" is NOT perfect.");
             System.out.println();
         }
-
-        scan.close();
     }
-
 }
