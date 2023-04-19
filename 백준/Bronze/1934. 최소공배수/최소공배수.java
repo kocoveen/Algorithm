@@ -14,17 +14,7 @@ public class Main {
             st = new StringTokenizer(br.readLine());
             int A = Integer.parseInt(st.nextToken());
             int B = Integer.parseInt(st.nextToken());
-            int C = 1;
-            int D = 2;
-            for (; D <= Math.max(Math.sqrt(Math.max(A, B)), Math.min(A, B)); D++) {
-                while (A % D == 0 && B % D == 0) {
-                    C *= D;
-                    A /= D;
-                    B /= D;
-                }
-            }
-            C *= A * B;
-            sb.append(C).append("\n");
+            sb.append(lcm(A, B)).append("\n");
         }
 
         bw.write(sb + "");
@@ -32,5 +22,18 @@ public class Main {
         bw.flush();
         br.close();
         bw.close();
+    }
+
+    private static int lcm(int A, int B) {
+        return A * B / gcb(A, B);
+    }
+
+    private static int gcb(int A, int B) {
+        while (B != 0) {
+            int r = A % B;
+            A = B;
+            B = r;
+        }
+        return A;
     }
 }
