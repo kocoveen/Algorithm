@@ -8,19 +8,13 @@ public class Main {
         StringBuilder sb = new StringBuilder();
 
         int T = Integer.parseInt(br.readLine());
-        int[] arr = new int[1000000];
-        int size = 0;
-        for (int j = 2; j < 1000000; j++)
-            if (isPrime(j))
-                arr[size++] = j;
+        boolean[] sieve = eratosthenes(1000000);
 
         for (int i = 0; i < T; i++) {
             int n = Integer.parseInt(br.readLine());
             int count = 0;
-            for (int j = 0; arr[j] <= n / 2; j++)
-                if (isPrime(n - arr[j])) {
-                    count++;
-                }
+            for (int j = 2; j <= n / 2; j++)
+                if (!sieve[j] && !sieve[n - j]) count++;
             sb.append(count).append("\n");
         }
 
@@ -30,12 +24,14 @@ public class Main {
         br.close();
         bw.close();
     }
-
-    private static boolean isPrime(int n) {
-        if (n == 0 || n == 1) return false;
-        for (int i = 2; i * i <= n; i++)
-            if (n % i == 0)
-                return false;
-        return true;
+    private static boolean[] eratosthenes(int n) {
+        boolean[] A = new boolean[n + 1];
+        A[0] = A[1] = true;
+        for (int i = 2; i <= Math.sqrt(n); i++)
+            if (!A[i])
+                for (int j = i * i; j <= n; j+=i)
+                    if (!A[j])
+                        A[j] = true;
+        return A;
     }
 }
