@@ -1,28 +1,35 @@
-import java.util.*;
+import java.io.*;
+import java.util.StringTokenizer;
 
 public class Main {
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int N = sc.nextInt();
-        int cnt = N;
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        StringTokenizer st;
+        int N = Integer.parseInt(br.readLine());
+        boolean[] a = eratos(1000);
 
+        int count = 0;
+        st = new StringTokenizer(br.readLine());
         for (int i = 0; i < N; i++) {
-            int a = sc.nextInt();
-
-            if (a == 1) {
-                cnt--;
-                continue;
-            }
-
-            if (a == 2) continue;
-
-            for (int j = 2; j < a; j++) {
-                if (a % j == 0) {
-                    cnt--;
-                    break;
-                }
-            }
+            int l = Integer.parseInt(st.nextToken());
+            if (!a[l])
+                count++;
         }
-        System.out.println(cnt);
+
+        bw.write( count + "");
+        bw.flush();
+        br.close();
+        bw.close();
+    }
+
+    private static boolean[] eratos(int n) {
+        boolean[] A = new boolean[n+1];
+        A[0] = A[1] = true;
+        for (int i = 2; i * i <= n; i++)
+            if (!A[i])
+                for (int j = i * i; j <= n; j += i)
+                    if(!A[j]) A[j] = true;
+        return A;
     }
 }
