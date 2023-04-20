@@ -1,11 +1,12 @@
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.IOException;
 import java.util.StringTokenizer;
 
 public class Main {
     static int[][] memo = new int[30][30];
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
         StringTokenizer st;
         StringBuilder sb = new StringBuilder();
         int N = Integer.parseInt(br.readLine());
@@ -16,12 +17,7 @@ public class Main {
             int n = Integer.parseInt(st.nextToken());
             sb.append(combination(n, r)).append('\n');
         }
-
-        bw.write( sb + "");
-
-        bw.flush();
-        br.close();
-        bw.close();
+        System.out.println(sb);
     }
     private static int combination(int n, int r) {
         if(memo[n][r] > 0)
