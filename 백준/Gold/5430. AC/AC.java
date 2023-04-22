@@ -10,7 +10,6 @@ public class Main {
 
         int N = Integer.parseInt(br.readLine());
 
-        Loop1:
         for (int i = 0; i < N; i++) {
             String cmd = br.readLine();
             int sz = Integer.parseInt(br.readLine());
@@ -22,21 +21,18 @@ public class Main {
             int rCount = 0;
             boolean isError = false;
             for (int j = 0; j < cmd.length(); j++) {
-                String c = String.valueOf(cmd.charAt(j));
-                switch (c) {
-                    case "R":
-                        rCount++;
-                        break;
-                    case "D":
-                        if (D.size() == 0) {
-                            isError = true;
-                            continue;
-                        }
-                        else
-                            delete(D, rCount);
-                        break;
+                if (isError) break;
+                char c = cmd.charAt(j);
+                if (c == 'R') {
+                    rCount++;
+                } else {
+                    if (D.size() == 0)
+                        isError = true;
+                    else
+                        delete(D, rCount);
                 }
             }
+
             if (!isError) {
                 int Dsize = D.size();
                 sb.append("[");
@@ -47,9 +43,9 @@ public class Main {
                         sb.append(delete(D, rCount));
                 }
                 sb.append("]").append("\n");
-            } else {
+            } else
                 sb.append("error").append("\n");
-            }
+
         }
         bw.write(sb + "");
         bw.flush();
