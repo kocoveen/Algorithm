@@ -23,16 +23,14 @@ public class Main {
     public static void Sudoku(int startPoint) {
         for (int i = startPoint; i < 81; i++) {
             if (A[i] == 0) {
-                for (int k = 1; k <= 10; k++) {
-                    if (k == 10) {
-                        A[i] = 0;
-                        return;
-                    }
+                for (int k = 1; k <= 9; k++) {
                     A[i] = k;
                         if (isPossible(i, k)) {
                         Sudoku(i + 1);
                     }
                 }
+                A[i] = 0;
+                return;
             }
         }
         print();
