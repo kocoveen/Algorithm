@@ -27,8 +27,8 @@ public class Main {
             sb.append("\n");
             return;
         }
-        for (int i = 1; i <= N; i++) {
-            Num[depth] = i;
+        for (int i = 0; i < N; i++) {
+            Num[depth] = i + 1;
             findNum(depth + 1);
         }
     }
