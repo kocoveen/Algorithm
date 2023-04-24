@@ -3,37 +3,38 @@ import java.util.StringTokenizer;
 
 public class Main {
     static StringBuilder sb = new StringBuilder();
-    static boolean[] isVisited = new boolean[10];
-    static int[] Num = new int[10];
-    
+    static boolean[] isVisited;
+    static int[] Num;
+    static int N;
+    static int M;
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
 
-        int N = Integer.parseInt(st.nextToken());
-        int M = Integer.parseInt(st.nextToken());
+        N = Integer.parseInt(st.nextToken());
+        M = Integer.parseInt(st.nextToken());
+        isVisited = new boolean[N];
+        Num = new int[M];
 
-        findNum(1, N, M);
-        System.out.println(sb);
+        findNum(0);
+        System.out.print(sb);
 
     }
 
-    private static void findNum(int index, int N, int M) {
-        if (index == M + 1) {
-            for (int i = 1; i <= M; i++) {
-                sb.append(Num[i]);
-                if (i != M) sb.append(" ");
-            }
+    public static void findNum(int depth) {
+        if (depth == M) {
+            for (int i : Num)
+                sb.append(i).append(' ');
             sb.append("\n");
             return;
         }
-        for (int i = 1; i <= N; i++) {
+        for (int i = 0; i < N; i++) {
             if (isVisited[i]) continue;
             isVisited[i] = true;
-            Num[index] = i;
-            findNum(index + 1, N, M);
+            Num[depth] = i + 1;
+            findNum(depth + 1);
             isVisited[i] = false;
         }
     }
-
 }
