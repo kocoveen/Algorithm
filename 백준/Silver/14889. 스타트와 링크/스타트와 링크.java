@@ -1,69 +1,65 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.StringTokenizer;
 
 public class Main {
-
+    static StringBuilder sb = new StringBuilder();
+    static StringTokenizer st;
+    static int[][] A;
+    static int[] isVisited;
     static int N;
-    static int[][] map;
-    static boolean[] visit;
-
-    static int Min = Integer.MAX_VALUE;
+    static int min = Integer.MAX_VALUE;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         N = Integer.parseInt(br.readLine());
 
-        map = new int[N][N];
-        visit = new boolean[N];
-
+        A = new int[N][N];
+        isVisited = new int[N];
         for (int i = 0; i < N; i++) {
-            StringTokenizer st = new StringTokenizer(br.readLine(), " ");
-            for (int j = 0; j < N; j++) {
-                map[i][j] = Integer.parseInt(st.nextToken());
-            }
+            st = new StringTokenizer(br.readLine());
+            for (int j = 0; j < N; j++)
+                A[i][j] = Integer.parseInt(st.nextToken());
         }
-        dfs(0, 0);
-        System.out.println(Min);
 
+        dfs(0, 0);
+        System.out.print(min);
     }
 
-    public static void dfs(int idx, int count) {
-        if(count == N / 2) {
-            diff();
+    public static void dfs(int startDepth, int startPlayer) {
+        if (startDepth == N/2) {
+            int diff = stat();
+            if (min > diff)
+                min = diff;
+            if (min == 0) {
+                System.out.println(min);
+                System.exit(0);
+            }
             return;
         }
-
-        for(int i = idx; i < N; i++) {
-            if(!visit[i]) {
-                visit[i] = true;
-                dfs(i + 1, count + 1);
-                visit[i] = false;
-            }
+        for (int i = startPlayer; i < N; i++) {
+            if (isVisited[i] == 1) continue;
+            isVisited[i] = 1;
+            dfs(startDepth + 1, i + 1);
+            isVisited[i] = 0;
         }
     }
-    public static void diff() {
+
+    public static int stat() {
         int team_start = 0;
         int team_link = 0;
         for (int i = 0; i < N - 1; i++) {
             for (int j = i + 1; j < N; j++) {
-                if (visit[i] == true && visit[j] == true) {
-                    team_start += map[i][j];
-                    team_start += map[j][i];
+                if (isVisited[i] == 1 && isVisited[j] == 1) {
+                    team_start += A[i][j];
+                    team_start += A[j][i];
                 }
-                else if (visit[i] == false && visit[j] == false) {
-                    team_link += map[i][j];
-                    team_link += map[j][i];
+                else if (isVisited[i] == 0 && isVisited[j] == 0) {
+                    team_link += A[i][j];
+                    team_link += A[j][i];
                 }
             }
         }
-        int val = Math.abs(team_start - team_link);
-        if (val == 0) {
-            System.out.println(val);
-            System.exit(0);
-        }
-        Min = Math.min(val, Min);
+        return Math.abs(team_link - team_start);
     }
 }
