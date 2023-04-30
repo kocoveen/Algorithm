@@ -21,8 +21,9 @@ public class Main {
             int l = Integer.parseInt(st.nextToken());
             int r = Integer.parseInt(st.nextToken());
 
-            System.out.println(count(a, l, r));
+            bw.write(count(a, l, r) + "\n");
         }
+        bw.flush();
     }
 
     public static int count(String a, int l, int r) {
@@ -32,7 +33,7 @@ public class Main {
             else
                 dp[i] = dp[i - 1];
         }
-        
+
         return dp[r + 1] - dp[l];
     }
 }
