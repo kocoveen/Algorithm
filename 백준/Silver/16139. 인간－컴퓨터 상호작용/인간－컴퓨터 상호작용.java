@@ -3,6 +3,7 @@ import java.util.StringTokenizer;
 
 public class Main {
     static StringTokenizer st;
+    static StringBuilder sb = new StringBuilder();
     static int[][] dp;
     static String S;
 
@@ -10,13 +11,11 @@ public class Main {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
+
         S = br.readLine();
         int N = Integer.parseInt(br.readLine());
 
         dp = new int[26][S.length() + 1];
-
-        for (int[] ints : dp)
-            ints[0] = 0;
 
         allCount(S);
 
@@ -26,14 +25,11 @@ public class Main {
             int l = Integer.parseInt(st.nextToken());
             int r = Integer.parseInt(st.nextToken());
 
-            bw.write(count(a, l, r) + "\n");
+            int idx = a.charAt(0) - 'a';
+            sb.append(dp[idx][r + 1] - dp[idx][l]).append("\n");
         }
+        bw.write(sb + "");
         bw.flush();
-    }
-
-    public static int count(String a, int l, int r) {
-        int idx = a.charAt(0) - 'a';
-        return dp[idx][r + 1] - dp[idx][l];
     }
 
     public static void allCount(String S) {
