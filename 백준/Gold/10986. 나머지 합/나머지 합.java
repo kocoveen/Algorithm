@@ -15,11 +15,11 @@ public class Main {
 
         st = new StringTokenizer(br.readLine());
         int N = Integer.parseInt(st.nextToken());
-        long M = Long.parseLong(st.nextToken());
+        int M = Integer.parseInt(st.nextToken());
 
         Num = new long[N + 1];
         Sum = new long[N + 1];
-        Reminder = new long[(int) M];
+        Reminder = new long[M];
 
         st = new StringTokenizer(br.readLine());
         for (int i = 1; i <= N; i++)
