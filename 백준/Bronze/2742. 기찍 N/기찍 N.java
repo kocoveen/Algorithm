@@ -8,6 +8,7 @@ public class Main {
         int A = Integer.parseInt(br.readLine());
 
         for (int i = A; i > 0; i--)
-            System.out.print(i + "\n");
+            bw.write(i + "\n");
+        bw.flush();
     }
 }
