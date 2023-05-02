@@ -13,23 +13,26 @@ public class Main {
         int N = Integer.parseInt(st.nextToken());
         int K = Integer.parseInt(st.nextToken());
 
-        long P = factorial(N);
-        long Q = factorial(K) * factorial(N - K) % R;
-
-        System.out.println(P * pow(Q, R - 2) % R);
+        System.out.println(binomialCoff(N, K));
     }
 
-    public static long factorial(long N) {
-        long fac = 1L;
+    public static long binomialCoff(long N, long K) {
+        long A = 1;
+        long B = 1;
 
-        while (N > 1) {
-            fac = (fac * N) % R;
-            N--;
+        long i = N;
+        long j = Math.min(K, N - K);
+
+        while (j > 0) {
+            A = (A * i) % R;
+            B = (B * j) % R;
+            i--; j--;
         }
-        return fac;
-    }
 
-    public static long pow(long B, int i) {
+        return A * pow(B, R - 2) % R;
+    }
+    
+        public static long pow(long B, int i) {
         if (i == 1)
             return B % R;
 
