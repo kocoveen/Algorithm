@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Main {
@@ -16,18 +17,14 @@ public class Main {
         for (int i = 0; i < N; i++)
             Num[i] = Integer.parseInt(st.nextToken());
 
+        Arrays.sort(Num);
+
         int M = Integer.parseInt(br.readLine());
         st = new StringTokenizer(br.readLine());
         for (int i = 0; i < M; i++) {
 
-            boolean exist = false;
             int k = Integer.parseInt(st.nextToken());
-            for (int j = 0; j < N; j++) {
-                if (Num[j] == k) {
-                    exist = true;
-                    break;
-                }
-            }
+            boolean exist = binarySearch(k, Num);
 
             if (exist)
                 sb.append(1).append("\n");
@@ -36,5 +33,21 @@ public class Main {
         }
         bw.write(sb + "");
         bw.flush();
+    }
+
+    public static boolean binarySearch(int k, int[] Num) {
+        int low = 0;
+        int high = Num.length - 1;
+        int mid = 0;
+        while (low <= high) {
+            mid = (low + high) / 2;
+            if (Num[mid] < k)
+                low = mid + 1;
+            else if (Num[mid] > k)
+                high = mid - 1;
+            else
+                break;
+        }
+        return Num[mid] == k;
     }
 }
