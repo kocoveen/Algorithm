@@ -34,37 +34,20 @@ public class Main {
                 B[i][j] = Integer.parseInt(st.nextToken());
         }
 
-        int[][] T = transfer(B, M, K);
-
         C = new int[N][K];
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < K; j++) {
-                int L = innerProduct(A[i], T[j]);
-                C[i][j] = L;
-            }
-        }
+        for (int i = 0; i < N; i++)
+            for (int j = 0; j < K; j++)
+                for(int k = 0; k < M; k++)
+                    C[i][j] += A[i][k] * B[k][j];
+
 
         for (int[] l : C) {
             for (int i : l)
-                System.out.printf("%d ", i);
-            System.out.println();
+                sb.append(i).append(" ");
+            sb.append("\n");
         }
-
-    }
-
-    private static int[][] transfer(int[][] B, int M, int K) {
-        int[][] T = new int[K][M];
-        for (int i = 0; i < K; i++)
-            for (int j = 0; j < M; j++)
-                T[i][j] = B[j][i];
-        return T;
-    }
-
-
-    private static int innerProduct(int[] A, int[] B) {
-        int answer = 0;
-        for (int i = 0; i < A.length; i++)
-            answer += A[i] * B[i];
-        return answer;
+        
+        bw.write(sb + "");
+        bw.flush();
     }
 }
