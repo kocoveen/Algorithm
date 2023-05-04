@@ -13,7 +13,7 @@ public class Main {
 
         long N = Long.parseLong(br.readLine());
         long[][] A = {{1, 1}, {1, 0}};
-        
+
         bw.write(power(A, N - 1)[0][0] + "");
         bw.flush();
     }
@@ -34,10 +34,12 @@ public class Main {
     private static long[][] multiply(long[][] A1, long[][] A2) {
         long[][] tmp = new long[2][2];
 
-        tmp[0][0] = ((A1[0][0] * A2[0][0]) + (A1[0][1] * A2[1][0])) % MOD;
-        tmp[0][1] = ((A1[0][0] * A2[0][1]) + (A1[0][1] * A2[1][1])) % MOD;
-        tmp[1][0] = ((A1[1][0] * A2[0][0]) + (A1[1][1] * A2[1][0])) % MOD;
-        tmp[1][1] = ((A1[1][0] * A2[0][1]) + (A1[1][1] * A2[1][1])) % MOD;
+        for (int i = 0; i < 2; i++)
+            for (int j = 0; j < 2; j++) {
+                for (int k = 0; k < 2; k++)
+                    tmp[i][j] += (A1[i][k] * A2[k][j]);
+                tmp[i][j] %= MOD;
+            }
 
         return tmp;
     }
