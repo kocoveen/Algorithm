@@ -35,18 +35,19 @@ public class Main {
         }
 
         C = new int[N][K];
-        for (int i = 0; i < N; i++)
-            for (int j = 0; j < K; j++)
-                for(int k = 0; k < M; k++)
-                    C[i][j] += A[i][k] * B[k][j];
-
+        for(int k = 0; k < M; k++)
+            for (int i = 0; i < N; i++) {
+                int r = A[i][k];
+                for (int j = 0; j < K; j++)
+                    C[i][j] += r * B[k][j];
+            }
 
         for (int[] l : C) {
             for (int i : l)
                 sb.append(i).append(" ");
             sb.append("\n");
         }
-        
+
         bw.write(sb + "");
         bw.flush();
     }
