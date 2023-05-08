@@ -3,7 +3,7 @@ import java.util.*;
 
 public class Main {
     static StringBuilder sb = new StringBuilder();
-    static StringTokenizer st;
+//    static StringTokenizer st;
     static int cursor;
 
     public static void main(String[] args) throws IOException {
@@ -11,38 +11,36 @@ public class Main {
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
         String s = br.readLine();
-        List<Character> text = new LinkedList<>();
-        ListIterator<Character> iter = text.listIterator();
+        Stack<Character> L = new Stack<>();
+        Stack<Character> R = new Stack<>();
 
         for (int i = 0; i < s.length(); i++)
-            iter.add(s.charAt(i));
+            L.push(s.charAt(i));
+
+        cursor = L.size();
 
         int N = Integer.parseInt(br.readLine());
 
         for (int i = 0; i < N; i++) {
-            st = new StringTokenizer(br.readLine());
-            String cmd = st.nextToken();
-            switch (cmd) {
-                case "L" -> {
-                    if (iter.hasPrevious())
-                        iter.previous();
+            String cmd = br.readLine();
+            switch (cmd.charAt(0)) {
+                case 'L' -> {
+                    if (!L.isEmpty()) R.add(L.pop());
                 }
-                case "D" -> {
-                    if (iter.hasNext())
-                        iter.next();
+                case 'D' -> {
+                    if (!R.isEmpty()) L.add(R.pop());
                 }
-                case "B" -> {
-                    if (iter.hasPrevious()) {
-                        iter.previous();
-                        iter.remove();
-                    }
+                case 'B' -> {
+                    if (!L.isEmpty()) L.pop();
                 }
-                case "P" -> iter.add(st.nextToken().charAt(0));
+                case 'P' -> L.add(cmd.charAt(2));
             }
         }
 
-        for (Character c : text)
+        for (Character c : L)
             sb.append(c);
+        while (!R.isEmpty())
+            sb.append(R.pop());
 
         bw.write(sb + "");
 
