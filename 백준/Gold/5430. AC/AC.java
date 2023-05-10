@@ -2,57 +2,55 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
+    static StringBuilder sb = new StringBuilder();
+    static StringTokenizer st;
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-        StringBuilder sb = new StringBuilder();
-        StringTokenizer st;
 
-        int N = Integer.parseInt(br.readLine());
+        int T = Integer.parseInt(br.readLine());
+        for (int i = 0; i < T; i++) {
 
-        for (int i = 0; i < N; i++) {
-            String cmd = br.readLine();
-            int sz = Integer.parseInt(br.readLine());
-            st = new StringTokenizer(br.readLine(), "[,]");
+            String cmd = br.readLine(); int HT = 0;
+
             Deque<Integer> D = new ArrayDeque<>();
-            for (int j = 0; j < sz; j++)
-                D.addLast(Integer.parseInt(st.nextToken()));
+            int N = Integer.parseInt(br.readLine());
+            String[] temp = br.readLine().split("\\D");
 
-            int rCount = 0;
-            boolean isError = false;
-            for (int j = 0; j < cmd.length(); j++) {
-                if (isError) break;
-                char c = cmd.charAt(j);
-                if (c == 'R') {
-                    rCount++;
-                } else {
-                    if (D.size() == 0)
-                        isError = true;
-                    else
-                        delete(D, rCount);
-                }
+            for (int j = 1; j <= N; j++) {
+                D.offerLast(Integer.valueOf(temp[j]));
             }
 
-            if (!isError) {
-                int Dsize = D.size();
-                sb.append("[");
-                for (int j = 0; j < Dsize; j++) {
-                    if (D.size() != 1)
-                        sb.append(delete(D, rCount)).append(",");
+            Integer value = 1;
+            for (int j = 0; j < cmd.length(); j++) {
+                if (cmd.charAt(j) == 'R')
+                    HT++;
+                else {
+                    if (HT % 2 == 0)
+                        value = D.pollFirst();
                     else
-                        sb.append(delete(D, rCount));
+                        value = D.pollLast();
                 }
-                sb.append("]").append("\n");
-            } else
+            }
+            if (value == null) {
                 sb.append("error").append("\n");
+                continue;
+            }
 
+            sb.append("[");
+            if (D.isEmpty()) {
+                sb.append("]").append("\n");
+                continue;
+            }
+            while (!D.isEmpty()) {
+                if (HT % 2 == 0)
+                    sb.append(D.pollFirst()).append(",");
+                else
+                    sb.append(D.pollLast()).append(",");
+            }
+            sb.deleteCharAt(sb.length() - 1);
+            sb.append("]").append("\n");
         }
-        bw.write(sb + "");
-        bw.flush();
-    }
-    private static int delete(Deque<Integer> D, int rCount) {
-        if (rCount % 2 == 0)
-            return D.removeFirst();
-        return D.removeLast();
+        System.out.print(sb);
     }
 }
