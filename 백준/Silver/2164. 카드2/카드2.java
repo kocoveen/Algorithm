@@ -1,26 +1,26 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 
 public class Main {
+    static StringBuilder sb = new StringBuilder();
+    static StringTokenizer st;
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st;
-        StringBuilder sb = new StringBuilder();
+
         int N = Integer.parseInt(br.readLine());
 
-        Queue<Integer> Q = new LinkedList<>();
+        Queue<Integer> deck = new LinkedList<>();
 
-        for (int i = 1; i <= N; i++) {
-            Q.add(i);
+        for (int i = 1; i <= N; i++)
+            deck.add(i);
+
+        while (deck.size() != 1) {
+            deck.remove();
+            deck.add(deck.remove());
         }
 
-        while (Q.size() != 1) {
-            Q.remove();
-            Q.add(Q.remove());
-        }
+        System.out.println(deck.remove());
 
-        System.out.println(Q.remove());
     }
 }
