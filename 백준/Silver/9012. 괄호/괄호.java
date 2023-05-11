@@ -1,39 +1,41 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 
 public class Main {
+    static StringBuilder sb = new StringBuilder();
+    static StringTokenizer st;
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringBuilder sb = new StringBuilder();
-        StringTokenizer st;
 
-        int N = Integer.parseInt(br.readLine());
+        int T = Integer.parseInt(br.readLine());
 
-        Loop1:
-        for (int i = 0; i < N; i++) {
-            Stack<String> S = new Stack<>();
+        Loop1 :
+        for (int j = 0; j < T; j++) {
+
             String s = br.readLine();
-            for (int j = 0; j < s.length(); j++) {
-                String r = String.valueOf(s.charAt(j));
-                if (r.equals("("))
-                    S.push(r);
-                else if (r.equals(")")) {
-                    if (S.empty()) {
+
+            Stack<Character> S = new Stack<>();
+            for (int i = 0; i < s.length(); i++) {
+                char c = s.charAt(i);
+                if (c == '(')
+                    S.push(c);
+                else if (c == ')') {
+                    if (S.isEmpty()) {
                         sb.append("NO").append("\n");
                         continue Loop1;
                     }
-                    S.pop();
+
+                    if (S.peek() == '(')
+                        S.pop();
                 }
             }
-            if (!S.empty())
-                sb.append("NO").append("\n");
-            else
+            if (S.isEmpty())
                 sb.append("YES").append("\n");
+            else
+                sb.append("NO").append("\n");
         }
 
         System.out.print(sb);
     }
-
 }
