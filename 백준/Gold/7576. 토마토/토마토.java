@@ -12,6 +12,7 @@ public class Main {
         int n = Integer.parseInt(st.nextToken());
 
         int[][] board = new int[n][m];
+        int[][] dist = new int[n][m];
 
         for (int i = 0; i < n; i++) {
             st = new StringTokenizer(br.readLine());
@@ -24,9 +25,12 @@ public class Main {
 
         Queue<Pair> Q = new ArrayDeque<>();
         for (int i = 0; i < n; i++)
-            for (int j = 0; j < m; j++)
+            for (int j = 0; j < m; j++) {
                 if (board[i][j] == 1)
                     Q.add(new Pair(i, j));
+                if (board[i][j] == 0)
+                    dist[i][j] = -1;
+            }
 
         while (!Q.isEmpty()) {
             Pair cur = Q.remove();
@@ -34,24 +38,23 @@ public class Main {
                 int nx = cur.x + dx[i];
                 int ny = cur.y + dy[i];
                 if (nx < 0 || nx >= n || ny < 0 || ny >= m) continue;
-                if (board[nx][ny] != 0) continue;
+                if (dist[nx][ny] >= 0) continue;
                 Q.add(new Pair(nx, ny));
-                if (board[nx][ny] == 0) board[nx][ny] = board[cur.x][cur.y] + 1;
-                else board[nx][ny] = Math.min(board[nx][ny], board[cur.x][cur.y] + 1);
+                dist[nx][ny] = dist[cur.x][cur.y] + 1;
             }
         }
 
-        int max = -1;
-        for (int[] b : board) {
+        int ans = 0;
+        for (int[] b : dist) {
             for (int i : b) {
-                if (i == 0) {
+                if (i == -1) {
                     System.out.println(-1);
                     System.exit(0);
-                } else if (i > 0 && max < i)
-                    max = i;
+                }
+                ans = Math.max(ans, i);
             }
         }
-        System.out.println(max - 1);
+        System.out.println(ans);
     }
 
     public static class Pair {
