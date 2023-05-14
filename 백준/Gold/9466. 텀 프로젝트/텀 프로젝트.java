@@ -22,7 +22,7 @@ public class Main {
             int n = Integer.parseInt(br.readLine());
             st = new StringTokenizer(br.readLine());
 
-            Arrays.fill(state, 0);
+            Arrays.fill(state, 1, n + 1, 0);
             for (int i = 1; i <= n; i++)
                 students[i] = Integer.parseInt(st.nextToken());
 
@@ -30,8 +30,8 @@ public class Main {
                 if (state[i] == NOT_VISITED) run(i);
 
             int cnt = 0;
-            for (int i : state)
-                if (i == NOT_CYCLE_IN) cnt++;
+            for (int i = 1; i <= n; i++)
+                if (state[i] == NOT_CYCLE_IN) cnt++;
 
             sb.append(cnt).append("\n");
         }
