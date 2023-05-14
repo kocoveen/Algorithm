@@ -9,8 +9,8 @@ public class Main {
 
     private static final int NOT_VISITED = 0;
     private static final int VISITED = 1;
-    private static final int CYCLE_IN = 2;
-    private static final int NOT_CYCLE_IN = 3;
+    private static final int NOT_CYCLE_IN = 2;
+    private static final int CYCLE_IN = 3;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -21,49 +21,53 @@ public class Main {
 
             int n = Integer.parseInt(br.readLine());
             st = new StringTokenizer(br.readLine());
+
             Arrays.fill(state, 0);
-            for(int i = 1; i <= n; i++)
+            for (int i = 1; i <= n; i++)
                 students[i] = Integer.parseInt(st.nextToken());
-            for(int i = 1; i <= n; i++){
-                if(state[i] == NOT_VISITED) run(i);
-            }
+
+            for (int i = 1; i <= n; i++)
+                if (state[i] == NOT_VISITED) run(i);
+
             int cnt = 0;
-            for(int i = 1; i <= n; i++){
-                if(state[i] == NOT_CYCLE_IN) cnt++;
-            }
+            for (int i : state)
+                if (i == NOT_CYCLE_IN) cnt++;
 
             sb.append(cnt).append("\n");
         }
         System.out.print(sb);
     }
 
-    private static void run(int x){
+    private static void run(int x) {
         int cur = x;
-        while(true){
+        while (true) {
             state[cur] = VISITED;
             cur = students[cur];
-            if(state[cur] == CYCLE_IN || state[cur] == NOT_CYCLE_IN){
+
+            if (state[cur] == CYCLE_IN || state[cur] == NOT_CYCLE_IN) {
                 cur = x;
-                while(state[cur] == VISITED){
+                while (state[cur] == VISITED) {
                     state[cur] = NOT_CYCLE_IN;
                     cur = students[cur];
                 }
                 return;
             }
-            if(state[cur] == VISITED && cur != x){
-                while(state[cur] != CYCLE_IN){
+
+            if (cur != x && state[cur] == VISITED) {
+                while (state[cur] != CYCLE_IN) {
                     state[cur] = CYCLE_IN;
                     cur = students[cur];
                 }
                 cur = x;
-                while(state[cur] != CYCLE_IN){
+                while (state[cur] != CYCLE_IN) {
                     state[cur] = NOT_CYCLE_IN;
                     cur = students[cur];
                 }
                 return;
             }
-            if(state[cur] == VISITED && cur == x){
-                while(state[cur] != CYCLE_IN){
+
+            if (cur == x && state[cur] == VISITED) {
+                while (state[cur] != CYCLE_IN) {
                     state[cur] = CYCLE_IN;
                     cur = students[cur];
                 }
