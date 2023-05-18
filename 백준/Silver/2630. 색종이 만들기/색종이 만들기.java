@@ -1,52 +1,49 @@
 import java.io.*;
-import java.util.Arrays;
-import java.util.StringTokenizer;
 
 public class Main {
-    static int[][] img;
     static StringBuilder sb = new StringBuilder();
-    static StringTokenizer st;
-    static int W;
-    static int B;
+
+    static int N;
+    static int b = 0, w = 0;
+
+    static int[][] board;
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        N = Integer.parseInt(br.readLine());
 
-        int N = Integer.parseInt(br.readLine());
-        img = new int[N][N];
+        board = new int[N][N];
 
         for (int i = 0; i < N; i++) {
-            st = new StringTokenizer(br.readLine());
+            String[] l = br.readLine().split(" ");
             for (int j = 0; j < N; j++)
-                img[i][j] = Integer.parseInt(st.nextToken());
+                board[i][j] = Integer.parseInt(l[j]);
         }
-        quad(0, 0, N);
-
-        System.out.println(W);
-        System.out.println(B);
+        rec(N, 0, 0);
+        System.out.println(w);
+        System.out.println(b);
     }
 
-    public static void quad(int startRow, int startCol, int size) {
-        if (isOneColor(startRow, startCol, size)) {
-            if (img[startRow][startCol] == 0)
-                W++;
-            else
-                B++;
+    private static void rec(int n, int r, int c) {
+        if (isSingle(n, r, c)) {
+            switch (board[r][c]) {
+                case 1 : b++; break;
+                case 0 : w++; break;
+            }
             return;
         }
 
-        int newSize = size / 2;
-        quad(startRow, startCol, newSize);
-        quad(startRow, startCol + newSize, newSize);
-        quad(startRow + newSize, startCol, newSize);
-        quad(startRow + newSize, startCol + newSize, newSize);
+        int k = n / 2;
+        for (int i = 0; i < 2; i++)
+            for (int j = 0; j < 2; j++)
+                rec(k, r + i * k, c + j * k);
     }
 
-    public static boolean isOneColor(int startRow, int startCol, int size) {
-        int value = img[startRow][startCol];
-        for (int i = 0; i < size; i++)
-            for (int j = 0; j < size; j++)
-                if (value != img[startRow + i][startCol + j])
+    private static boolean isSingle(int n, int r, int c) {
+        int value = board[r][c];
+        for (int i = 0; i < n; i++)
+            for (int j = 0; j < n; j++)
+                if (board[i + r][j + c] != value)
                     return false;
         return true;
     }
