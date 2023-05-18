@@ -1,56 +1,50 @@
 import java.io.*;
-import java.util.Arrays;
-import java.util.StringTokenizer;
 
 public class Main {
-    static int[][] img;
     static StringBuilder sb = new StringBuilder();
-    static StringTokenizer st;
-    static int Mone;
-    static int zero;
-    static int Pone;
+
+    static int N;
+    static int z = 0, p = 0, m = 0;
+
+    static int[][] board;
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        N = Integer.parseInt(br.readLine());
 
-        int N = Integer.parseInt(br.readLine());
-        img = new int[N][N];
+        board = new int[N][N];
 
         for (int i = 0; i < N; i++) {
-            st = new StringTokenizer(br.readLine());
+            String[] l = br.readLine().split(" ");
             for (int j = 0; j < N; j++)
-                img[i][j] = Integer.parseInt(st.nextToken());
+                board[i][j] = Integer.parseInt(l[j]);
         }
-
-        nonuTree(0, 0, N);
-
-        System.out.println(Mone);
-        System.out.println(zero);
-        System.out.println(Pone);
-
+        rec(N, 0, 0);
+        System.out.println(m);
+        System.out.println(z);
+        System.out.println(p);
     }
 
-    public static void nonuTree(int startRow, int startCol, int size) {
-        if (isUnited(startRow, startCol, size)) {
-            switch (img[startRow][startCol]) {
-                case -1: Mone++; break;
-                case 0: zero++; break;
-                case 1: Pone++; break;
+    private static void rec(int n, int r, int c) {
+        if (isSingle(n, r, c)) {
+            switch (board[r][c]) {
+                case 1 -> p++;
+                case 0 -> z++;
+                case -1 -> m++;
             }
             return;
         }
 
-        int newSize = size / 3;
+        int k = n / 3;
         for (int i = 0; i < 3; i++)
             for (int j = 0; j < 3; j++)
-                nonuTree(startRow + i * newSize, startCol + j * newSize, newSize);
+                rec(k, r + i * k, c + j * k);
     }
 
-    public static boolean isUnited(int startRow, int startCol, int size) {
-        int value = img[startRow][startCol];
-        for (int i = 0; i < size; i++)
-            for (int j = 0; j < size; j++)
-                if (img[startRow + i][startCol + j] != value)
+    private static boolean isSingle(int n, int r, int c) {
+        for (int i = r; i < r + n; i++)
+            for (int j = c; j < c + n; j++)
+                if (board[i][j] != board[r][c])
                     return false;
         return true;
     }
