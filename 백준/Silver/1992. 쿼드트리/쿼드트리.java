@@ -1,60 +1,54 @@
 import java.io.*;
-import java.util.Arrays;
-import java.util.StringTokenizer;
 
 public class Main {
-    static int[][] img;
     static StringBuilder sb = new StringBuilder();
-    static StringTokenizer st;
-    static int W;
-    static int B;
+
+    static int N;
+
+    static int[][] board;
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        N = Integer.parseInt(br.readLine());
 
-        int N = Integer.parseInt(br.readLine());
-        img = new int[N][N];
+        board = new int[N][N];
 
         for (int i = 0; i < N; i++) {
-            String line = br.readLine();
-            for (int j = 0; j < N; j++)
-                img[i][j] = line.charAt(j) - '0';
+            String l = br.readLine();
+            for (int j = 0; j < N; j++) {
+                board[i][j] = l.charAt(j) - '0';
+            }
         }
 
-        quadTree(0, 0, N);
-
+        quad(N, 0, 0);
         System.out.println(sb);
     }
 
-    public static void quadTree(int startRow, int startCol, int size) {
-        if (isUnited(startRow, startCol, size)) {
-            sb.append(img[startRow][startCol]);
+    private static void quad(int n, int r, int c) {
+        if (isSingle(n, r, c)) {
+            sb.append(board[r][c]);
             return;
         }
 
-        int newSize = size / 2;
+        int k = n / 2;
+
         sb.append("(");
-        quadTree(startRow, startCol, newSize);
-        quadTree(startRow, startCol + newSize, newSize);
-        quadTree(startRow + newSize, startCol, newSize);
-        quadTree(startRow + newSize, startCol + newSize, newSize);
+
+        quad(k, r, c);
+        quad(k, r, c + k);
+        quad(k, r + k, c);
+        quad(k, r + k, c + k);
+
         sb.append(")");
     }
 
-    public static boolean isUnited(int startRow, int startCol, int size) {
-        int value = img[startRow][startCol];
-        for (int i = 0; i < size; i++)
-            for (int j = 0; j < size; j++)
-                if (value != img[startRow + i][startCol + j])
+    private static boolean isSingle(int n, int r, int c) {
+        int v = board[r][c];
+        for (int i = 0; i < n; i++)
+            for (int j = 0; j < n; j++)
+                if (board[r + i][c + j] != v)
                     return false;
         return true;
     }
 
-    public static void print() {
-        for (int[] ints : img) {
-            for (int i : ints)
-                System.out.printf("%d", i);
-            System.out.println();
-        }
-    }
 }
