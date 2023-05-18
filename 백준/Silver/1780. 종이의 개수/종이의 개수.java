@@ -28,9 +28,9 @@ public class Main {
     private static void rec(int n, int r, int c) {
         if (isSingle(n, r, c)) {
             switch (board[r][c]) {
-                case 1 -> p++;
-                case 0 -> z++;
-                case -1 -> m++;
+                case 1 : p++; break;
+                case 0 : z++; break;
+                case -1 : m++; break;
             }
             return;
         }
@@ -42,9 +42,10 @@ public class Main {
     }
 
     private static boolean isSingle(int n, int r, int c) {
-        for (int i = r; i < r + n; i++)
-            for (int j = c; j < c + n; j++)
-                if (board[i][j] != board[r][c])
+        int value = board[r][c];
+        for (int i = 0; i < n; i++)
+            for (int j = 0; j < n; j++)
+                if (board[i + r][j + c] != value)
                     return false;
         return true;
     }
