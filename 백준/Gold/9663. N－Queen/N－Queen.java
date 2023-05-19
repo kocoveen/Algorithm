@@ -1,43 +1,33 @@
 import java.io.*;
-import java.util.StringTokenizer;
 
 public class Main {
-    static StringBuilder sb = new StringBuilder();
-    static int N;
-    static int[] A; // index = 열, 값 = 행
-    static int count = 0;
+    static int N, cnt = 0;
+
+    static boolean[] vis1, vis2, vis3;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine());
 
-        N = Integer.parseInt(st.nextToken());
-        A = new int[N];
+        N = Integer.parseInt(br.readLine());
+        vis1 = new boolean[N];
+        vis2 = new boolean[2 * N - 1];
+        vis3 = new boolean[2 * N - 1];
 
-        Queen(0, A);
-        System.out.println(count);
+        func(0);
+        System.out.println(cnt);
     }
 
-    public static void Queen(int depth, int[] A) {
-        if (depth == N) {
-            count++;
+    private static void func(int i) {
+        if (i == N) {
+            cnt++;
             return;
         }
-        for (int i = 0; i < N; i++) {
-            A[depth] = i;
-            if (isPossible(depth, A))
-                Queen(depth + 1, A);
-        }
-    }
 
-    public static boolean isPossible(int col, int[] A) {
-        for (int i = 0; i < col; i++) {
-
-            if (A[col] == A[i])
-                return false;
-            else if (Math.abs(col - i) == Math.abs(A[col] - A[i]))
-                return false;
+        for (int j = 0; j < N; j++) {
+            if (vis1[j] || vis2[i + j] || vis3[i - j + N - 1]) continue;
+            vis1[j] = vis2[i + j] = vis3[i - j + N - 1] = true;
+            func(i + 1);
+            vis1[j] = vis2[i + j] = vis3[i - j + N - 1] = false;
         }
-        return true;
     }
 }
