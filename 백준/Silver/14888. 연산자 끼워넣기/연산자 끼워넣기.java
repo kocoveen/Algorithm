@@ -1,75 +1,54 @@
 import java.io.*;
-import java.util.StringTokenizer;
 
 public class Main {
-    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    static StringBuilder sb = new StringBuilder();
-    static StringTokenizer st;
-    static int[] A;
-    static int[] Op;
+    static String[] l;
 
-    static int[] seq;
-    static int max = Integer.MIN_VALUE;
-    static int min = Integer.MAX_VALUE;
-    static int result = 0;
+    static int N, min = Integer.MAX_VALUE, max = Integer.MIN_VALUE;
+
+    static int[] num;
+    static int[] operator;
 
     public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        int N = Integer.parseInt(br.readLine());
+        N = Integer.parseInt(br.readLine());
 
-        A = new int[N]; Op = new int[4]; seq = new int[N-1];
-        st = new StringTokenizer(br.readLine());
-        for (int i = 0; i < N; i++)
-            A[i] = Integer.parseInt(st.nextToken());
+        num = new int[N];
+        l = br.readLine().split(" ");
+        for (int i = 0; i < N; i++) num[i] = Integer.parseInt(l[i]);
 
-        st = new StringTokenizer(br.readLine());
-        for (int i = 0; i < 4; i++)
-            Op[i] = Integer.parseInt(st.nextToken());
+        operator = new int[4];
+        l = br.readLine().split(" ");
+        for (int i = 0; i < 4; i++) operator[i] = Integer.parseInt(l[i]);
 
-        dfs(0);
+        func(0, num[0]);
 
-        sb.append(max).append("\n").append(min);
-        System.out.println(sb);
-
+        System.out.println(max);
+        System.out.println(min);
     }
 
-    public static void dfs(int startIndex) {
-        if (seq.length == startIndex) {
-            result = Calculate();
-            if (max < result)
-                max = result;
-            if (min > result)
-                min = result;
+    private static void func(int depth, int value) {
+        if (depth == N - 1) {
+            max = Math.max(max, value);
+            min = Math.min(min, value);
             return;
         }
+
         for (int i = 0; i < 4; i++) {
-            if (Op[i] == 0) continue;
-            seq[startIndex] = i;
-            Op[i]--;
-            dfs(startIndex + 1);
-            Op[i]++;
+            if (operator[i] == 0) continue;
+            operator[i]--;
+            func(depth + 1, calculate(value, num[depth + 1], i));
+            operator[i]++;
         }
-    }
-    
-    public static int Calculate() {
-        int result = A[0];
-        for (int i = 1; i < A.length; i++) {
-            result = Operate(result, A[i], seq[i-1]);
-        }
-        return result;
     }
 
-    public static int Operate(int Op1, int Op2, int Operator) {
-        if (Operator == 0)
-            return Op1 + Op2;
-        else if (Operator == 1)
-            return Op1 - Op2;
-        else if (Operator == 2)
-            return Op1 * Op2;
-        else {
-            if (Op1 < 0 && Op2 > 0)
-                return -((-Op1) / Op2);
-            return Op1 / Op2;
-        }
+    private static int calculate(int op1, int op2, int operand) {
+        if (operand == 0)
+            return op1 + op2;
+        else if (operand == 1)
+            return op1 - op2;
+        else if (operand == 2)
+            return op1 * op2;
+        else return op1 / op2;
     }
 }
