@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.Arrays;
 
 public class Main {
     static String[] l;
@@ -17,13 +18,15 @@ public class Main {
         for (int i = 0; i < N; i++) C[i] = Integer.parseInt(br.readLine());
 
         merge_sort(C);
-        for (int i : C) sb.append(i).append("\n");
+
+        Arrays.stream(C).forEach(i -> sb.append(i).append('\n'));
         System.out.print(sb);
     }
 
     private static void merge_sort(int[] arr) {
         sorted = new int[arr.length];
         merge_sort(arr, 0, arr.length - 1);
+        sorted = null;
     }
 
     private static void merge_sort(int[] arr, int st, int en) {
