@@ -1,37 +1,37 @@
 import java.io.*;
-import java.util.StringTokenizer;
 
 public class Main {
-    static int[] Num;
-    static int[] Sum;
-    static StringTokenizer st;
+    static String[] l;
+
+    static int N, M;
+
+    static int[] arr;
+    static Integer[] dp;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-        st = new StringTokenizer(br.readLine());
-        int N = Integer.parseInt(st.nextToken());
-        int M = Integer.parseInt(st.nextToken());
+        l = br.readLine().split(" ");
+        N = Integer.parseInt(l[0]);
+        M = Integer.parseInt(l[1]);
 
-        Num = new int[N+1];
-        Sum = new int[N+1];
+        arr = new int[100005];
+        dp = new Integer[100005];
+        dp[0] = 0;
+        l = br.readLine().split(" ");
+        for (int i = 1; i <= N; i++) dp[i] = dp[i - 1] + Integer.parseInt(l[i - 1]);
 
-        st = new StringTokenizer(br.readLine());
-        for (int i = 1; i <= N; i++)
-            Num[i] = Integer.parseInt(st.nextToken());
-
-        for (int i = 1; i <= N; i++)
-            Sum[i] = Sum[i - 1] + Num[i];
-
-        for (int i = 0; i < M; i++) {
-            st = new StringTokenizer(br.readLine());
-            int start = Integer.parseInt(st.nextToken());
-            int end = Integer.parseInt(st.nextToken());
-
-            bw.write(Sum[end] - Sum[start - 1] + "\n");
+        while (M-- > 0) {
+            l = br.readLine().split(" ");
+            int st = Integer.parseInt(l[0]);
+            int en = Integer.parseInt(l[1]);
+            System.out.println(func(st, en));
         }
 
-        bw.flush();
     }
+
+    private static int func(int st, int en) {
+        return dp[en] - dp[st - 1];
+    }
+
 }
