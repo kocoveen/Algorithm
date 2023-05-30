@@ -1,6 +1,7 @@
 import java.io.*;
 
 public class Main {
+    static StringBuilder sb = new StringBuilder();
     static String[] l;
 
     static int N, M;
@@ -25,13 +26,12 @@ public class Main {
             l = br.readLine().split(" ");
             int st = Integer.parseInt(l[0]);
             int en = Integer.parseInt(l[1]);
-            System.out.println(func(st, en));
+            sb.append(func(st, en)).append('\n');
         }
-
+        System.out.println(sb);
     }
 
     private static int func(int st, int en) {
         return dp[en] - dp[st - 1];
     }
-
 }
