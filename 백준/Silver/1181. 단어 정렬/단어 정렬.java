@@ -10,12 +10,12 @@ public class Main {
 
     static String[] words;
 
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        N = sc.nextInt();
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        N = Integer.parseInt(br.readLine());
         words = new String[N];
 
-        for (int i = 0; i < N; i++) words[i] = sc.next();
+        for (int i = 0; i < N; i++) words[i] = br.readLine();
 
         Arrays.sort(words, (o1, o2) -> {
             if (o1.length() == o2.length()) return o1.compareTo(o2);
