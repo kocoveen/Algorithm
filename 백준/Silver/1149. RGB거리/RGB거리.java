@@ -1,48 +1,37 @@
 import java.io.*;
-import java.util.Arrays;
-import java.util.StringTokenizer;
 
 public class Main {
-    static StringTokenizer st;
-    static StringBuilder sb = new StringBuilder();
-    static int[][] Num;
-    static int[] Sum;
-    static int N;
-    static int max;
+    static String[] l;
+
+    static int[][] cost;
+    static Integer[][] dp;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-        N = Integer.parseInt(br.readLine());
+        int N = Integer.parseInt(br.readLine());
 
-        Num = new int[3][N];
-        Sum = new int[3];
+        dp = new Integer[N + 1][3];
+        cost = new int[N + 1][3];
 
-        Arrays.fill(Sum, -1001);
-        for (int i = 0; i < N; i++) {
-            st = new StringTokenizer(br.readLine());
-            Num[0][i] = Integer.parseInt(st.nextToken());
-            Num[1][i] = Integer.parseInt(st.nextToken());
-            Num[2][i] = Integer.parseInt(st.nextToken());
+        for (int i = 1; i <= N; i++) {
+            l = br.readLine().split(" ");
+            for (int j = 0; j < 3; j++)
+                cost[i][j] = Integer.parseInt(l[j]);
         }
 
-        Sum[0] = Num[0][0];
-        Sum[1] = Num[0][1];
-        Sum[2] = Num[0][2];
-        bw.write(findMax(N) + "\n");
+        dp[1][0] = cost[1][0];
+        dp[1][1] = cost[1][1];
+        dp[1][2] = cost[1][2];
 
-        br.close();
-        bw.flush();
-        bw.close();
+        System.out.println(Math.min(func(N, 1), Math.min(func(N, 2), func(N, 0))));
     }
 
-    public static int findMax(int N) {
-        for (int i = 0; i < N - 1; i++) {
-            Num[0][i+1] += Math.min(Num[1][i], Num[2][i]);
-            Num[1][i+1] += Math.min(Num[2][i], Num[0][i]);
-            Num[2][i+1] += Math.min(Num[0][i], Num[1][i]);
+    private static int func(int n, int c) {
+        if (dp[n][c] == null) {
+            dp[n][c] = Math.min(func(n - 1, (c + 1) % 3), func(n - 1, (c + 2) % 3)) + cost[n][c];
         }
-        return Math.min(Num[0][N-1], Math.min(Num[1][N-1], Num[2][N-1]));
+        return dp[n][c];
     }
+
 }
