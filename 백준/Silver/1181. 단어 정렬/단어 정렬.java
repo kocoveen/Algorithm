@@ -1,29 +1,32 @@
 import java.io.*;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-        int N = Integer.parseInt(br.readLine());
-        String[] words = new String[N];
-        for (int i = 0; i < N; i++) {
-            words[i] = br.readLine();
-        }
-        Arrays.sort(words, (w1, w2) -> {
-            if (w1.length() == w2.length())
-                return w1.compareTo(w2);
-            else
-                return w1.length() - w2.length();
+    static StringBuilder sb = new StringBuilder();
+
+    static int N;
+
+    static String[] words;
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        N = sc.nextInt();
+        words = new String[N];
+
+        for (int i = 0; i < N; i++) words[i] = sc.next();
+
+        Arrays.sort(words, (o1, o2) -> {
+            if (o1.length() == o2.length()) return o1.compareTo(o2);
+            else return o1.length() - o2.length();
         });
 
-        bw.write(words[0] + "\n");
+        sb.append(words[0]).append('\n');
         for (int i = 1; i < N; i++) {
-            if (!words[i].equals(words[i-1]))
-                bw.write(words[i] + "\n");
+            if (words[i - 1].equals(words[i])) continue;
+            sb.append(words[i]).append('\n');
         }
-        bw.flush();
-        br.close();
-        bw.close();
+        System.out.print(sb);
     }
 }
