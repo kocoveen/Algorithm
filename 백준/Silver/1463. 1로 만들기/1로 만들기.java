@@ -1,28 +1,18 @@
 import java.io.*;
 
 public class Main {
-    static Integer[] dp;
-    static int N;
+
+    static int[] dp = new int[1000005];
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        int N = Integer.parseInt(br.readLine());
 
-        N = Integer.parseInt(br.readLine());
-
-        dp = new Integer[N+1];
-        dp[0] = dp[1] = 0;
-
-        bw.write(findMax(N, 0) + "\n");
-
-        br.close();
-        bw.flush();
-        bw.close();
-    }
-
-    public static int findMax(int N, int count) {
-        if (N < 2)
-            return count;
-        return Math.min(findMax(N / 2, count + 1 + (N % 2)), findMax(N / 3, count + 1 + (N % 3)));
+        for(int i = 2; i <= N; i++) {
+            dp[i] = dp[i - 1] + 1;
+            if (i % 2 == 0) dp[i] = Math.min(dp[i], dp[i / 2] + 1);
+            if (i % 3 == 0) dp[i] = Math.min(dp[i], dp[i / 3] + 1);
+        }
+        System.out.println(dp[N]);
     }
 }
