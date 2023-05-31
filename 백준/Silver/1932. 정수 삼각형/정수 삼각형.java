@@ -1,37 +1,38 @@
 import java.io.*;
-import java.util.Arrays;
-import java.util.StringTokenizer;
 
 public class Main {
-    static StringTokenizer st;
-    static int[][] Num;
-    static int N;
+    static StringBuilder sb = new StringBuilder();
+    static String[] l;
+
+    static int n;
+
+    static int[][] arr;
+    static Integer[][] dp;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-        N = Integer.parseInt(br.readLine());
+        n = Integer.parseInt(br.readLine());
+        arr = new int[n][n];
+        dp = new Integer[n][n];
 
-        Num = new int[N][N];
-
-        for (int i = 0; i < N; i++) {
-            st = new StringTokenizer(br.readLine());
-            for (int j = 0; j < i + 1; j++)
-                Num[i][j] = Integer.parseInt(st.nextToken());
+        for (int i = n - 1; i >= 0; i--) {
+            l = br.readLine().split(" ");
+            for (int j = 0; j < l.length; j++) {
+                arr[i][j] = Integer.parseInt(l[j]);
+            }
         }
 
-        bw.write(findMax(N) + "\n");
+        for (int i = 0; i < n; i++) {
+            dp[0][i] = arr[0][i];
+        }
 
-        br.close();
-        bw.flush();
-        bw.close();
-    }
+        for (int i = 1; i < n; i++) {
+            for (int j = 0; j < n - i; j++) {
+                dp[i][j] = Math.max(dp[i - 1][j], dp[i - 1][j + 1]) + arr[i][j];
+            }
+        }
 
-    public static int findMax(int N) {
-        for (int i = N-1; i >= 1; i--)
-            for (int j = 0; j < N - 1; j++)
-                Num[i-1][j] += Math.max(Num[i][j], Num[i][j+1]);
-        return Num[0][0];
+        System.out.println(dp[n - 1][0]);
     }
 }
