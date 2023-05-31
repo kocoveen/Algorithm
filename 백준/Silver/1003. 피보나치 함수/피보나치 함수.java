@@ -1,34 +1,32 @@
 import java.io.*;
-import java.util.StringTokenizer;
 
 public class Main {
     static StringBuilder sb = new StringBuilder();
-    static StringTokenizer st;
-    static Integer[] f;
+
+    static int T, N;
+
+    static Integer[] fib;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-        int T = Integer.parseInt(br.readLine());
-        f = new Integer[41];
-        f[0] = 0; f[1] = 1;
-        fibonacci(41);
-        for (int i = 0; i < T; i++) {
-            int N = Integer.parseInt(br.readLine());
+        fib = new Integer[45];
+        fib[0] = 0; fib[1] = 1;
+        func(42);
+
+        T = Integer.parseInt(br.readLine());
+        while (T-- > 0) {
+            N = Integer.parseInt(br.readLine());
             if (N == 0) {
-                sb.append(f[1]).append(" ").append(f[0]).append("\n");
+                sb.append(1).append(" ").append(0).append('\n');
                 continue;
             }
-            sb.append(f[N - 1]).append(" ").append(f[N]).append("\n");
+            sb.append(fib[N - 1]).append(" ").append(fib[N]).append('\n');
         }
-        bw.write(sb + "");
-        bw.close();
+        System.out.println(sb);
     }
 
-    private static void fibonacci(int N) {
-        for (int i = 2; i < N; i++)
-            f[i] = f[i - 1] + f[i - 2];
+    private static void func(int n) {
+        for (int i = 2; i <= n; i++) fib[i] = fib[i - 1] + fib[i - 2];
     }
 }
-
