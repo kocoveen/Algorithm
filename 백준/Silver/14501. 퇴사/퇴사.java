@@ -6,7 +6,7 @@ public class Main {
     static int N;
 
     static int[] T, P;
-    static Integer[] dp;
+    static int[] dp;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -14,9 +14,7 @@ public class Main {
         N = Integer.parseInt(br.readLine());
         T = new int[N + 2];
         P = new int[N + 2];
-        dp = new Integer[N + 2];
-
-        dp[N + 1] = 0;
+        dp = new int[N + 2];
 
         for (int i = 1; i <= N; i++) {
             l = br.readLine().split(" ");
@@ -24,22 +22,12 @@ public class Main {
             P[i] = Integer.parseInt(l[1]);
         }
 
-        for (int i = N; i >= 1; i--) func(i);
-
-        int max = Integer.MIN_VALUE;
-        for (Integer i : dp) {
-            if (i == null) continue;
-            max = Math.max(max, i);
+        for (int i = 1; i <= N; i++) {
+            if (i + T[i] <= N + 1) {
+                dp[i + T[i]] = Math.max(dp[i + T[i]], dp[i] + P[i]);
+            }
+            dp[i + 1] = Math.max(dp[i + 1], dp[i]);
         }
-
-        System.out.println(max);
-    }
-
-    private static int func(int day) {
-        if (dp[day] == null) {
-            if (day + T[day] > N + 1) dp[day] = dp[day + 1];
-            else dp[day] = Math.max(func(day + T[day]) + P[day], dp[day + 1]);
-        }
-        return dp[day];
+        System.out.println(dp[N + 1]);
     }
 }
