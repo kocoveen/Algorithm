@@ -1,40 +1,31 @@
 import java.io.*;
 
 public class Main {
-    static int[] Num;
+
+    static int N, max;
+    static int[] arr;
     static Integer[] dp;
-    static int N;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
         N = Integer.parseInt(br.readLine());
+        arr = new int[N + 1];
+        dp = new Integer[N + 1];
 
-        Num = new int[N];
-        dp = new Integer[N];
+        for (int i = 1; i <= N; i++)
+            arr[i] = Integer.parseInt(br.readLine());
 
-        for (int i = 0; i < N; i++)
-            Num[i] = Integer.parseInt(br.readLine());
-
-        bw.write(Math.max(findMax(0), findMax(1))+ "\n");
-
-        br.close();
-        bw.flush();
-        bw.close();
+        System.out.println(func(N));
     }
 
-    public static int findMax(int index) {
-        if (index > N - 1)
-            return 0;
-        else if (index == N - 1)
-            return Num[index];
+    private static int func(int n) {
+        if (n <= 0) return 0;
+        if (n == 1) return arr[1];
 
-        if (dp[index] == null)
-            dp[index] = Math.max(findMax(index + 1),
-                    Math.max(Num[index + 1] + findMax(index + 3) + Num[index],
-                            findMax(index + 2)  + Num[index]));
-
-        return dp[index];
+        if (dp[n] == null)
+            dp[n] = Math.max(func(n - 1), Math.max(func(n - 2), arr[n - 1] + func(n - 3)) + arr[n]);
+        
+        return dp[n];
     }
 }
