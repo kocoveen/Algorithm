@@ -27,18 +27,16 @@ public class Main {
             dp[1][1] = stickers[1][1];
             dp[2][1] = stickers[2][1];
 
-            for (int j = 2; j <= N; j++) {
+            for (int j = 2; j <= N; j++)
                 for (int i = 1; i <= 2; i++) {
-
                     int max = 0;
                     max = Math.max(max, dp[1][j - 2]);
                     max = Math.max(max, dp[2][j - 2]);
                     if (i == 1) max = Math.max(max, dp[2][j - 1]);
                     else max = Math.max(max, dp[1][j - 1]);
-
                     dp[i][j] = max + stickers[i][j];
                 }
-            }
+           
             sb.append(Math.max(dp[1][N], dp[2][N])).append('\n');
         }
         System.out.print(sb);
