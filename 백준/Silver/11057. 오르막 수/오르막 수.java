@@ -15,7 +15,7 @@ public class Main {
 
         for (int i = 1; i <= N + 1; i++)
             for (int j = 1; j <= 10; j++)
-                dp[i][j] = (dp[i][j - 1] % C + dp[i - 1][j] % C) % 10007;
+                dp[i][j] = (dp[i][j - 1] % C + dp[i - 1][j] % C) % C;
         System.out.println(dp[N + 1][10]);
     }
 }
