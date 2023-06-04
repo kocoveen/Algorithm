@@ -17,7 +17,7 @@ public class Main {
         dp[0] = 1;
 
         for(int i = 1; i <= n; i++){
-            if (pw[i] > 0) dp[i] = (dp[i] + dp[i - 1]) % C;
+            if (pw[i] > 0) dp[i] = dp[i - 1] % C;
             int x = pw[i - 1] * 10 + pw[i];
             if (x >= 10 && x <= 26) dp[i] = (dp[i] + dp[i - 2]) % C;
         }
