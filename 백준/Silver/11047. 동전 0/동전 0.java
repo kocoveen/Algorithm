@@ -1,35 +1,27 @@
 import java.io.*;
-import java.sql.SQLOutput;
-import java.util.StringTokenizer;
 
 public class Main {
-    static StringTokenizer st;
-    static StringBuilder sb = new StringBuilder();
+    static String[] l;
+
     static int N, K;
-    static int[] V;
+
+    static int[] value;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-        st = new StringTokenizer(br.readLine());
-        N = Integer.parseInt(st.nextToken());
-        K = Integer.parseInt(st.nextToken());
-
-        V = new int[N];
+        l = br.readLine().split(" ");
+        N = Integer.parseInt(l[0]);
+        K = Integer.parseInt(l[1]);
+        value = new int[N];
         for (int i = 0; i < N; i++)
-            V[i] = Integer.parseInt(br.readLine());
+            value[i] = Integer.parseInt(br.readLine());
 
-        int i = N - 1;
-        int C = 0;
-        while (K != 0) {
-            if (V[i] > K) {
-                i--;
-                continue;
-            }
-            K -= V[i];
-            C++;
+        int ans = 0;
+        for (int i = N - 1; i >= 0; i--) {
+            ans += K / value[i];
+            K %= value[i];
         }
-        System.out.println(C);
+        System.out.println(ans);
     }
 }
