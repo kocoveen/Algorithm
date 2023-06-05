@@ -1,39 +1,27 @@
 import java.io.*;
-import java.sql.SQLOutput;
 import java.util.Arrays;
-import java.util.Comparator;
-import java.util.StringTokenizer;
 
 public class Main {
-    static StringTokenizer st;
-    static StringBuilder sb = new StringBuilder();
-    static int N;
-    static int[] P;
-    static int[] Sum;
+    static String[] l;
+
+    static int N, sum = 0;
+
+    static int[] A;
+    static int[] dp;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-        st = new StringTokenizer(br.readLine());
-        N = Integer.parseInt(st.nextToken());
+        N = Integer.parseInt(br.readLine());
+        A = new int[N];
+        dp = new int[N + 1];
+        l = br.readLine().split(" ");
+        for (int i = 0; i < N; i++) A[i] = Integer.parseInt(l[i]);
 
-        P = new int[N];
-        Sum = new int[N + 1];
-
-        st = new StringTokenizer(br.readLine());
-        for (int i = 0; i < N; i++)
-            P[i] = Integer.parseInt(st.nextToken());
-
-        Arrays.sort(P);
-
-        for (int i = 1; i <= N; i++)
-            Sum[i] = Sum[i - 1] + P[i - 1];
-
-        int sum = 0;
-        for (int i = 0; i <= N; i++)
-            sum += Sum[i];
-
+        Arrays.sort(A);
+        for (int i = 1; i <= N; i++) dp[i] = dp[i - 1] + A[i - 1];
+        
+        for (int i : dp) sum += i;
         System.out.println(sum);
     }
 }
