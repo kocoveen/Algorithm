@@ -2,7 +2,7 @@ import java.util.*;
 
 class Solution {
     
-    static int cnt, aday;
+    static int cnt;
     
     public int[] solution(String today, String[] terms, String[] privacies) {
         int[] answer = new int[105];
@@ -13,26 +13,14 @@ class Solution {
             termsMap.put(term[0], Integer.parseInt(term[1]));
         }
         
-        String[] date = today.split("\\W");
-        int year = Integer.parseInt(date[0]);
-        int month = Integer.parseInt(date[1]);
-        int day = Integer.parseInt(date[2]);
-        aday = year * 10000 + month * 100 + day;
+        int date = getDate(today);
         
         for (int i = 0; i < privacies.length; i++) {
-            date = privacies[i].split("\\W");
+            String[] privacy = privacies[i].split(" ");
+            int expireDate = getDate(privacy[0]) + 28 * termsMap.get(privacy[1]);
             
-            int tmpMonth = Integer.parseInt(date[1]) + termsMap.get(date[3]);
-            
-            year = Integer.parseInt(date[0]) + (tmpMonth - 1) / 12;
-            month = (tmpMonth - 1) % 12 + 1;
-            day = Integer.parseInt(date[2]);
-            
-            int expiration = year * 10000 + month * 100 + day;
-            
-            if (aday >= year * 10000 + month * 100 + day) {
-                answer[cnt] = i + 1;
-                cnt++;
+            if (date >= expireDate) {
+                answer[cnt++] = i + 1;
             }
         }
         
@@ -40,5 +28,13 @@ class Solution {
         for (int i = 0; i < cnt; i++) ans[i] = answer[i];
 
         return ans;
+    }
+    
+    private int getDate(String date) {
+        String[] YMD = date.split("\\.");
+        int year = Integer.parseInt(YMD[0]);
+        int month = Integer.parseInt(YMD[1]);
+        int day = Integer.parseInt(YMD[2]);
+        return year * 12 * 28 + month * 28 + day;
     }
 }
