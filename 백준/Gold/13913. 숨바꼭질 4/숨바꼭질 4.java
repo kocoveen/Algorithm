@@ -1,12 +1,8 @@
-import org.w3c.dom.Node;
-
 import java.io.*;
-import java.util.ArrayDeque;
-import java.util.Arrays;
-import java.util.Queue;
-import java.util.Stack;
+import java.util.*;
 
 public class Main {
+    static StringBuilder sb = new StringBuilder();
     static String[] l;
 
     static int N, K;
@@ -45,17 +41,14 @@ public class Main {
             }
         }
 
-        System.out.println(arr[K]);
+        sb.append(arr[K]).append('\n');
 
-        Stack<Integer> S = new Stack<>();
-        S.push(K);
-        int i = K;
-        while (pre[i] != -1) {
-            S.push(pre[i]);
-            i = pre[i];
-        }
+        Deque<Integer> D = new ArrayDeque<>();
+        D.addFirst(K);
+        while (D.peekFirst() != N) D.addFirst(pre[D.peekFirst()]);
+        while (!D.isEmpty()) sb.append(D.removeFirst()).append(' ');
 
-        while (!S.isEmpty()) System.out.printf("%d ", S.pop());
+        System.out.println(sb);
     }
 
     private static int move(int pos, int i) {
