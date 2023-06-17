@@ -1,17 +1,23 @@
-import java.util.*;
+import java.io.*;
 
 public class Main {
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int N = sc.nextInt();
+    static StringBuilder sb = new StringBuilder();
 
-        int i = 2;
-        while (N > 1) {
+    static int N;
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+        N = Integer.parseInt(br.readLine());
+
+        for (int i = 2; i * i <= N; i++) {
             while (N % i == 0) {
+                sb.append(i).append('\n');
                 N /= i;
-                System.out.println(i);
             }
-            i++;
         }
+        if (N != 1) sb.append(N);
+        System.out.print(sb);
     }
+
 }
