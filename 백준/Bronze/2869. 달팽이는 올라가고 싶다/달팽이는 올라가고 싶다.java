@@ -1,13 +1,21 @@
 import java.io.*;
-import java.util.*;
 
 public class Main {
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int A = sc.nextInt();
-        int B = sc.nextInt();
-        int V = sc.nextInt();
-        int i = ((V - B - 1) / (A - B)) + 1;
-        System.out.println(i);
+    static StringBuilder sb = new StringBuilder();
+    static String[] l;
+
+    static int A, B, V, ans;
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+        l = br.readLine().split(" ");
+        A = Integer.parseInt(l[0]);
+        B = Integer.parseInt(l[1]);
+        V = Integer.parseInt(l[2]);
+
+        if ((V - B) % (A - B) == 0) ans = (V - B) / (A - B);
+        else ans = (V - B) / (A - B) + 1;
+        System.out.println(ans);
     }
 }
