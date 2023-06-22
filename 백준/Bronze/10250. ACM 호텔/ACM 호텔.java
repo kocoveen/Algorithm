@@ -1,30 +1,21 @@
 import java.io.*;
-import java.util.StringTokenizer;
+import java.util.Scanner;
 
 public class Main {
-    static StringBuilder sb = new StringBuilder();
-    static StringTokenizer st;
+    static int T, H, W, N;
 
     public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        Scanner sc = new Scanner(System.in);
+        T = sc.nextInt();
 
-        int T = Integer.parseInt(br.readLine());
-        for (int i = 0; i < T; i++) {
-            st = new StringTokenizer(br.readLine());
-            int H = Integer.parseInt(st.nextToken());
-            int W = Integer.parseInt(st.nextToken());
-            int N = Integer.parseInt(st.nextToken());
+        while (T-- > 0) {
+            H = sc.nextInt();
+            W = sc.nextInt();
+            N = sc.nextInt();
 
-            int Y = N % H;
-            int X = (N - 1) / H + 1;
-
-            if (Y == 0)
-                Y = H;
-
-            sb.append(Y * 100 + X).append("\n");
+            int f = (N - 1) % H + 1;
+            int n = (N - 1) / H + 1;
+            System.out.println(f * 100 + n);
         }
-        bw.write(sb + "");
-        bw.flush();
     }
 }
