@@ -1,37 +1,34 @@
 import java.io.*;
-import java.util.*;
+import java.util.Arrays;
 
 public class Main {
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
         StringBuilder sb = new StringBuilder();
 
         int T = Integer.parseInt(br.readLine());
-        boolean[] sieve = eratosthenes(1000000);
+        boolean[] sieve = sieve(1000000);
 
-        for (int i = 0; i < T; i++) {
+        while (T-- > 0) {
             int n = Integer.parseInt(br.readLine());
-            int count = 0;
-            for (int j = 2; j <= n / 2; j++)
-                if (!sieve[j] && !sieve[n - j]) count++;
-            sb.append(count).append("\n");
+            int cnt = 0;
+
+            for (int i = 2; i <= n / 2; i++)
+                if(sieve[i] && sieve[n - i]) cnt++;
+            sb.append(cnt).append('\n');
         }
 
-        bw.write(sb + "");
-
-        bw.flush();
-        br.close();
-        bw.close();
+        System.out.print(sb);
     }
-    private static boolean[] eratosthenes(int n) {
-        boolean[] A = new boolean[n + 1];
-        A[0] = A[1] = true;
-        for (int i = 2; i <= Math.sqrt(n); i++)
-            if (!A[i])
-                for (int j = i * i; j <= n; j+=i)
-                    if (!A[j])
-                        A[j] = true;
-        return A;
+
+    private static boolean[] sieve(int n) {
+        boolean[] tmp = new boolean[n + 1];
+        Arrays.fill(tmp, true);
+        tmp[0] = tmp[1] = false;
+        for (int i = 2; i * i <= n; i++)
+            for (int j = i * i; j <= n; j += i)
+                tmp[j] = false;
+        return tmp;
     }
 }
