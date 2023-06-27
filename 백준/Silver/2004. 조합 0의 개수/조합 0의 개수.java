@@ -7,32 +7,20 @@ public class Main {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         l = br.readLine().split(" ");
-        int n = Integer.parseInt(l[0]);
-        int m = Integer.parseInt(l[1]);
-        int m1 = Math.max(m, n - m);
-        int m2 = Math.min(m, n - m);
-        int cnt5 = 0, cnt2 = 0;
+        long n = Long.parseLong(l[0]);
+        long m = Long.parseLong(l[1]);
 
-        for (int i = n - (n % 5); i > m1; i -= 5)
-            cnt5 += CountNum(i, 5);
-
-        for (int i = n - (n % 2); i > m1; i -= 2)
-            cnt2 += CountNum(i, 2);
-
-        for (int i = m2 - (m2 % 5); i > 0; i -= 5)
-            cnt5 -= CountNum(i, 5);
-
-        for (int i = m2 - (m2 % 2); i > 0; i -= 2)
-            cnt2 -= CountNum(i, 2);
+        long cnt5 = CountNum(n, 5) - CountNum(m, 5) - CountNum((n - m), 5);
+        long cnt2 = CountNum(n, 2) - CountNum(m, 2) - CountNum((n - m), 2);
 
         System.out.println(Math.min(cnt5, cnt2));
     }
 
-    private static int CountNum(int i, int base) {
-        int cnt = 0;
-        while (i % base == 0) {
-            i /= base;
-            cnt++;
+    private static long CountNum(long num, long p) {
+        long cnt = 0, div = p;
+        while (num / div != 0) {
+            cnt += (num / div);
+            div *= p;
         }
         return cnt;
     }
