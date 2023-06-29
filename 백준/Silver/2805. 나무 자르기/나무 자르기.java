@@ -1,47 +1,45 @@
 import java.io.*;
-import java.util.StringTokenizer;
 
 public class Main {
-    static StringBuilder sb = new StringBuilder();
-    static StringTokenizer st;
-    static int[] Num;
+    static String[] l;
+    static int M;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        StringBuilder sb = new StringBuilder();
 
-        st = new StringTokenizer(br.readLine());
-        int N = Integer.parseInt(st.nextToken());
-        int M = Integer.parseInt(st.nextToken());
+        l = br.readLine().split(" ");
+        int n = Integer.parseInt(l[0]);
+        int m = Integer.parseInt(l[1]);
 
-        Num = new int[N];
-        st = new StringTokenizer(br.readLine());
-
-        long max = 0;
-        for (int i = 0; i < N; i++) {
-            Num[i] = Integer.parseInt(st.nextToken());
-            if (max < Num[i])
-                max = Num[i];
+        int[] trees = new int[n];
+        l = br.readLine().split(" ");
+        for (int i = 0; i < n; i++) {
+            trees[i] = Integer.parseInt(l[i]);
+            M = Math.max(M, trees[i]);
         }
 
         long min = 0;
+        long max = M;
         long mid;
+        long key;
 
         while (min < max) {
             mid = (min + max) / 2;
-            long total = 0;
-            for (int i = 0; i < N; i++) {
-                long tmp = Num[i] - mid;
-                if (tmp < 0)
-                    tmp = 0;
-                total += tmp;
-            }
+            key = cnt(trees, mid);
 
-            if (total < M)
+            if (key < m)
                 max = mid;
-            else if (total >= M)
+            else if (key >= m)
                 min = mid + 1;
         }
         System.out.println(max - 1);
+    }
+
+    private static long cnt(int[] trees, long mid) {
+        long sum = 0;
+        for (int tree : trees)
+            sum += (tree - mid > 0 ? tree - mid : 0);
+        return sum;
     }
 }
