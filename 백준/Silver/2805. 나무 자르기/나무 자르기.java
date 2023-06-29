@@ -20,20 +20,17 @@ public class Main {
         }
 
         long min = 0;
-        long max = M;
-        long mid;
-        long key;
+        long max = M + 1;
+        long mid = (min + max) / 2;;
+        long key = cnt(trees, mid);
 
         while (min < max) {
+            if (key < m) max = mid;
+            else if (key >= m) min = mid + 1;
             mid = (min + max) / 2;
             key = cnt(trees, mid);
-
-            if (key < m)
-                max = mid;
-            else if (key >= m)
-                min = mid + 1;
         }
-        System.out.println(max - 1);
+        System.out.println(mid - 1);
     }
 
     private static long cnt(int[] trees, long mid) {
