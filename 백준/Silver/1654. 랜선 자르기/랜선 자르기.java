@@ -1,44 +1,41 @@
 import java.io.*;
-import java.util.StringTokenizer;
 
 public class Main {
-    static StringBuilder sb = new StringBuilder();
-    static StringTokenizer st;
-    static int[] Num;
+    static String[] l;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        l = br.readLine().split(" ");
 
-        st = new StringTokenizer(br.readLine());
-        int K = Integer.parseInt(st.nextToken());
-        int N = Integer.parseInt(st.nextToken());
-        Num = new int[K];
+        int k = Integer.parseInt(l[0]);
+        int n = Integer.parseInt(l[1]);
 
-        long max = 0;
-        for (int i = 0; i < K; i++) {
-            Num[i] = Integer.parseInt(br.readLine());
-            if (max < Num[i])
-                max = Num[i];
-        }
-        max++;
-
-        long min = 0;
-        long mid;
-
-        while (min < max) {
-            mid = (min + max) / 2;
-            long count = 0;
-
-            for (int i = 0; i < K; i++)
-                count += (Num[i] / mid);
-
-            if (count >= N)
-                min = mid + 1;
-            else
-                max = mid;
+        int[] arr = new int[k]; int max = 0;
+        for (int i = 0; i < k; i++) {
+            arr[i] = Integer.parseInt(br.readLine());
+            max = Math.max(max, arr[i]);
         }
 
-        System.out.println(min - 1);
+        System.out.println(binarySearch(arr, max, n));
+
+    }
+
+    private static long binarySearch(int[] arr, long max, int target) {
+        long left = 0, right = max + 1, mid = (left + right) / 2;
+        long key = cnt(arr, mid);
+        while (left < right) {
+            if (key >= target) left = mid + 1;
+            else if (target > key) right = mid;
+            mid = (left + right) / 2;
+            key = cnt(arr, mid);
+        }
+        return mid - 1;
+    }
+
+    private static long cnt(int[] arr, long val) {
+        int sum = 0;
+        for (int j : arr)
+            sum += j / val;
+        return sum;
     }
 }
