@@ -1,53 +1,39 @@
 import java.io.*;
 import java.util.Arrays;
-import java.util.StringTokenizer;
 
 public class Main {
-    static StringBuilder sb = new StringBuilder();
-    static StringTokenizer st;
-    static int Num[];
+    static String[] l;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
         int N = Integer.parseInt(br.readLine());
-        st = new StringTokenizer(br.readLine());
-        Num = new int[N];
+        int[] A = new int[N];
+        l = br.readLine().split(" ");
         for (int i = 0; i < N; i++)
-            Num[i] = Integer.parseInt(st.nextToken());
-
-        Arrays.sort(Num);
+            A[i] = Integer.parseInt(l[i]);
 
         int M = Integer.parseInt(br.readLine());
-        st = new StringTokenizer(br.readLine());
-        for (int i = 0; i < M; i++) {
+        int[] B = new int[M];
+        l = br.readLine().split(" ");
+        for (int i = 0; i < M; i++)
+            B[i] = Integer.parseInt(l[i]);
 
-            int k = Integer.parseInt(st.nextToken());
-            boolean exist = binarySearch(k, Num);
+        Arrays.sort(A);
 
-            if (exist)
-                sb.append(1).append("\n");
-            else
-                sb.append(0).append("\n");
-        }
-        bw.write(sb + "");
-        bw.flush();
+        for (int i = 0; i < l.length; i++)
+            System.out.println(binarySearch(A, B[i]));
     }
 
-    public static boolean binarySearch(int k, int[] Num) {
-        int low = 0;
-        int high = Num.length - 1;
-        int mid = 0;
-        while (low <= high) {
-            mid = (low + high) / 2;
-            if (Num[mid] < k)
-                low = mid + 1;
-            else if (Num[mid] > k)
-                high = mid - 1;
-            else
-                break;
+    private static int binarySearch(int[] A, int target) {
+        int l = 0, r = A.length;
+        while (l < r) {
+            int m = (l + r) / 2;
+            if (A[m] == target) return 1;
+            else if (A[m] < target) l = m + 1;
+            else r = m;
         }
-        return Num[mid] == k;
+        return 0;
     }
+
 }
