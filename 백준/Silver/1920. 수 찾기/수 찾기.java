@@ -6,6 +6,7 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringBuilder sb = new StringBuilder();
 
         int N = Integer.parseInt(br.readLine());
         int[] A = new int[N];
@@ -22,7 +23,9 @@ public class Main {
         Arrays.sort(A);
 
         for (int i = 0; i < l.length; i++)
-            System.out.println(binarySearch(A, B[i]));
+            sb.append(binarySearch(A, B[i])).append('\n');
+
+        System.out.println(sb);
     }
 
     private static int binarySearch(int[] A, int target) {
@@ -35,5 +38,4 @@ public class Main {
         }
         return 0;
     }
-
 }
