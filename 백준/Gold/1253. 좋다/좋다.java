@@ -21,12 +21,10 @@ public class Main {
             for (int j = i + 1; j < n; j++) {
                 int target = A[i] + A[j];
                 int l = lowerBound(A, target);
-                int r = upperBound(A, target);
 
-                if (r < l) continue;
-
-                for (int k = l; k <= r; k++) {
-                    if (k == i || k == j || chk[k]) continue;
+                if (l >= n) continue;
+                for (int k = l; k < n; k++) {
+                    if (k == i || k == j || chk[k] || A[k] != target) continue;
                     chk[k] = true;
                 }
             }
@@ -34,7 +32,6 @@ public class Main {
 
         for (int i = 0; i < n; i++)
             if (chk[i]) cnt++;
-
         System.out.println(cnt);
     }
 
@@ -57,5 +54,4 @@ public class Main {
         }
         return m - 1;
     }
-
 }
