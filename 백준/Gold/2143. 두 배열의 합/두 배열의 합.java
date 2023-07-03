@@ -43,7 +43,7 @@ public class Main {
 
         for (int item: lstA) {
             int target = T - item;
-            int idx = upperBound(lstB, target) - lowerBound(lstB, target);
+            int idx = upperBound(lstB, target) - lowerBound(lstB, target) + 1;
             if (idx < 1) continue;
             cnt += idx;
         }
@@ -57,7 +57,7 @@ public class Main {
             else r = m;
             m = (l + r) / 2;
         }
-        return m;
+        return m - 1;
     }
 
     private static int lowerBound(List<Integer> lstB, int target) {
