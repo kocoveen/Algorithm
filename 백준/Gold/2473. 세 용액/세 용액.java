@@ -4,7 +4,7 @@ import java.util.Arrays;
 public class Main {
     static String[] l;
 
-    static long[] ans = {Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE};
+    static long[] ans = new long[3];
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -16,20 +16,23 @@ public class Main {
 
         Arrays.sort(A);
 
-        for (int i = 0; i < n - 2; i++) {
-            for (int j = i + 1; j < n - 1; j++) {
-                long target = A[i] + A[j];
-                int idx = ternarySearch(A, j + 1, target);
+        long diff = Long.MAX_VALUE;
+        for (int i = 0; i < n; i++) {
+            int left = i + 1;
+            int right = n - 1;
 
-                for (int k = -2; k <= 2; k++) {
-                    if (idx + k == i || idx + k == j) continue;
-                    if (idx + k < 0 || idx + k >= n) continue;
-                    if (Math.abs(ans[0] + ans[1] + ans[2]) > Math.abs(A[i] + A[j] + A[idx + k])) {
-                        ans[0] = A[i];
-                        ans[1] = A[j];
-                        ans[2] = A[idx + k];
-                    }
+            while(left < right) {
+                long sum = A[i] + A[left] + A[right];
+                long cur_diff = Math.abs(sum);
+                if (diff > cur_diff) {
+                    diff = cur_diff;
+                    ans[0] = A[i];
+                    ans[1] = A[left];
+                    ans[2] = A[right];
                 }
+
+                if(sum > 0) right--;
+                else left++;
             }
         }
 
