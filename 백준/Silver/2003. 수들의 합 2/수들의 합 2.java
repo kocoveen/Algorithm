@@ -14,11 +14,14 @@ public class Main {
         int[] a = new int[n + 1];
         for (int i = 1; i <= n; i++) a[i] = a[i - 1] + Integer.parseInt(l[i - 1]);
 
-        int en = 1, cnt = 0;
-        for (int st = 0; st <= n; st++) {
-            while (en <= n && a[en] - a[st] < m) en++;
-            if (en > n) break;
-            if (a[en] - a[st] == m) cnt++;
+        int l = 0, r = 0, cnt = 0;
+        while (r <= n) {
+            int pSum = a[r] - a[l];
+            if (pSum <= m) {
+                if (pSum == m) cnt++;
+                r++;
+            }
+            else l++;
         }
         System.out.println(cnt);
     }
