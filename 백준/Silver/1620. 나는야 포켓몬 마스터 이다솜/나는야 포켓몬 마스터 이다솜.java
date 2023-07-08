@@ -1,34 +1,35 @@
 import java.io.*;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Main {
+    static String[] l;
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-        StringTokenizer st = new StringTokenizer(br.readLine());
+        StringBuilder sb = new StringBuilder();
 
-        int N = Integer.parseInt(st.nextToken());
-        int M = Integer.parseInt(st.nextToken());
+        l = br.readLine().split(" ");
+        int n = Integer.parseInt(l[0]);
+        int m = Integer.parseInt(l[1]);
 
-        Map<Integer, String> pkm1 = new HashMap<>();
-        Map<String, Integer> pkm2 = new HashMap<>();
-        for (int i = 0; i < N; i++) {
+        int num = 1;
+        Map<String, Integer> dict1 = new HashMap<>();
+        String[] dict2 = new String[n + 1];
+        while (n-- > 0) {
             String mon = br.readLine();
-            pkm1.put(i+1, mon);
-            pkm2.put(mon, i+1);
+            dict2[num] = mon;
+            dict1.put(mon, num++);
         }
 
-        for (int i = 0; i < M; i++) {
-            String a = br.readLine();
-            if ('0' <= a.charAt(0) && a.charAt(0) <= '9') {
-                bw.write(pkm1.get(Integer.parseInt(a)) + "\n");
-            } else {
-                bw.write(pkm2.get(a) + "\n");
-            }
+        while (m-- > 0) {
+            String tmp = br.readLine();
+            if ('0' <= tmp.charAt(0) && tmp.charAt(0) <= '9')
+                sb.append(dict2[Integer.parseInt(tmp)]).append('\n');
+            else
+                sb.append(dict1.get(tmp)).append('\n');
         }
 
-        bw.flush();
-        br.close();
-        bw.close();
+        System.out.print(sb);
     }
 }
