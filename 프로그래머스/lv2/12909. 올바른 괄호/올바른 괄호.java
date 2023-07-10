@@ -1,17 +1,19 @@
-import java.util.*;
-
 class Solution {
+    
     boolean solution(String s) {
-        Stack S = new Stack();
-        for(int i = 0; i < s.length(); i++) {
-            if (s.charAt(i) == '(')
-                S.push('(');
-            else {
-                if (S.isEmpty()) return false;
-                S.pop();
-            } 
+        int count = 0;
+        for(int i = 0; i < s.length(); i++){
+            if(s.charAt(i) == '(') {
+                count++;
+            }
+            if(s.charAt(i) == ')') {
+                count--;
+            }
+            if(count < 0){
+                break;
+            }
         }
 
-        return S.isEmpty();
+        return count == 0 ? true : false;
     }
 }
