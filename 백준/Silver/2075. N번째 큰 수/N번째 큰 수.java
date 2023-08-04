@@ -19,20 +19,12 @@ public class Main {
             String[] line = br.readLine().split(" ");
             for (int j = 0; j < n; j++) {
                 int value = Integer.parseInt(line[j]);
-                add(value);
+                pq.add(value);
+                if (pq.size() > n) {
+                    pq.remove();
+                }
             }
         }
-
-//        for (Integer val : pq) {
-//            System.out.printf("%d ", val);
-//        }
-
         System.out.println(pq.remove());
-    }
-
-    private static void add(int value) {
-        pq.add(value);
-        if (pq.size() > n)
-            pq.remove();
     }
 }
