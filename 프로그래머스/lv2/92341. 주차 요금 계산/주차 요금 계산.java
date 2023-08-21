@@ -15,27 +15,14 @@ class Solution {
             timeAccuMap.put(carNum, time + timeAccuMap.getOrDefault(carNum, 0));
         }
         
+        int[] answer = new int[timeAccuMap.size()];
+        int i = 0;
         for (Map.Entry<Integer, Integer> en : timeAccuMap.entrySet()) {   
             if (en.getValue() <= 0) {
                 timeAccuMap.put(en.getKey(), en.getValue() + convert("23:59"));
             }
-        }
-        
-        int j = 0;
-        int[][] arr = new int[timeAccuMap.size()][2];
-        for (Map.Entry<Integer, Integer> en : timeAccuMap.entrySet()) {            
-            arr[j][0] = en.getKey();
-            arr[j][1] = caculateFees(fees, en.getValue());
-            j++;
-        }
-        
-        Arrays.sort(arr, (a1, a2) -> {
-            return a1[0] - a2[0];
-        });
-        
-        int[] answer = new int[arr.length];
-        for(int i = 0; i < answer.length; i++) {
-            answer[i] = arr[i][1];
+            
+            answer[i++] = caculateFees(fees, timeAccuMap.get(en.getKey()));
         }
         
         return answer;
