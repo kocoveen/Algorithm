@@ -3,24 +3,22 @@ import java.util.*;
 class Solution {
     public int[] solution(int[] fees, String[] records) {
         
-        Map<Integer, Integer> timeInMap = new HashMap<>();
-        Map<Integer, Integer> timeAccuMap = new HashMap<>();
+        TreeMap<Integer, Integer> timeAccuMap = new TreeMap<>();
         
         for (String record : records) {
             String[] l = record.split(" ");
             int carNum = Integer.parseInt(l[1]);
             int time = convert(l[0]);
             if (l[2].equals("IN")) {
-                timeInMap.put(carNum, time);
-            } else {
-                timeAccuMap.put(carNum, time - timeInMap.get(carNum) + timeAccuMap.getOrDefault(carNum, 0));
-                timeInMap.remove(carNum);
+                time *= -1;
             }
+            timeAccuMap.put(carNum, time + timeAccuMap.getOrDefault(carNum, 0));
         }
         
-        for (Integer carNum : timeInMap.keySet()) {
-            int time = convert("23:59");
-            timeAccuMap.put(carNum, time - timeInMap.get(carNum) + timeAccuMap.getOrDefault(carNum, 0));
+        for (Map.Entry<Integer, Integer> en : timeAccuMap.entrySet()) {   
+            if (en.getValue() <= 0) {
+                timeAccuMap.put(en.getKey(), en.getValue() + convert("23:59"));
+            }
         }
         
         int j = 0;
