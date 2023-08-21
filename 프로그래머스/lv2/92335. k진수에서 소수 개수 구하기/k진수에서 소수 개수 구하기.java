@@ -3,11 +3,8 @@ import java.util.*;
 class Solution {
     public int solution(int n, int k) {
         int answer = 0;
-        
-        String a = makeBaseNumber(n, k);
-        String[] bits = a.split("0+");
-        
-        System.out.println(makeBaseNumber(3, 3));
+
+        String[] bits = Integer.toString(n, k).split("0+");
         
         for (String bit : bits) {
             if (isPrime(bit)) {
