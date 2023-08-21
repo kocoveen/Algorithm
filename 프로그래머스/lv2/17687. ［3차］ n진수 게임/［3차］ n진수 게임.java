@@ -5,7 +5,7 @@ class Solution {
         StringBuilder sb = new StringBuilder();
         StringBuilder sb2 = new StringBuilder();
         
-        for (int i = 0; sb.length() < 100 * t; i++){
+        for (int i = 0; sb.length() < m * t; i++){
             sb.append(Integer.toString(i, n).toUpperCase());
         }
         
