@@ -36,9 +36,13 @@ class Solution {
             }
         }
         
-        List<String> parsedChatLog = parseNickname(idToNickMap, chatLog);
+        // List<String> parsedChatLog = parseNickname(idToNickMap, chatLog);
         
-        return parsedChatLog.toArray(new String[parsedChatLog.size()]);
+        return chatLog.stream()
+            .map(c -> idToNickMap.get(c[0]) + c[1])
+            .toArray(list -> new String[chatLog.size()]);
+        
+        // return parsedChatLog.toArray(new String[parsedChatLog.size()]);
     }
     
     private List<String> parseNickname(Map<String, String> idToNickMap, List<String[]> chatLog) {
