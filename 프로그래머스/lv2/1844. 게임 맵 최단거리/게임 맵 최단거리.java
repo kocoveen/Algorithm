@@ -25,6 +25,9 @@ class Solution {
                 int nc = p.c + dc[i];
                 if (isNotBoundaryIn(nr, nc)) continue;
                 if (maps[nr][nc] == 0 || visited[nr][nc]) continue;
+                if (nr == n && nc == m) {
+                    return board[p.r][p.c] + 1;
+                }
                 visited[nr][nc] = true;
                 board[nr][nc] = board[p.r][p.c] + 1;
                 Q.add(new Pair(nr, nc));
