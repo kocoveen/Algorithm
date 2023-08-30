@@ -29,21 +29,9 @@ class Solution {
             newSet.add(prevP);
             newSet.add(curP);
             S.add(newSet);
-            dots.add(new Pair(prevP.r + dr[dIndex], prevP.c + dc[dIndex]));
+            
+            dots.add(curP);
         }
-        
-//         for (Pair p : dots) {
-//             System.out.printf("(%d, %d) -> ", p.r, p.c);
-//         }
-//         System.out.printf("\n");
-        
-//         for (Map.Entry<Pair, Set<Pair>> en : routes.entrySet()) {
-//             System.out.printf("(%d, %d) -> {", en.getKey().r, en.getKey().c);
-//             for (Pair end : en.getValue()) {
-//                 System.out.printf("(%d, %d)", end.r, end.c);  
-//             }
-//             System.out.printf("}\n");
-//         }
         
         return S.size();
     }
