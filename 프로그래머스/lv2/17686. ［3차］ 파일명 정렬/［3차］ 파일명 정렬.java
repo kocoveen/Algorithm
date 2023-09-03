@@ -1,84 +1,22 @@
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.lang.StringBuilder;
+import java.util.*;
+import java.util.regex.*;
 
 class Solution {
-    
     public String[] solution(String[] files) {
-        
-        List<File> fileList = new ArrayList<>();
-        
-        for (String file : files) {
-            String head = null, number = null, tail = null;
-            
-            int i = 0, numCount = 0;
-            for (; i < file.length(); i++) {
-                if (file.charAt(i) >= '0' && file.charAt(i) <= '9') {
-                    head = file.substring(0, i);
-                    numCount++;
-                    break;
-                }   
-            }
-            
-            int j = i;
-            for (; i < file.length(); i++) {
-                if (!(file.charAt(i) >= '0' && file.charAt(i) <= '9') || numCount > 5) {
-                    number = file.substring(j, i);
-                    j = i;
-                    break;
-                }
-                numCount++;
-            }
-            
-            if (number == null) {
-                number = file.substring(j);
-                tail = "";
-            } else {
-                tail = file.substring(j);
-            }
-            
-            fileList.add(new File(head, number, tail));
-        }
-        
-        Collections.sort(fileList, (f1, f2) -> {
-            if (f1.headL.equals(f2.headL)) {
-                return f1.num - f2.num;
-            }
-            return f1.headL.compareTo(f2.headL);
-        });
-        
-        int i = 0;
-        String[] answer = new String[fileList.size()];
-        for (File file : fileList) {
-            StringBuilder sb = new StringBuilder();
-            answer[i++] = sb.append(file.head).append(file.number).append(file.tail).toString();
-        }
-        
-        return answer;
-    }
-    
-    private void printStr(String[] str) {
-        System.out.printf("%d: ", str.length);
-        for(String s : str) {
-            System.out.printf("%s | ", s);
-        }
-        System.out.println();
-    }
-}
+        Pattern pattern = Pattern.compile("([a-z\\s.-]+)([0-9]{1,5})");
 
-class File {
-    String head;
-    String number;
-    String tail;
-    String headL;
-    int num;
-    
-    public File(String head, String number, String tail) {
-        this.head = head;
-        this.number = number;
-        this.tail = tail;
-        this.headL = head.toLowerCase();
-        this.num = Integer.parseInt(number);
+        Arrays.sort(files, (s1, s2) -> {
+            Matcher m1 = pattern.matcher(s1.toLowerCase());
+            Matcher m2 = pattern.matcher(s2.toLowerCase());
+            m1.find();
+            m2.find();
+
+            if(!m1.group(1).equals(m2.group(1))) {
+                return m1.group(1).compareTo(m2.group(1));
+            }
+            return Integer.parseInt(m1.group(2)) - Integer.parseInt(m2.group(2));
+        });
+
+        return files;
     }
 }
