@@ -24,15 +24,6 @@ class Solution {
         return count;
     }
 
-    private static void printBoard(char[][] chars) {
-        for (char[] aChar : chars) {
-            for (char c : aChar) {
-                System.out.printf("%c ", c);
-            }
-            System.out.println();
-        }
-    }
-
     private char[][] findSameTwoByTwo(int m, int n, char[][] cBoard) {
         char[][] markedBlock = markSameBlock(m, n, cBoard);
         return getBlocks(m, n, cBoard, markedBlock);
@@ -47,24 +38,7 @@ class Solution {
                 }
             }
         }
-
-
         return fallDown(m, n, cBoard);
-    }
-
-    private char[][] markSameBlock(int m, int n, char[][] cBoard) {
-        char[][] tmp = new char[m][n];
-        for (int i = 0; i < m - 1; i++) {
-            for (int j = 0; j < n - 1; j++) {
-                if (isSame(cBoard, i, j)) {
-                    tmp[i][j] = '*';
-                    tmp[i][j + 1] = '*';
-                    tmp[i + 1][j] = '*';
-                    tmp[i + 1][j + 1] = '*';
-                }
-            }
-        }
-        return tmp;
     }
 
     private char[][] fallDown(int m, int n, char[][] cBoard) {
@@ -84,6 +58,21 @@ class Solution {
             }
         }
         return cBoard;
+    }
+
+    private char[][] markSameBlock(int m, int n, char[][] cBoard) {
+        char[][] tmp = new char[m][n];
+        for (int i = 0; i < m - 1; i++) {
+            for (int j = 0; j < n - 1; j++) {
+                if (isSame(cBoard, i, j)) {
+                    tmp[i][j] = '*';
+                    tmp[i][j + 1] = '*';
+                    tmp[i + 1][j] = '*';
+                    tmp[i + 1][j + 1] = '*';
+                }
+            }
+        }
+        return tmp;
     }
 
     private boolean isSame(char[][] cBoard, int i, int j) {
