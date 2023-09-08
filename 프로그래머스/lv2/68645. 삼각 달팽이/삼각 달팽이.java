@@ -8,7 +8,7 @@ class Solution {
         int idx = 0;
         for (int[] a : tmp) {
             for (int i : a) {
-                if (i == 0) continue;
+                if (i == 0) break;
                 answer[idx++] = i;
             }
         }
