@@ -1,8 +1,7 @@
 class Solution {
 
     public int[] solution(int n) {
-        int length = getLength(n);
-        int[] answer = new int[length];
+        int[] answer = new int[n * (n + 1) / 2];
 
         int[][] tmp = fillArr(n);
         
@@ -15,14 +14,6 @@ class Solution {
         }
 
         return answer;
-    }
-
-    public int getLength(int n) {
-        int length = 0;
-        for (int i = 1; i <= n; i++) {
-            length += i;
-        }
-        return length;
     }
 
     public int[][] fillArr(int n) {
