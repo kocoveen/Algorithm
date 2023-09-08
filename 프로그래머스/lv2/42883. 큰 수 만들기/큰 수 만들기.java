@@ -1,28 +1,23 @@
 import java.util.Stack;
 
 class Solution {
-
     public String solution(String number, int k) {
-        String[] digits = new String[number.length() - k];
-        Stack<Integer> S = new Stack<>();
+        
+        char[] result = new char[number.length() - k];
+        Stack<Character> stack = new Stack<>();
+
         for (int i = 0; i < number.length(); i++) {
-            while (!S.isEmpty() && S.peek() < number.charAt(i) - '0' && k > 0) {
-                k--;
-                S.pop();
+            char c = number.charAt(i);
+            while (!stack.isEmpty() && stack.peek() < c && k-- > 0) {
+                stack.pop();
             }
-            S.push(number.charAt(i) - '0');
+            stack.push(c);
         }
-
-        if (k != 0) {
-            for (int i = 0; i < k; i++) {
-                S.pop();
-            }
+        
+        for (int i = 0; i < result.length; i++) {
+            result[i] = stack.get(i);
         }
-
-        int j = 0;
-        for (Integer i : S) {
-            digits[j++] = String.valueOf(i);
-        }
-        return String.join("", digits);
+        
+        return new String(result);
     }
 }
