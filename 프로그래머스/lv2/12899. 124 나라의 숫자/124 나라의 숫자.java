@@ -1,28 +1,12 @@
 class Solution {
-     public static String solution(int n) {
-        StringBuilder sb = new StringBuilder();
-        int t = 3; // target
-        int idx = 2;
-        while(n>t){
-            t += Math.pow(3, idx);
-            idx++;
-        }
+  public String solution(int n) {
+      String[] num = {"4","1","2"};
+      String answer = "";
 
-        int start = ((int)(t-Math.pow(3, idx-1))+1); // 자리수 시작 위치
-        int m = n-start;
-        int pow = idx-2;
-
-        for(int i=0; i<idx-1; i++){
-            int div = (int)(m/Math.pow(3, pow));
-
-            if(div == 2) sb.append(4);
-            else if(div == 1) sb.append(2);
-            else sb.append(1);
-
-            m %= Math.pow(3, pow);
-            pow--;
-        }
-
-        return sb.toString();
-    }
+      while(n > 0){
+          answer = num[n % 3] + answer;
+          n = (n - 1) / 3;
+      }
+      return answer;
+  }
 }
