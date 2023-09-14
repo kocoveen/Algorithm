@@ -50,15 +50,12 @@ class Solution {
             return new int[]{-1};
         }
 
-        L.sort(Integer::compareTo);
         int[] answer = new int[L.size()];
         for (int i = 0; i < L.size(); i++) {
             answer[i] = L.get(i);
         }
-
-        for (int i : answer) {
-            System.out.println(i);
-        }
+        
+        Arrays.sort(answer);
 
         return answer;
     }
