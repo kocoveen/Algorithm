@@ -15,14 +15,6 @@ class Solution {
 
         for (int i = 0; i < queries.length; i++) {
             mins[i] = (clockwise(board, queries[i]));
-
-//            for (int[] b : board) {
-//                for (int i1 : b) {
-//                    System.out.printf("%d ", i1);
-//                }
-//                System.out.println();
-//            }
-//            System.out.println();
         }
 
         return mins;
