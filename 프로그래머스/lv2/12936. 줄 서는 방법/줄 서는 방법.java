@@ -2,12 +2,12 @@ import java.util.*;
 
 class Solution {
     public int[] solution(int n, long k) {
+        int[] answer = new int[n];
         List<Integer> mens = new ArrayList<>();
 
         for (int i = 0; i < n; i++) {
             mens.add(i + 1);
         }
-        int[] answer = new int[mens.size()];
 
         long fac = factorial(mens.size());
         int turn = 0;
