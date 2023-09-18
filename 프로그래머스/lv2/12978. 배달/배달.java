@@ -31,24 +31,24 @@ class Solution {
             network.get(t2).add(new Node(t1, c));
         }
 
-//         // network
-//         for (int i = 1; i <= N; i++) {
-//             System.out.printf("[%d] -> ", i);
-//             for (Node node : network.get(i)) {
-//                 System.out.printf("[%d(%d)], ", node.endpoint, node.cost);
-//             }
-//             System.out.println("\b\b}");
-//         }
+        // network
+        for (int i = 1; i <= N; i++) {
+            System.out.printf("[%d] -> ", i);
+            for (Node node : network.get(i)) {
+                System.out.printf("[%d(%d)], ", node.endpoint, node.cost);
+            }
+            System.out.println("\b\b}");
+        }
 
         visited[1] = true;
-        costs[1] = 1;
+        costs[1] = 0;
         dfs(1, 0);
 
-        // // network
-        // for (int i : costs) {
-        //     System.out.printf("%d ", i);
-        // }
-        // System.out.println();
+        // network
+        for (int i : costs) {
+            System.out.printf("%d ", i);
+        }
+        System.out.println();
 
         for (int c : costs) {
             if (c == 1) answer++;
@@ -65,7 +65,7 @@ class Solution {
             if (cost > K) continue;
             visited[i] = true;
             costs[i] = 1;
-            dfs(i, cost);
+            dfs(i, costs[i]);
             visited[i] = false;
         }
     }
