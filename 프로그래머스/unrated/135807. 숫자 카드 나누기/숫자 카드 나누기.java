@@ -1,7 +1,7 @@
+import java.util.Arrays;
+
 class Solution {
     public int solution(int[] arrayA, int[] arrayB) {
-        int answer = 0;
-
         int A = arrayA[0];
         for (int i = 1; i < arrayA.length; i++) {
             A = gcd(A, arrayA[i]);
@@ -27,21 +27,7 @@ class Solution {
     }
 
     private boolean indivisible(int[] array, int gcd) {
-        for (int i : array) {
-            if (i >= gcd && i % gcd == 0) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private boolean containingGcd(int[] array, int gcd) {
-        for (int i : array) {
-            if (i == gcd) {
-                return true;
-            }
-        }
-        return false;
+        return Arrays.stream(array).noneMatch(i -> i >= gcd && i % gcd == 0);
     }
 
     private int gcd(int a, int b) {
