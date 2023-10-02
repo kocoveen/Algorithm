@@ -1,28 +1,28 @@
 class Solution {
     int[][] board;
-    int answer = 0;
     
     public int solution(int n) {
-        
         board = new int[n][n];
-        func(0, n);
+        
+        int answer = func(0, n);
         return answer;
     }
     
-    private void func(int r, int n) {
+    private int func(int r, int n) {
+        int sum = 0;
         if (r == n) {
-            answer++;
             // print(board);
-            return;
+            return 1;
         }
         
         
         for (int c = 0; c < n; c++) {
             if (!isPossible(r, c, n)) continue;
             board[r][c] = 1;
-            func(r + 1, n);
+            sum += func(r + 1, n);
             board[r][c] = 0;
         }
+        return sum;
     }
     
     private boolean isPossible(int r, int c, int n) {
