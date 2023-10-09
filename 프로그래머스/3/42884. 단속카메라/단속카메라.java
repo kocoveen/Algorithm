@@ -3,20 +3,17 @@ import java.util.*;
 class Solution {
     public int solution(int[][] routes) {
         int answer = 0;
+
+        Arrays.sort(routes, (r1, r2) -> Integer.compare(r1[1], r2[1]));
         
-        Arrays.sort(routes, (r1, r2) -> r1[0] - r2[0]);
+        int camera = Integer.MIN_VALUE;
         
-        int[] camera = routes[0];
-        
-        for (int[] route : routes) {
-            if (route[0] <= camera[1]) {
-                camera[1] = Math.min(route[1], camera[1]);
-            } else {
-                camera = route;
+        for (int[] a : routes) {
+            if (camera < a[0]) {
                 answer++;
+                camera = a[1];
             }
         }
-        
-        return answer + 1;
+        return answer;
     }
 }
