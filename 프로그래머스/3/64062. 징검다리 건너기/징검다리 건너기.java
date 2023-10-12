@@ -1,10 +1,6 @@
 class Solution {
     public int solution(int[] stones, int k) {
-        int answer = 0;
-        
-        int mx = findMaxStone(stones);
-        
-        int l = 0, r = mx;
+        int l = 0, r = findMaxStone(stones);
         while (l < r) {
             int m = (l + r) / 2;
             if (findMaxDistance(stones, m) >= k) {
@@ -13,10 +9,7 @@ class Solution {
                 l = m + 1;
             }
         }
-        
-        answer = l;
-        
-        return answer;
+        return l;
     }
     
     private int findMaxDistance(int[] stones, int k) {
