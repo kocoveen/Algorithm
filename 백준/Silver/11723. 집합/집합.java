@@ -1,7 +1,4 @@
 import java.io.*;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.stream.IntStream;
 
 public class Main {
 
@@ -11,7 +8,7 @@ public class Main {
 
         int n = Integer.parseInt(br.readLine());
 
-        SetImpl S = new SetImpl();
+        Set S = new Set();
         while (n-- > 0) {
             String[] command = br.readLine().split(" ");
             String op = command[0];
@@ -20,7 +17,7 @@ public class Main {
                 x = Integer.parseInt(command[1]);
             }
 
-            switch (command[0]) {
+            switch (op) {
                 case "add": {
                     S.add(x);
                     break;
@@ -50,40 +47,35 @@ public class Main {
         bw.flush();
     }
 
-    static class SetImpl {
-        Set<Integer> set;
+    static class Set {
+        int set;
 
-        public SetImpl() {
-            this.set = new HashSet<>();
+        public Set() {
+            this.set = 0;
         }
 
         public void add(int x) {
-            set.add(x);
+            set |= (1 << x);
         }
 
         public void remove(int x) {
-            set.remove(x);
+            set &= ~(1 << x);
         }
 
         public int check(int x) {
-            return set.contains(x) ? 1 : 0;
+            return (set & (1 << x)) > 0 ? 1 : 0 ;
         }
 
         public void toggle(int x) {
-            if (check(x) == 1) {
-                remove(x);
-            } else {
-                add(x);
-            }
+            set ^= (1 << x);
         }
 
         public void all() {
-            set = new HashSet<>();
-            IntStream.range(1, 21).forEach(i -> set.add(i));
+            set = (1 << 21) - 1;
         }
 
         public void empty() {
-            set.clear();
+            set = 0;
         }
     }
 }
