@@ -29,20 +29,20 @@ class Solution {
             return index;
         }
         
-        // while(parent[index] != -1) {
-        //     index = parent[index];
-        // }
-        // return index;
-        return find(parent, parent[index]);
+        while(parent[index] != -1) {
+            index = parent[index];
+        }
+        return index;
+        // return find(parent, parent[index]);
     }
     
     private void union(int[] parent, int root1, int root2) {
-        int r1 = find(parent, root1);
-        int r2 = find(parent, root2);
+        // int r1 = find(parent, root1);
+        // int r2 = find(parent, root2);
         
-        if (r1 != r2) {
-            parent[r2] = r1;
-        }
+        // if (r1 != r2) {
+            parent[root2] = root1;
+        // }
     }
     
     private int[] makeParentInit(int n) {
