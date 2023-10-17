@@ -8,27 +8,29 @@ public class Main {
 
         int n = sc.nextInt();
         int m = sc.nextInt();
-        String s = sc.next();
+        char[] s = sc.next().toCharArray();
+        int[] p = new int[m];
         int answer = 0;
 
-        for (int i = 0; i < n; i++) {
-            sb.append('I').append('O');
+        for (int i = 0; i < s.length; i++) {
+            if (i < 2) {
+                p[i] = s[i] == 'I' ? 0 : -1;
+            } else {
+                if (s[i] == 'I') {
+                    if (s[i - 1] == 'O' && s[i - 2] == 'I') {
+                        p[i] = p[i - 2] + 1;
+                    } else {
+                        p[i] = 0;
+                    }
+                } else {
+                    p[i] = -1;
+                }
+            }
         }
-        String p = sb.append('I').toString();
 
-        StringBuilder tmp = new StringBuilder();
-
-        for (char c : s.toCharArray()) {
-            if (tmp.length() < 2 * n + 1) {
-                tmp.append(c);
-            }
-
-            if (tmp.toString().equals(p)) {
+        for (int c : p) {
+            if (c >= n) {
                 answer++;
-            }
-
-            if (tmp.length() >= 2 * n + 1) {
-                tmp.deleteCharAt(0);
             }
         }
         System.out.println(answer);
