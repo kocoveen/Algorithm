@@ -1,71 +1,68 @@
 import java.util.*;
-
-
+ 
 class Solution {
+    
+    int N;
+    int [][][] visited;
+    int[][] d = {{1,0},{-1,0},{0,1},{0,-1}};
+    
+    public int solution(int[][] board) {
+        N = board.length;
+        visited = new int[N][N][4];
 
-    private static final int[] dx = {1, -1, 0, 0};
-    private static final int[] dy = {0, 0, 1, -1};
-
-    private class Road {
-        public final int x;
-        public final int y;
-        public final int cost;
-        public final Road prev;
-
-        public Road(int x, int y, int cost, Road prev) {
-            this.x = x;
-            this.y = y;
-            this.cost = cost;
-            this.prev = prev;
-        }
+        return bfs(board);
     }
+    
+    public int bfs(int[][] board) {
+        int r = 0, c = 0, direction = -1, cost = 0;
+        Queue<Node> q = new LinkedList<>();
+        q.add(new Node(r, c, direction, cost));
 
-    private int bfs(int[][] roads) {
-        int result = Integer.MAX_VALUE;
-        int size = roads.length - 1;
+        int min_cost = Integer.MAX_VALUE;
 
-        Queue<Road> q = new LinkedList<>();
-        q.add(new Road(0, 0, 0, null));
+        while(!q.isEmpty()) {
+            Node now = q.poll();
 
-        while (!q.isEmpty()) {
-            Road current = q.poll();
-
-            if (current.x == size && current.y == size) {
-                if (current.cost < result) result = current.cost;
-                continue;
+            if (now.r == N - 1 && now.c == N - 1) {
+                min_cost = Math.min(min_cost, now.cost);
             }
 
-            for (int i = 0; i < 4; i++) {
-                int nx = current.x + dx[i];
-                int ny = current.y + dy[i];
+            for (int dir = 0; dir < 4; dir++) {
+                int dr = now.r + d[dir][0];
+                int dc = now.c + d[dir][1];
 
-                if (nx < 0 || nx > size || ny < 0 || ny > size || roads[ny][nx] == 1) continue;
+                if(dr < 0 || dr >= N || dc < 0 || dc >= N || board[dr][dc] == 1) {
+                    continue;
+                }
 
-                int cost = 100;
-                if (current.prev != null && current.prev.x != nx && current.prev.y != ny) cost += 500;
-                cost += current.cost;
+                int nextCost = now.cost;
+                if(now.dir == -1 || now.dir == dir) { 
+                    //처음이라 비교대상이 없는 경우엔 무조건 100원만 추가,
+                    //이전과 같은 방향인 경우에도 100원 추가
+                    nextCost += 100;
+                }
+                else {
+                    nextCost += 600;
+                }
 
-                if (roads[ny][nx] >= cost) {
-                    roads[ny][nx] = cost;
-                    q.add(new Road(nx, ny, cost, current));
-                } else if (roads[ny][nx] + 500 >= cost) {
-                    q.add(new Road(nx, ny, cost, current));
+                if (visited[dr][dc][dir] == 0 || board[dr][dc] >= nextCost) {
+                    q.add(new Node(dr, dc, dir, nextCost));
+                    visited[dr][dc][dir] = 1;
+                    board[dr][dc] = nextCost;
                 }
             }
         }
-
-        return result;
+        return min_cost;
     }
 
-    public int solution(int[][] board) {
-        int size = board.length - 1;
-        for (int i = 0; i <= size; i++) {
-            for (int j = 0; j <= size; j++) {
-                if (board[i][j] == 1) continue;
-                board[i][j] = Integer.MAX_VALUE;
-            }
+    public class Node {
+        int r, c, dir, cost;
+
+        public Node(int r, int c, int dir, int cost) {
+            this.r = r;
+            this.c = c;
+            this.dir = dir;
+            this.cost = cost;
         }
-        board[0][0] = 0;
-        return bfs(board);
     }
 }
