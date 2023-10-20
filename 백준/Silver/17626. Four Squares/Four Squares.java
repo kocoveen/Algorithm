@@ -8,12 +8,9 @@ public class Main {
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
         int n = Integer.parseInt(br.readLine());
-        count = new Integer[50001];
+        count = new Integer[n + 1];
         count[0] = 0;
         count[1] = 1;
-        count[2] = 2;
-        count[3] = 3;
-
 
         bw.write(dp(n) + "");
         bw.flush();
@@ -23,9 +20,8 @@ public class Main {
         if (count[n] == null) {
             int a = (int) Math.sqrt(n);
             int b = a / 2;
-            int aa = a * a;
 
-            if (n == aa) {
+            if (n == a * a) {
                 count[n] = 1;
             } else {
                 int k = Integer.MAX_VALUE;
