@@ -25,22 +25,26 @@ public class Main {
             }
         }
 
+        int n1 = 1; // 시작 노드
+        int n2 = -1; // 시작 노드에서 가장 먼 노드
+        Map.Entry<Integer, Integer> n3 = null; // 시작 노드에서 가장 먼 노드로부터 한 번만 이동할 때 가장 먼 노드
+        
         dists = new int[n + 1];
         dfs(1, new boolean[n + 1]);
-        int n1 = getMaxDistIndex(1); // 1에서 가장 먼 노드
-
-        // 1에서 가장 먼 노드에서 한 번만 이동할 때 가장 먼 노드
-        Map.Entry<Integer, Integer> n2 = graph[n1].firstEntry();
+        n2 = getMaxDistIndex(n1);
+        
+        n3 = graph[n2].firstEntry();
 
         dists = new int[n + 1];
-        dfs(n2.getKey(), new boolean[n + 1]);
+        // n3로부터 가장 먼 노드 찾기
+        dfs(n3.getKey(), new boolean[n + 1]);
 
         for (int i = 1; i <= n; i++) {
-            if (i == n1) continue;
+            if (i == n2) continue; // n2와의 거리 체크 X -> n3.getValue()가 이미 n2와의 거리이기 때문
             mx = Math.max(dists[i], mx);
         }
 
-        System.out.println(n2.getValue() + mx);
+        System.out.println(n3.getValue() + mx);
     }
 
     private static void dfs(int i, boolean[] visited) {
