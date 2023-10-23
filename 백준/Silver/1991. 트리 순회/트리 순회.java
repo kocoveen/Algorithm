@@ -1,6 +1,8 @@
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.*;
 
 public class Main {
     static int[][] graph;
@@ -13,19 +15,25 @@ public class Main {
 
         while (n-- > 0) {
             String[] split = br.readLine().split(" ");
-            String c = split[0];
-            String l = split[1];
-            String r = split[2];
+            int p = split[0].charAt(0) - 'A';
 
-            int p = c.charAt(0) - 'A';
-            graph[p][0] = l.charAt(0) == '.' ? -1 : l.charAt(0) - 'A';
-            graph[p][1] = r.charAt(0) == '.' ? -1 : r.charAt(0) - 'A';
+            if (split[1].equals(".")) {
+                graph[p][0] = -1;
+            } else {
+                graph[p][0] = split[1].charAt(0) - 'A';
+            }
+
+            if (split[2].equals(".")) {
+                graph[p][1] = -1;
+            } else {
+                graph[p][1] = split[2].charAt(0) - 'A';
+            }
+
         }
 
         preorder(0); sb.append("\n");
         inorder(0); sb.append("\n");
         postorder(0); sb.append("\n");
-
         System.out.print(sb);
     }
 
