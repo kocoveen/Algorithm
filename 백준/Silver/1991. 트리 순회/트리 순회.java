@@ -1,18 +1,21 @@
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 public class Main {
     static int[][] graph;
     static StringBuilder sb = new StringBuilder();
 
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int n = sc.nextInt();
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int n = Integer.parseInt(br.readLine());
         graph = new int[n][2];
 
         while (n-- > 0) {
-            String c = sc.next();
-            String l = sc.next();
-            String r = sc.next();
+            String[] split = br.readLine().split(" ");
+            String c = split[0];
+            String l = split[1];
+            String r = split[2];
 
             int p = c.charAt(0) - 'A';
             graph[p][0] = l.charAt(0) == '.' ? -1 : l.charAt(0) - 'A';
