@@ -1,76 +1,55 @@
 import java.util.*;
 
 public class Main {
-    static Map<String, Node> nodes = new HashMap<>();
-    static class Node {
-        String name;
-        Node l;
-        Node r;
-
-        public Node(String name) {
-            this.name = name;
-        }
-
-        public void setL(Node node) {
-            this.l = node;
-        }
-
-        public void setR(Node node) {
-            this.r = node;
-        }
-    }
+    static int[][] graph;
+    static StringBuilder sb = new StringBuilder();
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         int n = sc.nextInt();
-        for (int i = 0; i < n; i++) {
-            String name = String.valueOf((char) (i + 'A'));
-            nodes.put(name, new Node(name));
-        }
+        graph = new int[n][2];
 
         while (n-- > 0) {
-            String i = sc.next();
+            String c = sc.next();
             String l = sc.next();
             String r = sc.next();
 
-            Node p = nodes.get(i);
-            if (!l.equals(".")) {
-                p.setL(nodes.get(l));
-            }
-            if (!r.equals(".")) {
-                p.setR(nodes.get(r));
-            }
+            int p = c.charAt(0) - 'A';
+            graph[p][0] = l.charAt(0) == '.' ? -1 : l.charAt(0) - 'A';
+            graph[p][1] = r.charAt(0) == '.' ? -1 : r.charAt(0) - 'A';
         }
 
-        preorder(nodes.get("A")); System.out.println();
-        inorder(nodes.get("A")); System.out.println();
-        postorder(nodes.get("A")); System.out.println();
+        preorder(0); sb.append("\n");
+        inorder(0); sb.append("\n");
+        postorder(0); sb.append("\n");
+
+        System.out.print(sb);
     }
 
-    private static void preorder(Node root) {
-        if (root == null) {
+    private static void preorder(int root) {
+        if (root == -1) {
             return;
         }
-        System.out.print(root.name);
-        preorder(root.l);
-        preorder(root.r);
+        sb.append((char) (root + 'A'));
+        preorder(graph[root][0]);
+        preorder(graph[root][1]);
     }
 
-    private static void inorder(Node root) {
-        if (root == null) {
+    private static void inorder(int root) {
+        if (root == -1) {
             return;
         }
-        inorder(root.l);
-        System.out.print(root.name);
-        inorder(root.r);
+        inorder(graph[root][0]);
+        sb.append((char) (root + 'A'));
+        inorder(graph[root][1]);
     }
 
-    private static void postorder(Node root) {
-        if (root == null) {
+    private static void postorder(int root) {
+        if (root == -1) {
             return;
         }
-        postorder(root.l);
-        postorder(root.r);
-        System.out.print(root.name);
+        postorder(graph[root][0]);
+        postorder(graph[root][1]);
+        sb.append((char) (root + 'A'));
     }
 }
