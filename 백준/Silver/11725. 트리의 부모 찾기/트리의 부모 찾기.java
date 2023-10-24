@@ -2,7 +2,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 public class Main {
 
@@ -27,20 +29,26 @@ public class Main {
             graph.get(b).add(a);
         }
 
-        parent[1] = 1;
-        bfs(1);
+        bfs();
 
         for (int i = 2; i <= n; i++) {
             System.out.println(parent[i]);
         }
     }
 
-    private static void bfs(int cur) {
-        for (int i : graph.get(cur)) {
-            if (parent[i] == 0) {
-                parent[i] = cur;
-                bfs(i);
+    private static void bfs() {
+        Queue<Integer> q = new LinkedList<>();
+        q.offer(1);
+        parent[1] = 1;
+
+        while (!q.isEmpty()) {
+            int cur = q.poll();
+            for (int next : graph.get(cur)) {
+                if (parent[next] != 0) continue;
+                parent[next] = cur;
+                q.offer(next);
             }
         }
     }
+
 }
