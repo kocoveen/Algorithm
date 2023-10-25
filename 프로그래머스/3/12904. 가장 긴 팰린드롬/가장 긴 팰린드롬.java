@@ -1,14 +1,12 @@
 class Solution {
     
-    private int findMaxPalindrome(String s, int l, int r) {
-        int L = l, R = r;
-        
-        while (L >= 0 && R < s.length() && s.charAt(L) == s.charAt(R)) {
-            L--;
-            R++;
+    private int findMaxPalindrome(String s, int l, int r) {        
+        while (l >= 0 && r < s.length() && s.charAt(l) == s.charAt(r)) {
+            l--;
+            r++;
         }
         
-        return R - L - 1;
+        return r - l - 1;
     }
        
     public int solution(String s) {
