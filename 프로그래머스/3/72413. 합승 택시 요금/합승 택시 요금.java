@@ -4,24 +4,17 @@ class Solution {
     int[][] graph;
     
     public int solution(int n, int s, int a, int b, int[][] fares) {
-        
         graph = new int[n + 1][n + 1];
+        
         for (int i = 1; i <= n; i++) {
             for (int j = 1; j <= n; j++) {
-                if (i != j) {
-                    graph[i][j] = INF;
-                } else {
-                    graph[i][j] = 0;
-                }
-            } 
-        }
+                graph[i][j] = INF;
+            }
+            graph[i][i] = 0;
+        } 
         
-        for (int i = 0; i < fares.length; i++) {
-            int c = fares[i][0];
-            int d = fares[i][1];
-            int f = fares[i][2];
-            graph[c][d] = f;
-            graph[d][c] = f;
+        for (int[] fare : fares) {
+            graph[fare[0]][fare[1]] = graph[fare[1]][fare[0]] = fare[2];
         }
         
         for (int k = 1; k <= n; k++) {
@@ -33,9 +26,7 @@ class Solution {
         }
         
         int answer = graph[s][a] + graph[s][b];
-        
         for (int i = 1; i <= n; i++) {
-            if (i == s) continue;
             answer = Math.min(graph[s][i] + graph[i][a] + graph[i][b], answer);
         }
         
