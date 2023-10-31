@@ -1,8 +1,8 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Deque;
 import java.util.LinkedList;
+import java.util.Queue;
 
 public class Main {
     static Integer[] time = new Integer[100001];
@@ -17,18 +17,17 @@ public class Main {
         n = Integer.parseInt(split[0]);
         k = Integer.parseInt(split[1]);
 
-        Deque<Integer> d = new LinkedList<>();
-        d.offerLast(n);
+        Queue<Integer> d = new LinkedList<>();
+        d.offer(n);
         time[n] = 0;
-        
+
         if (n == k) {
             System.out.println(0);
             System.out.println(1);
             System.exit(0);
         }
-        
         while (!d.isEmpty()) {
-            int cur = d.pollFirst();
+            int cur = d.poll();
             for (int i = 0; i < 3; i++) {
                 int nx;
                 if (i == 0) {
@@ -57,7 +56,7 @@ public class Main {
                     }
                 }
 
-                d.offerLast(nx);
+                d.offer(nx);
                 time[nx] = time[cur] + 1;
             }
         }
