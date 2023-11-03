@@ -6,8 +6,6 @@ import java.util.*;
 public class Main {
     static int n;
     static int[][] board;
-    static int[][] tmp;
-    static int answer = 1;
     static int[][] dir = {{-1, 0}, {0, -1}, {0, 1}, {1, 0}};
     static Pair init;
     static Whale whale = new Whale(2);
@@ -16,7 +14,6 @@ public class Main {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         n = Integer.parseInt(br.readLine());
         board = new int[n][n];
-        tmp = new int[n][n];
 
         for (int i = 0; i < n; i++) {
             String[] split = br.readLine().split(" ");
@@ -71,10 +68,8 @@ public class Main {
             Pair cur = pq.poll();
             board[cur.r][cur.c] = 0;
             whale.increaseExp();
-            tmp[cur.r][cur.c] = answer++;
             return cur.d + bfs(new Pair(cur.r, cur.c, 0));
         }
-
         return 0;
     }
 
@@ -107,5 +102,4 @@ public class Main {
             this.exp = lvl;
         }
     }
-
 }
