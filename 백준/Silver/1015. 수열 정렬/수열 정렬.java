@@ -12,23 +12,23 @@ public class Main {
         int n = Integer.parseInt(br.readLine());
         split = br.readLine().split(" ");
 
-        int[][] A = new int[n][2];
+        int[] A = new int[n];
         int[] B = new int[n];
 
         for (int i = 0; i < n; i++) {
-            A[i][0] = Integer.parseInt(split[i]); // 값 저장
-            A[i][1] = i; // 인덱스 저장
+            A[i] = Integer.parseInt(split[i]);
+            B[i] = A[i];
         }
-        Arrays.sort(A, (a1, a2) -> {
-            return a1[0] - a2[0];
-        });
+        Arrays.sort(B);
 
         for (int i = 0; i < n; i++) {
-            B[A[i][1]] = i;
-        }
-
-        for (int b : B) {
-            System.out.printf(b + " ");
+            for (int j = 0; j < n; j++) {
+                if (A[i] == B[j]) {
+                    System.out.print(j + " ");
+                    B[j] = -1;
+                    break;
+                }
+            }
         }
     }
 }
