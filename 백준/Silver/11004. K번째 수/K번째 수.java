@@ -11,9 +11,11 @@ public class Main {
         int n = Integer.parseInt(st[0]);
         int k = Integer.parseInt(st[1]);
 
-        int[] arr = Arrays.stream(br.readLine().split(" "))
-                .mapToInt(Integer::parseInt)
-                .toArray();
+        st = br.readLine().split(" ");
+        int[] arr = new int[n];
+        for (int i = 0; i < n; i++) {
+            arr[i] = Integer.parseInt(st[i]);
+        }
 
         Arrays.sort(arr);
         System.out.println(arr[k - 1]);
