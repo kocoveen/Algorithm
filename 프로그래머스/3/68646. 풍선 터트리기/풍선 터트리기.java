@@ -1,36 +1,25 @@
+import java.util.*;
+
 class Solution {
+
     public int solution(int[] a) {
-        int answer = 1;
-        int l = 0, r = a.length - 1;
-        int lMin = a[l];
-        int rMin = a[r];
-
-        while (l < r) {
-            if (lMin < rMin) {
-                r--;
-
-                if (a[r] < rMin) {
-                    answer++;
-                } else {  //a[r] > rMin && a[r] > lMin
-                    //nothing to do
-                }
-
-                rMin = Math.min(rMin, a[r]);
-
-            } else { //lMin > rMin
-                l++;
-
-                if (a[l] < lMin) {
-                    answer++;
-                } else { //a[l] > lMin && a[l] > rMin
-                    //nothing to do
-                }
-
-                lMin = Math.min(lMin, a[l]);
-            }
+        int answer = 0;
+        int min1 = Integer.MAX_VALUE;
+        int min2 = Integer.MAX_VALUE;
+        HashSet<Integer> hs = new HashSet<>();
+        // int[][] dp=new int[a.length][2];
+        for(int i=0;i<a.length;i++){
+            min1=Math.min(min1,a[i]);
+            min2=Math.min(min2,a[a.length-1-i]);
+            hs.add(min1);
+            hs.add(min2);
+            // dp[i][0]=min1;
+            // dp[a.length-1-i][1]=min2;
 
         }
-
-        return answer;
+        // for(int i=0;i<dp.length;i++){
+        //     System.out.println(dp[i][0]+" "+dp[i][1]);
+        // }
+        return hs.size();
     }
 }
