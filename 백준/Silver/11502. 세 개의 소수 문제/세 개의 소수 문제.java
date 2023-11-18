@@ -16,32 +16,23 @@ public class Main {
         while (t-- > 0) {
             int k = Integer.parseInt(br.readLine());
             sieve = makeSieve(k);
-            dfs(k, 0, 2);
-            System.out.printf("%d %d %d\n", answer[0], answer[1], answer[2]);
+            System.out.println(getThreePrime(k));
         }
     }
 
-    private static void dfs(int k, int depth, int st) {
-        if (depth == 3) {
-            int a = 0;
-            for (int i = 0; i < depth; i++) {
-                a += sum[i];
-            }
-
-            if (a == k) {
-                answer[0] = sum[0];
-                answer[1] = sum[1];
-                answer[2] = sum[2];
-            }
-            return;
-        }
-
-        for (int i = st; i <= k; i++) {
-            if (sieve[i]) {
-                sum[depth] = i;
-                dfs(k, depth + 1, i);
+    private static String getThreePrime(int k) {
+        for (int i = 2; i <= k; i++) {
+            if (!sieve[i]) continue;
+            sum[0] = i;
+            for (int j = i; j <= k; j++) {
+                if (!sieve[j]) continue;
+                int tmp = k - (i + j);
+                if (tmp >= j && sieve[tmp]) {
+                    return i + " " + j + " " + tmp;
+                }
             }
         }
+        return "0";
     }
 
     private static boolean[] makeSieve(int k) {
