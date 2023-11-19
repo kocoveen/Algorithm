@@ -1,5 +1,14 @@
 import java.io.*;
 
+/**
+ * 점화식
+ * dp[i] -> i장의 카드를 사는데 드는 최소비용
+ * values[i] -> i장의 묶음 카드를 사는데 드는 비용
+ * dp[i] = min(dp[i-1] + values[1], dp[i-2] + values[2], dp[i-3] + values[3], ... dp[i] + dp[0])
+ * 
+ * i가 1일 때, 2일 때... 을 반복
+ * 각 dp[i]를 갱신하며, 최소값을 찾아 저장
+ */
 public class Main {
 
     static String[] st;
