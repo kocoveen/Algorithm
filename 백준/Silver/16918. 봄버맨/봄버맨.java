@@ -8,7 +8,7 @@ public class Main {
     static int R, C, N;
     static int[][] times;
     static boolean[][] isBombs;
-    static Set<int[]> removed = new HashSet<>();
+    static Deque<int[]> removed = new ArrayDeque<>();
     static int[] dr = {1, 0, -1, 0};
     static int[] dc = {0, 1, 0, -1};
 
@@ -41,7 +41,6 @@ public class Main {
             removedBombs();
             running();
         }
-        
         printBombs();
     }
 
@@ -57,11 +56,19 @@ public class Main {
     }
 
     private static void removedBombs() {
-        for (int[] pos : removed) {
+        while (!removed.isEmpty()) {
+            int[] pos = removed.pollLast();
             isBombs[pos[0]][pos[1]] = false;
             times[pos[0]][pos[1]] = 0;
+            for (int i = 0; i < 4; i++) {
+                int nr = pos[0] + dr[i];
+                int nc = pos[1] + dc[i];
+                if (0 <= nr && nr < R && 0 <= nc && nc < C) {
+                    isBombs[nr][nc] = false;
+                    times[nr][nc] = 0;
+                }
+            }
         }
-        removed.clear();
     }
 
     private static void running() {
@@ -70,35 +77,25 @@ public class Main {
                 if (isBombs[i][j]) {
                     times[i][j]--;
                     if (times[i][j] == 0) {
-                        explode(i, j);
+                        removed.add(new int[]{i, j});
                     }
                 }
             }
         }
     }
 
-    private static void explode(int r, int c) {
-        removed.add(new int[]{r, c});
-        for (int k = 0; k < 4; k++) {
-            int nr = r + dr[k];
-            int nc = c + dc[k];
-            if (0 <= nr && nr < R && 0 <= nc && nc < C) {
-                removed.add(new int[]{nr, nc});
-            }
-        }
-    }
-
-
     private static void printBombs() {
+        StringBuilder sb = new StringBuilder();
         for (boolean[] isBomb : isBombs) {
             for (boolean b : isBomb) {
                 if (b) {
-                    System.out.printf("%c", 'O');
+                    sb.append('O');
                 } else {
-                    System.out.printf("%c", '.');
+                    sb.append('.');
                 }
             }
-            System.out.println();
+            sb.append('\n');
         }
+        System.out.println(sb);
     }
 }
