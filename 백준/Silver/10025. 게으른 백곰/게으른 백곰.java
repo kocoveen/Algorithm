@@ -1,21 +1,18 @@
 import java.io.*;
+import java.util.*;
 
 public class Main {
-
-    static String[] st;
-
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        st = br.readLine().split(" ");
-        int n = Integer.parseInt(st[0]);
-        int k = Integer.parseInt(st[1]) * 2 + 1;
+    public static void main(String[] args) throws Exception {
+        BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(in.readLine());
+        int n = Integer.parseInt(st.nextToken());
+        int k = Integer.parseInt(st.nextToken()) * 2 + 1;
 
         int[] glaciers = new int[1000001];
-
-        while (n-- > 0) {
-            st = br.readLine().split(" ");
-            int g = Integer.parseInt(st[0]);
-            int x = Integer.parseInt(st[1]);
+        for (int i = 0; i < n; i++) {
+            st = new StringTokenizer(in.readLine());
+            int g = Integer.parseInt(st.nextToken());
+            int x = Integer.parseInt(st.nextToken());
             glaciers[x] = g;
         }
 
@@ -25,8 +22,9 @@ public class Main {
                 sum -= glaciers[i - k];
             }
             sum += glaciers[i];
-            max = Math.max(max, sum);
+            max = Math.max(max,sum);
         }
+
         System.out.println(max);
     }
 }
