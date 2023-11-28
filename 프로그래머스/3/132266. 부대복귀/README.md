@@ -1,10 +1,10 @@
 # [level 3] 부대복귀 - 132266 
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/132266#qna) 
+[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/132266) 
 
 ### 성능 요약
 
-메모리: 137 MB, 시간: 78.47 ms
+메모리: 130 MB, 시간: 66.17 ms
 
 ### 구분
 
@@ -16,7 +16,7 @@
 
 ### 제출 일자
 
-2023년 11월 2일 12:36:1
+2023년 11월 2일 14:3:10
 
 ### 문제 설명
 
