@@ -3,6 +3,8 @@ class Solution {
         int answer = 0;
         int row = board.length;
         int col = board[0].length;
+        
+        // 누적합을 위한 acc 배열
         int[][] acc = new int[row + 1][col + 1];
         
         for (int[] skill : skills) {
@@ -23,12 +25,14 @@ class Solution {
             }
         }
         
+        // +col 방향으로 누적합
         for (int j = 0; j < col; j++) {
             for (int i = 0; i < row; i++) {
                 acc[i+1][j] += acc[i][j];
             }
         }
         
+        // +row 방향으로 누적합
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < col; j++) {
                 board[i][j] += acc[i][j];
