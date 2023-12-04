@@ -1,29 +1,22 @@
 import java.io.*;
 
 public class Main {
-
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        String[] tokens = br.readLine().split("(?=(?!^)\\.)(?<!\\.)|(?!\\.)(?<=\\.)");
-
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
         StringBuilder sb = new StringBuilder();
-        for (String token : tokens) {
-            if (token.charAt(0) == '.') {
-                sb.append(token);
-            } else {
-                if (token.length() % 2 != 0) {
-                    System.out.println(-1);
-                    System.exit(0);
-                } else {
-                    if (token.length() % 4 == 0) {
-                        sb.append("A".repeat(token.length()));
-                    } else {
-                        sb.append("A".repeat(token.length() / 4 * 4));
-                        sb.append("BB");
-                    }
-                }
-            }
+
+        String str = br.readLine();
+        str = str.replaceAll("XXXX", "AAAA");
+        str = str.replaceAll("XX", "BB");
+
+        if (str.contains("X")) {
+            sb.append("-1");
+        } else {
+            sb.append(str);
         }
-        System.out.println(sb);
+
+        bw.write(sb.toString());
+        bw.close();
     }
 }
