@@ -1,11 +1,12 @@
 import java.io.*;
-import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.StringTokenizer;
 
 public class Main {
 
     static int[] tmp = new int[4];
-    static int[] arr = new int[10000];
+    static Set<Integer> set = new HashSet<>();
     static int count;
 
     public static void main(String[] args) throws IOException {
@@ -25,8 +26,9 @@ public class Main {
     private static void dfs(int depth, int clockNumber) {
         if (depth == 4) {
             int cn = getClockNumber(tmp);
-            if (arr[cn] == 0) {
-                arr[cn] = ++count;
+            if (!set.contains(cn)) {
+                count++;
+                set.add(cn);
             }
 
             if (clockNumber == cn) {
@@ -51,10 +53,9 @@ public class Main {
     }
 
     private static int getNumber(int[] nums, int i) {
-        return Integer.parseInt(
-                String.format("%d%d%d%d",
-                    nums[i], nums[(i + 1) % 4], nums[(i + 2) % 4], nums[(i + 3) % 4]
-                )
-        );
+        return nums[i] * 1000 +
+                nums[(i + 1) % 4] * 100 +
+                nums[(i + 2) % 4] * 10 +
+                nums[(i + 3) % 4];
     }
 }
