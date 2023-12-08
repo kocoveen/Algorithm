@@ -1,14 +1,18 @@
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class Main {
 
     static StringTokenizer st;
     static long n, m, result;
-    static List<Customer> customers = new ArrayList<>();
+    static PriorityQueue<Customer> customers = new PriorityQueue<>((c1, c2) -> {
+        // 목적지 기준 오름차순 정렬
+        if (c1.arrives != c2.arrives) {
+            return c1.arrives - c2.arrives;
+        } else {
+            return c1.departures - c2.departures;
+        }
+    });
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -28,29 +32,25 @@ public class Main {
             }
         }
 
-        Collections.sort(customers);
+        long departures = 0;
+        long arrives = 0;
 
-        long departures = customers.get(0).departures;
-        long arrives = customers.get(0).arrives;
-
-        for (int i = 1; i < customers.size(); i++) {
-            // 다음 승객 정보
-            long start = customers.get(i).departures;
-            long end = customers.get(i).arrives;
+        while (!customers.isEmpty()) {
+            Customer cur = customers.poll();
 
             // 이전 승객의 목적지에 가는 동안 현재 태울 승객을 내려줄 수 있을 때
-            if (end <= departures) {
+            if (cur.arrives <= departures) {
                 // 이전 승객을 내려주지 말고 현재 승객을 먼저 태움
-                departures = Math.max(departures, start);
+                departures = Math.max(departures, cur.departures);
 
             // 이전 승객의 목적지에 가는 동안 현재 태울 승객을 내려줄 수 없을 때
             } else {
                 // 이전 승객의 목적지를 미리 갔다 옴
-                result += 2 * (departures - arrives);
+                result += 2L * (departures - arrives);
 
                 // 현재 태울 승객을 태움
-                departures = start;
-                arrives = end;
+                departures = cur.departures;
+                arrives = cur.arrives;
             }
         }
 
@@ -58,23 +58,13 @@ public class Main {
         System.out.println(result);
     }
 
-    public static class Customer implements Comparable<Customer> {
+    public static class Customer {
         int departures;
         int arrives;
 
         public Customer(int departures, int arrives) {
             this.departures = departures;
             this.arrives = arrives;
-        }
-
-        // 목적지 기준 오름차순 정렬
-        @Override
-        public int compareTo(Customer o) {
-            if (this.arrives != o.arrives) {
-                return this.arrives - o.arrives;
-            } else {
-                return this.departures - o.departures;
-            }
         }
     }
 }
