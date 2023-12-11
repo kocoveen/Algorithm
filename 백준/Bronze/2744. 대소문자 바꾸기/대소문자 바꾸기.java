@@ -1,5 +1,4 @@
 import java.io.*;
-import java.util.Arrays;
 
 public class Main {
 
@@ -9,7 +8,7 @@ public class Main {
         char[] inputChar = input.toCharArray();
 
         for (int i = 0; i < inputChar.length; i++) {
-            if ('A' <= inputChar[i] && inputChar[i] <= 'Z') {
+            if (Character.isUpperCase(inputChar[i])) {
                 inputChar[i] = Character.toLowerCase(inputChar[i]);
             } else {
                 inputChar[i] = Character.toUpperCase(inputChar[i]);
@@ -19,7 +18,5 @@ public class Main {
         for (char c : inputChar) {
             System.out.printf("%c", c);
         }
-
-
     }
 }
