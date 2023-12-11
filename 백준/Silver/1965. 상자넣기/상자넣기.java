@@ -14,16 +14,28 @@ public class Main {
             boxes[i] = Integer.parseInt(st.nextToken());
         }
 
-        int max = 0;
+        int len = 1;
         for (int i = 1; i <= n; i++) {
-            dp[i] = 1;
-            for (int j = 1; j < i; j++) {
-                if (boxes[j] < boxes[i]) {
-                    dp[i] = Math.max(dp[i], dp[j] + 1);
-                }
+            int index = lowerBound(dp, len, boxes[i]);
+            if (index == len) {
+                len++;
             }
-            max = Math.max(dp[i], max);
+            dp[index] = boxes[i];
         }
-        System.out.print(max);
+
+        System.out.println(len-1);
+    }
+
+    private static int lowerBound(int[] arr, int len, int target) {
+        int l = 1, r = len, m;
+        while (l < r) {
+            m = (l + r) / 2;
+            if (arr[m] >= target) {
+                r = m;
+            } else {
+                l = m + 1;
+            }
+        }
+        return l;
     }
 }
