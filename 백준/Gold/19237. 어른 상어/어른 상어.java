@@ -1,8 +1,5 @@
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class Main {
 
@@ -126,7 +123,13 @@ public class Main {
         }
 
         public void removeShark() {
-            sharks.removeIf(shark -> map[shark.r][shark.c].num != shark.num);
+            Iterator<Shark> each = sharks.iterator();
+            while (each.hasNext()) {
+                Shark nxt = each.next();
+                if (map[nxt.r][nxt.c].num != nxt.num) {
+                    each.remove();
+                }
+            }
         }
 
         private void smellsOut() {
