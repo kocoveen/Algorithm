@@ -1,27 +1,25 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Arrays;
+import java.io.*;
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
         int n = Integer.parseInt(br.readLine());
-        Long[] arr = new Long[n];
+
+        Integer[] arr = new Integer[n];
         for (int i = 0; i < n; i++) {
-            arr[i] = Long.parseLong(br.readLine());
+            arr[i] = Integer.parseInt(br.readLine());
         }
 
-        Arrays.sort(arr, (l1, l2) -> l2.compareTo(l1));
+        Arrays.sort(arr, Collections.reverseOrder());
 
-        Long sum = 0L;
-        for (long i = 0; i < n; i++) {
-            if (arr[(int) i] - i > 0) {
-                sum += arr[(int) i] - i;
+        long sum = 0;
+        for (int i = 0; i < n; i++) {
+            int num = arr[i] - i;
+            if (num > 0) {
+                sum += num;
             }
         }
         System.out.println(sum);
-
     }
 }
