@@ -1,5 +1,4 @@
 import java.io.*;
-import java.util.Stack;
 import java.util.StringTokenizer;
 
 public class Main {
@@ -9,11 +8,8 @@ public class Main {
     static int[][] map;
     static Integer[][] cnt;
 
-    static int[] dr = {1, 0, -1, 0};
-    static int[] dc = {0, 1, 0, -1};
-
-    static int m;
-    static int n;
+    static int[] dr = {1, 0, -1, 0}, dc = {0, 1, 0, -1};
+    static int m, n;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -31,17 +27,12 @@ public class Main {
                 map[i][j] = Integer.parseInt(st.nextToken());
             }
         }
-
+        
         cnt[0][0] = 1;
-        int count = dp(m-1, n-1);
-        System.out.println(count);
+        System.out.println(dp(m-1, n-1));
     }
 
     private static int dp(int r, int c) {
-        if (r < 0 || m <= r || c < 0 || n <= c) {
-            return 0;
-        }
-
         if (cnt[r][c] != null) {
             return cnt[r][c];
         }
