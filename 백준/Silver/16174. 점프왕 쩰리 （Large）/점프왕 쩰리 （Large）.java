@@ -29,20 +29,20 @@ public class Main {
         }
 
         Queue<Info> q = new LinkedList<>();
-        q.add(new Info(0, 0, map[0][0]));
+        q.add(new Info(0, 0));
         vis[0][0] = true;
         while (!q.isEmpty()) {
             Info cur = q.poll();
             for (int i = 0; i < 2; i++) {
-                int nr = cur.r + dr[i] * cur.d;
-                int nc = cur.c + dc[i] * cur.d;
+                int nr = cur.r + dr[i] * map[cur.r][cur.c];
+                int nc = cur.c + dc[i] * map[cur.r][cur.c];
                 if (n <= nr || n <= nc) continue;
                 if (vis[nr][nc]) continue;
-                if (nr == n-1 && nc == n-1) {
+                if (map[nr][nc] == -1) {
                     System.out.println("HaruHaru");
                     System.exit(0);
                 }
-                q.add(new Info(nr, nc, map[nr][nc]));
+                q.add(new Info(nr, nc));
                 vis[nr][nc] = true;
             }
         }
@@ -50,11 +50,10 @@ public class Main {
     }
 
     private static class Info {
-        int r, c, d;
-        public Info(int r, int c, int d) {
+        int r, c;
+        public Info(int r, int c) {
             this.r = r;
             this.c = c;
-            this.d = d;
         }
     }
 }
