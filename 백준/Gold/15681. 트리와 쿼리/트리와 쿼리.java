@@ -34,13 +34,13 @@ public class Main {
     }
 
     private static int dfs(int cur, int root) {
-        size[cur] = 1;
+        int sum = 1;
         for (Integer i : child[cur]) {
             if (i != root) {
-                size[cur] += dfs(i, cur);
+                sum += dfs(i, cur);
             }
         }
-        return size[cur];
+        return size[cur] = sum;
     }
 
     static int read() throws IOException {
