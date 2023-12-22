@@ -1,62 +1,29 @@
 import java.io.*;
 
 public class Main {
-    static char[] ducks = new char[500];
-    static int idx = 0;
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
-        String str = br.readLine();
-
-        for (int i = 0; i < str.length(); i++) {
-            char c = str.charAt(i);
-            func(c);
-        }
-
-        for (int i = 0; i < idx; i++) {
-            if (ducks[i] != 'k') {
-                System.out.println(-1);
-                System.exit(0);
-            }
-        }
-        System.out.println(idx);
+        System.out.println(solve(br.readLine()));
     }
 
-    private static void func(char c) {
-        if (idx == 0) {
+    static int solve(String s) {
+        String str = "quack";
+        int len = s.length();
+        int[] quack = new int[5];
+        for (int i = 0; i < len; i++) {
+            char c = s.charAt(i);
             if (c == 'q') {
-                ducks[idx++] = c;
-                return;
+                if (quack[4] > 0) quack[4]--;
+                quack[0]++;
             } else {
-                System.out.println(-1);
-                System.exit(0);
+                int j = str.indexOf(c);
+                if (quack[j-1] == 0) return -1;
+                quack[j-1]--;
+                quack[j]++;
             }
         }
-
-        switch (c) {
-            case 'q': find('k', c); break;
-            case 'u': find('q', c); break;
-            case 'a': find('u', c); break;
-            case 'c': find('a', c); break;
-            case 'k': find('c', c); break;
-        }
-    }
-
-    private static void find(char c, char a) {
-        int i;
-        for (i = 0; i < idx; i++) {
-            if (ducks[i] == c) {
-                ducks[i] = a;
-                return;
-            }
-        }
-
-        if (a == 'q') {
-            ducks[idx++] = a;
-        } else {
-            System.out.println(-1);
-            System.exit(0);
-        }
+        if (quack[0] > 0 || quack[1] > 0 || quack[2] > 0 || quack[3] > 0) return -1;
+        return quack[4];
     }
 }
