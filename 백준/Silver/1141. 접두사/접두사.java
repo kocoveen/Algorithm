@@ -21,7 +21,13 @@ public class Main {
                 continue;
             }
 
-            boolean isPrefix = S.stream().anyMatch(inWord -> inWord.startsWith(word));
+            boolean isPrefix = false;
+            for (String inWord : S) {
+                if (inWord.startsWith(word)) {
+                    isPrefix = true;
+                    break;
+                }
+            }
             if (!isPrefix) {
                 S.add(word);
             }
