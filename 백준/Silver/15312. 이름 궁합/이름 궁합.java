@@ -13,19 +13,21 @@ public class Main {
     }
 
     private static void findChemistry(String a, String b) {
-        int len = a.length() + b.length();
-        int[] dp = new int[len];
-        for (int i = 0; i < len; i += 2) {
-            int j = i / 2;
-            dp[i] = strokes[a.charAt(j) - 'A'];
-            dp[i + 1] = strokes[b.charAt(j) - 'A'];
+        int len = a.length();
+        int[] dp = new int[len * 2];
+        int idx = 0;
+        for (int i = 0; i < len; i++) {
+            dp[idx++] = strokes[a.charAt(i) - 'A'];
+            dp[idx++] = strokes[b.charAt(i) - 'A'];
         }
 
-        for (int i = len-1; i >= 2; i--) {
-            for (int j = 0; j < i; j++) {
-                dp[j] = (dp[j] + dp[j+1]) % 10;
+        int cur = len * 2;
+        while (--cur >= 2) {
+            for (int i = 0; i < cur; i++) {
+                dp[i] = (dp[i] + dp[i+1]) % 10;
             }
         }
+
         System.out.println(dp[0] + "" + dp[1]);
     }
 }
