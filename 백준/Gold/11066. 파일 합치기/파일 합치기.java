@@ -2,7 +2,7 @@ public class Main {
 
     static int t, k;
     static int[] A, S;
-    static Integer[][] D;
+    static int[][] D;
 
     public static void main(String[] args) throws Exception {
         t = read();
@@ -10,25 +10,23 @@ public class Main {
             k = read();
             A = new int[k + 1];
             S = new int[k + 1];
-            D = new Integer[k + 1][k + 1];
+            D = new int[k + 1][k + 1];
             for (int i = 1; i <= k; i++) {
                 A[i] = read();
                 S[i] = A[i] + S[i-1];
-                D[i][i] = 0;
             }
 
-            System.out.println(dp(1, k));
-        }
-    }
-
-    private static int dp(int st, int en) {
-        if (D[st][en] == null) {
-            D[st][en] = Integer.MAX_VALUE;
-            for (int mid = st; mid < en; mid++) {
-                D[st][en] = Math.min(D[st][en], dp(st, mid) + dp(mid + 1, en) + S[en] - S[st - 1]);
+            for (int gap = 1; gap <= k; gap++) {
+                for (int st = 1; st + gap <= k; st++) {
+                    int en = st + gap;
+                    D[st][en] = Integer.MAX_VALUE;
+                    for (int mid = st; mid < en; mid++) {
+                        D[st][en] = Math.min(D[st][en], D[st][mid] + D[mid + 1][en] + S[en] - S[st - 1]);
+                    }
+                }
             }
+            System.out.println(D[1][k]);
         }
-        return D[st][en];
     }
 
     public static int read() throws Exception {
