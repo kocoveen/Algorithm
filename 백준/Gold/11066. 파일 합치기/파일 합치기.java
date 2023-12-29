@@ -1,3 +1,6 @@
+import java.io.BufferedWriter;
+import java.io.OutputStreamWriter;
+
 public class Main {
 
     static int t, k;
@@ -5,6 +8,7 @@ public class Main {
     static int[][] D;
 
     public static void main(String[] args) throws Exception {
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
         t = read();
         while (t-- > 0) {
             k = read();
@@ -25,8 +29,9 @@ public class Main {
                     }
                 }
             }
-            System.out.println(D[1][k]);
+            bw.write(D[1][k] + "\n");
         }
+        bw.flush();
     }
 
     public static int read() throws Exception {
