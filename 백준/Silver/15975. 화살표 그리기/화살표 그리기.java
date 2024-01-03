@@ -18,10 +18,12 @@ public class Main {
         }
 
         for (int i = 1; i <= n; i++) {
-            Collections.sort(dots.get(i), (i1, i2) -> i1 - i2);
+            List<Integer> p = dots.get(i);
+            if (p.isEmpty() || p.size() == 1) continue;
+            Collections.sort(p, (i1, i2) -> i1 - i2);
         }
 
-        int l = 0;
+        long l = 0;
         for (int i = 1; i <= n; i++) {
             List<Integer> p = dots.get(i);
             if (p.isEmpty() || p.size() == 1) {
