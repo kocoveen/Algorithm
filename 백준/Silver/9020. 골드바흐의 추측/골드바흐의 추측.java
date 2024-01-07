@@ -27,9 +27,9 @@ public class Main {
     private static int[] getPair(int n) {
         int l = n / 2, r = n / 2;
 
-        while (2 <= l && r <= n) {
-            while ((2 <= l) && !isPrime[l]) l--;
-            while ((r <= n) && !isPrime[r]) r++;
+        while (true) {
+            while (!isPrime[l]) l--;
+            while (!isPrime[r]) r++;
 
             if (l + r > n) {
                 l--;
@@ -39,7 +39,6 @@ public class Main {
                 return new int[]{l, r};
             }
         }
-        return new int[]{};
     }
 
     private static int read() throws Exception {
