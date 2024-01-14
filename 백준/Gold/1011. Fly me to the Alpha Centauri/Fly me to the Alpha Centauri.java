@@ -1,31 +1,29 @@
-import java.io.*;
-
 public class Main {
-    static String[] l;
+    public static void main(String[] args) throws Exception {
+        int t = read();
+        long a = 0;
+        while (t-- > 0) {
+            int x = read();
+            int y = read();
+            int diff = y - x;
 
-    private static final int C = 46341;
+            for (long i = 0; i < 46341; i++) {
+                long p = i * i;
+                long n = (i + 1) * (i + 1);
 
-    static long cnt;
-
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringBuilder sb = new StringBuilder();
-
-        int T = Integer.parseInt(br.readLine());
-        while (T-- > 0) {
-            l = br.readLine().split(" ");
-            long diff = Integer.parseInt(l[1]) - Integer.parseInt(l[0]);
-
-            for (long i = 0; i <= C; i++) {
-                if (i * i <= diff && diff < (i + 1) * (i + 1)) {
-                    if (diff == i * i) cnt = 2 * i - 1;
-                    else if (diff - (i * i) <= i) cnt = 2 * i;
-                    else if (diff - (i * i) > i) cnt = 2 * i + 1;
+                if (p < diff && diff <= n) {
+                    if (diff <= p + i) a = 2 * i;
+                    else a = 2 * i + 1;
+                    break;
                 }
             }
-
-            sb.append(cnt).append('\n');
+            System.out.println(a);
         }
-        System.out.println(sb);
+    }
+
+    public static int read() throws Exception {
+        int c, n = System.in.read() & 15;
+        while ((c = System.in.read()) > 32) n = (n << 3) + (n << 1) + (c & 15);
+        return n;
     }
 }
