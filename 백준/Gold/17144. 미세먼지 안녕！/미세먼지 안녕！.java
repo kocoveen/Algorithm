@@ -1,132 +1,128 @@
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Deque;
 import java.util.LinkedList;
-import java.util.List;
+import java.util.Queue;
 
 public class Main {
-    static String[] split;
 
+    static String[] line;
+    static int R, C, T;
     static int[][] board;
-    static int r, c, t;
-    static List<int[]> cleaner = new ArrayList<>();
+    static int[] aPRows = new int[2]; // 공기청정기 행
+    static Queue<Info> q = new LinkedList<>();
     static int[] dr = {1, 0, -1, 0};
     static int[] dc = {0, 1, 0, -1};
-    static Deque<Dust> d = new LinkedList<>();
-    static class Dust {
-        int r, c, a;
-        public Dust(int r, int c, int a) {
+    static class Info {
+        int r;
+        int c;
+        int amount;
+
+        public Info(int r, int c, int amount) {
             this.r = r;
             this.c = c;
-            this.a = a;
+            this.amount = amount;
         }
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        line = br.readLine().split(" ");
+        R = Integer.parseInt(line[0]);
+        C = Integer.parseInt(line[1]);
+        T = Integer.parseInt(line[2]);
 
-        split = br.readLine().split(" ");
-        r = Integer.parseInt(split[0]);
-        c = Integer.parseInt(split[1]);
-        t = Integer.parseInt(split[2]);
-
-        board = new int[r][c];
-        for (int i = 0; i < r; i++) {
-            split = br.readLine().split(" ");
-            for (int j = 0; j < c; j++) {
-                board[i][j] = Integer.parseInt(split[j]);
+        board = new int[R][C]; int a = 0;
+        for (int i = 0; i < R; i++) {
+            line = br.readLine().split(" ");
+            for (int j = 0; j < C; j++) {
+                board[i][j] = Integer.parseInt(line[j]);
                 if (board[i][j] == -1) {
-                    cleaner.add(new int[]{i, j});
+                    aPRows[a++] = i;
                 }
             }
         }
 
-        while (t-- > 0) {
-            for (int i = 0; i < r; i++) {
-                for (int j = 0; j < c; j++) {
-                    if (board[i][j] >= 5) {
-                        spreadDust(i, j, board[i][j]);
-                    }
-                }
-            }
-            while (!d.isEmpty()) {
-                Dust loc = d.pollFirst();
-                board[loc.r][loc.c] += loc.a;
-            }
-            circulate();
+        while (T-- > 0) {
+            spread();
+            ventilate();
         }
 
-        int answer = 0;
-        for (int[] b : board) {
-            for (int i : b) {
-                if (i != -1) {
-                    answer += i;
-                }
+        int sum = 0;
+        for (int i = 0; i < R; i++) {
+            for (int j = 0; j < C; j++) {
+                if (board[i][j] == -1) continue;
+                sum += board[i][j];
             }
         }
-        System.out.println(answer);
+        System.out.println(sum);
     }
 
-    private static void circulate() {
-        for (int i = cleaner.get(0)[0] - 2; i >= 0; i--) {
-            board[i + 1][0] = board[i][0];
+    private static void ventilate() {
+        // 반시계
+        int north = aPRows[0];
+
+        for (int r = north - 2; r >= 0; r--) {
+            board[r + 1][0] = board[r][0];
         }
 
-        for (int i = 1; i < c; i++) {
-            board[0][i - 1] = board[0][i];
+        for (int c = 1; c < C; c++) {
+            board[0][c - 1] = board[0][c];
         }
 
-        for (int i = 1; i <= cleaner.get(0)[0]; i++) {
-            board[i - 1][c - 1] = board[i][c - 1];
+        for (int r = 1; r <= north; r++) {
+            board[r - 1][C - 1] = board[r][C - 1];
         }
 
-        for (int i = c - 2; i >= 1; i--) {
-            board[cleaner.get(0)[0]][i + 1] = board[cleaner.get(0)[0]][i];
+        for (int c = C - 2; c >= 1; c--) {
+            board[north][c + 1] = board[north][c];
         }
-        board[cleaner.get(0)[0]][cleaner.get(0)[1] + 1] = 0;
-        //-------
-        for (int i = cleaner.get(1)[0] + 2; i < r; i++) {
-            board[i - 1][0] = board[i][0];
+        board[north][1] = 0;
+
+        //시계
+        int south = aPRows[1];
+
+        for (int r = south + 2; r < R; r++) {
+            board[r - 1][0] = board[r][0];
         }
 
-        for (int i = 1; i < c; i++) {
-            board[r - 1][i - 1] = board[r - 1][i];
+        for (int c = 1; c < C; c++) {
+            board[R - 1][c - 1] = board[R - 1][c];
         }
 
-        for (int i = r - 2; i >= cleaner.get(1)[0]; i--) {
-            board[i + 1][c - 1] = board[i][c - 1];
+        for (int r = R - 2; r >= south; r--) {
+            board[r + 1][C - 1] = board[r][C - 1];
         }
 
-        for (int i = c - 2; i >= 1; i--) {
-            board[cleaner.get(1)[0]][i + 1] = board[cleaner.get(1)[0]][i];
+        for (int c = C - 2; c >= 1; c--) {
+            board[south][c + 1] = board[south][c];
         }
-        board[cleaner.get(1)[0]][cleaner.get(1)[1] + 1] = 0;
+        board[south][1] = 0;
     }
 
-    private static void spreadDust(int r, int c, int a) {
-        int spreadingDust = a / 5;
-        for (int i = 0; i < 4; i++) {
-            int nr = r + dr[i];
-            int nc = c + dc[i];
-            if (isOverBoundary(nr, nc)) continue;
-            if (isCleaner(nr, nc)) continue;
-            d.offerLast(new Dust(nr, nc, spreadingDust));
-            board[r][c] -= spreadingDust;
+    private static void spread() {
+        for (int i = 0; i < R; i++) {
+            for (int j = 0; j < C; j++) {
+                if (board[i][j] <= 0) continue;
+                board[i][j] -= evaluateDust(i, j, board[i][j]);
+            }
+        }
+
+        while (!q.isEmpty()) {
+            Info d = q.remove();
+            board[d.r][d.c] += d.amount;
         }
     }
 
-    private static boolean isCleaner(int nr, int nc) {
-        for (int[] clean : cleaner) {
-            if (clean[0] == nr && clean[1] == nc) {
-                return true;
-            }
+    private static int evaluateDust(int r, int c, int curAmount) {
+        int sum = 0;
+        for (int k = 0; k < 4; k++) {
+            int nr = r + dr[k];
+            int nc = c + dc[k];
+            if (nr < 0 || R <= nr || nc < 0 || C <= nc) continue;
+            if (board[nr][nc] == -1) continue;
+            q.add(new Info(nr, nc, curAmount / 5));
+            sum += curAmount / 5;
         }
-        return false;
-    }
-
-    private static boolean isOverBoundary(int nr, int nc) {
-        return nr < 0 || nr >= r || nc < 0 || nc >= c;
+        return sum;
     }
 }
