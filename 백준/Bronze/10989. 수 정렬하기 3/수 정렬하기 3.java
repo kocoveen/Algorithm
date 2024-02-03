@@ -1,44 +1,28 @@
-import java.io.*;
-
 public class Main {
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-        int N = Integer.parseInt(br.readLine());
-        int[] A = new int[N];
 
-        for (int i = 0; i < N; i++) {
-            A[i] = Integer.parseInt(br.readLine());
-        } 
+    static int n, mx;
+    static int[] cnt = new int[10_000_001];
 
-        countingSort(A);
-
-        for (int i : result) {
-            bw.write(i + "\n");
+    public static void main(String[] args) throws Exception {
+        n = read();
+        for (int i = 0; i < n; i++) {
+            int k = read();
+            cnt[k]++;
+            mx = Math.max(mx, k);
         }
 
-        br.close();
-        bw.flush();
-        bw.close();
+        StringBuilder sb = new StringBuilder();
+        for (int i = 1; i <= mx; i++) {
+            while (cnt[i]-- > 0) {
+                sb.append(i).append("\n");
+            }
+        }
+        System.out.print(sb);
     }
 
-    private static int[] counting;
-    private static int[] result;
-
-    private static void countingSort(int[] A) {
-        counting = new int[10001];
-        result = new int[A.length];
-
-        for (int j : A)
-            counting[j]++;
-
-        for (int i = 0; i < counting.length - 1; i++)
-            counting[i+1] += counting[i];
-
-        for (int i = A.length - 1; i >= 0; i--) {
-            int value = A[i];
-            counting[value]--;
-            result[counting[value]] = value;
-        }
+    static int read() throws Exception {
+        int c, n = System.in.read() & 15;
+        while ((c = System.in.read()) > 32) n = (n << 3) + (n << 1) + (c & 15);
+        return n;
     }
 }
