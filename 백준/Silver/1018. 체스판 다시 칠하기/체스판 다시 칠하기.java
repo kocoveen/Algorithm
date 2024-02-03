@@ -1,56 +1,55 @@
 import java.io.*;
-import java.util.StringTokenizer;
 
 public class Main {
+
+    static String[] ln;
+    static int n, m;
+    static int min = Integer.MAX_VALUE;
+    static char[][] board;
+    static char[][][] correctBoard = new char[2][8][8];
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-        StringTokenizer st = new StringTokenizer(br.readLine());
+        ln = br.readLine().split(" ");
+        n = Integer.parseInt(ln[0]);
+        m = Integer.parseInt(ln[1]);
 
-        int M = Integer.parseInt(st.nextToken());
-        int N = Integer.parseInt(st.nextToken());
-
-        char[][][] board = new char[2][8][8];
-        char[][] boardMN = new char[M][N];
-
-        for (int k = 0; k < board.length; k++)
-            for (int i = 0; i < board[k].length; i++)
-                for (int j = 0; j < board[k][i].length; j++)
-                    if ((i + j + k) % 2 == 0)
-                        board[k][i][j] = 'B';
-                    else
-                        board[k][i][j] = 'W';
-
-        String s;
-        for (int i = 0; i < M; i++) {
-            s = br.readLine();
-            for (int j = 0; j < N; j++) {
-                boardMN[i][j] = s.charAt(j);
+        board = new char[n][m];
+        for (int i = 0; i < n; i++) {
+            String l = br.readLine();
+            for (int j = 0; j < m; j++) {
+                board[i][j] = l.charAt(j);
             }
         }
 
-        int min = M*N;
         for (int k = 0; k < 2; k++) {
-
-            for (int y = 0; y <= N - 8; y++) {
-                for (int x = 0; x <= M - 8; x++) {
-
-                    int cnt = 0;
-                    for (int i = 0; i < 8; i++) {
-                        for (int j = 0; j < 8; j++) {
-                            if (board[k][i][j] != boardMN[i+x][j+y])
-                                cnt++;
-                        }
-                    }
-                    if (min > cnt)
-                        min = cnt;
+            for (int i = 0; i < 8; i++) {
+                for (int j = 0; j < 8; j++) {
+                    char color = (k + i + j) % 2 == 0 ? 'B' : 'W';
+                    correctBoard[k][i][j] = color;
                 }
             }
         }
-        bw.write(min + "");
 
-        bw.flush();
-        br.close();
-        bw.close();
+        for (int i = 0; i <= n - 8; i++) {
+            for (int j = 0; j <= m - 8; j++) {
+                min = Math.min(min, countIncorrect(i, j));
+            }
+        }
+        System.out.println(min);
+    }
+
+    private static int countIncorrect(int r, int c) {
+        int result = min;
+        for (int k = 0; k < 2; k++) {
+            int sum = 0;
+            for (int i = 0; i < 8; i++) {
+                for (int j = 0; j < 8; j++) {
+                    if (correctBoard[k][i][j] != board[r + i][c + j]) sum++;
+                }
+            }
+            result = Math.min(result, sum);
+        }
+        return result;
     }
 }
