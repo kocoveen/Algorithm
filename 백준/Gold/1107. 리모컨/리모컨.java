@@ -1,37 +1,41 @@
-import java.util.*;
+import java.io.IOException;
 
 public class Main {
 
-    public static void main(String[] args)  {
-        Scanner sc = new Scanner(System.in);
+    static int n, m;
+    static int brokens;
 
-        int n = sc.nextInt();
-        int m = sc.nextInt();
-
-        boolean[] broken = new boolean[10];
-        while (m-- > 0) {
-            int i = sc.nextInt();
-            broken[i] = true;
+    public static void main(String[] args) throws IOException {
+        n = read();
+        m = read();
+        for (int i = 0; i < m; i++) {
+            brokens |= 1 << read();
         }
 
-        int result = Math.abs(n - 100);
+        int min = Math.abs(n - 100);
         for (int i = 0; i <= 999999; i++) {
-            String str = Integer.toString(i);
-            int digit = str.length();
+            String channel = Integer.toString(i);
 
             boolean isBroken = false;
-            for (int j = 0; j < digit; j++) {
-                if (broken[str.charAt(j) - '0']) {
+            for (int j = 0; j < channel.length(); j++) {
+                int button = channel.charAt(j) - '0';
+                if ((brokens & (1 << button)) == (1 << button)) {
                     isBroken = true;
                     break;
                 }
             }
 
             if (!isBroken) {
-                int pushCount = Math.abs(n - i) + digit;
-                result = Math.min(pushCount, result);
+                int cnt = channel.length() + Math.abs(n - i);
+                min = Math.min(min, cnt);
             }
         }
-        System.out.println(result);
+        System.out.println(min);
+    }
+
+    static int read() throws IOException {
+        int c, n = System.in.read() & 15;
+        while ((c = System.in.read()) > 32) n = (n << 3) + (n << 1) + (c & 15);
+        return n;
     }
 }
