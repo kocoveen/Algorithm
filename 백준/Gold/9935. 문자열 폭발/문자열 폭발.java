@@ -1,46 +1,30 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Stack;
+import java.io.*;
+import java.util.*;
 
 public class Main {
-
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        String text = br.readLine();
+        String pattern = br.readLine();
 
-        String string = br.readLine();
-        String explosion = br.readLine();
-        Stack<Character> s = new Stack<>();
-
-        for (int i = 0; i < string.length(); i++) {
-            char c = string.charAt(i);
-            s.push(c);
-
-            while (s.size() >= explosion.length() && isExplosion(s, explosion)) {
-                for (int j = 0; j < explosion.length(); j++) {
-                    s.pop();
-                }
+        Stack<Character> stack = new Stack<>();
+        for (int i = 0; i < text.length(); i++) {
+            stack.push(text.charAt(i));
+            if (stack.size() >= pattern.length() && isCorrect(stack, pattern)) {
+                for (int j = 0; j < pattern.length(); j++) stack.pop();
             }
         }
 
         StringBuilder sb = new StringBuilder();
-        if (s.isEmpty()) {
-            System.out.println("FRULA");
-            System.exit(0);
-        }
-
-        for (char c : s) {
-            sb.append(c);
-        }
+        if (stack.isEmpty()) sb.append("FRULA");
+        else for (char c : stack) sb.append(c);
         System.out.println(sb);
     }
 
-    private static boolean isExplosion(Stack<Character> s, String explosion) {
-        int idx = 0;
-        for (int i = s.size() - explosion.length(); i < s.size(); i++, idx++) {
-            if (s.get(i) != explosion.charAt(idx)) {
-                return false;
-            }
+    private static boolean isCorrect(Stack<Character> stack, String pattern) {
+        int si = stack.size() - pattern.length();
+        for (int pi = 0; pi < pattern.length(); pi++) {
+            if (stack.get(si + pi) != pattern.charAt(pi)) return false;
         }
         return true;
     }
