@@ -1,36 +1,29 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.IOException;
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.Queue;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine());
+    public static void main(String[] args) throws Exception {
+        int n = read(), k = read();
+
+        Queue<Integer> q = new ArrayDeque<>();
+        for (int i = 1; i <= n; i++) q.add(i);
+
         StringBuilder sb = new StringBuilder();
-        int N = Integer.parseInt(st.nextToken());
-        int K = Integer.parseInt(st.nextToken());
-
-        Queue<Integer> Q = new LinkedList<>();
-
-        for (int i = 1; i <= N; i++)
-            Q.add(i);
-
-        int count = 0;
-        while (!Q.isEmpty()) {
-            count++;
-            if (count == K) {
-                if (Q.size() != 1)
-                    sb.append(Q.poll()).append(", ");
-                else
-                    sb.append(Q.poll());
-                count = 0;
-            } else
-                Q.add(Q.poll());
+        sb.append("<");
+        int cnt = 0;
+        while (!q.isEmpty()) {
+            cnt++;
+            if (cnt % k != 0) q.add(q.remove());
+            else if (q.size() > 1) sb.append(q.remove()).append(", ");
+            else sb.append(q.remove());
         }
-        System.out.print("<");
+        sb.append(">");
         System.out.print(sb);
-        System.out.print(">");
+    }
 
+    public static int read() throws Exception {
+        int c, n = System.in.read() & 15;
+        while ((c = System.in.read()) > 32) n = (n << 3) + (n << 1) + (c & 15);
+        return n;
     }
 }
