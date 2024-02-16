@@ -1,65 +1,66 @@
-import java.io.*;
-import java.util.StringTokenizer;
-
 public class Main {
 
-    static int[] inorders;
-    static int[] postorders;
-    static int[] indexes;
-    static int N;
-    static StringTokenizer st;
-    static StringBuilder sb = new StringBuilder();
+    static int n, idx = 1;
+    static int[] preTree;
+    static int[] postTree;
+    static int[] inTree;
+    static int[] indexes; // inTree 값의 인덱스 저장
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    public static void main(String[] args) throws Exception {
+        n = read();
+        preTree = new int[n + 1];
+        inTree = new int[n + 1];
+        postTree = new int[n + 1];
 
-        N = Integer.parseInt(br.readLine());
+        indexes = new int[n + 1];
 
-        inorders = new int[N+1];
-        postorders = new int[N+1];
-        indexes = new int[N+1]; // inorder 의 index 정보 저장
-
-        st = new StringTokenizer(br.readLine());
-        for (int i = 1; i <= N; i++) {
-            inorders[i] = Integer.parseInt(st.nextToken());
-            indexes[inorders[i]] = i;
-
+        for (int i = 1; i <= n; i++) {
+            inTree[i] = read();
+            indexes[inTree[i]] = i;
         }
 
-        st = new StringTokenizer(br.readLine());
-        for (int i = 1; i <= N; i++) {
-            postorders[i] = Integer.parseInt(st.nextToken());
-        }
+        for (int i = 1; i <= n; i++) postTree[i] = read();
 
-        dfs(1, N, 1, N);
-        System.out.print(sb);
+        dfs(1, n + 1, 1, n + 1);
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 1; i <= n; i++) {
+            sb.append(preTree[i]).append(" ");
+        }
+        System.out.println(sb);
     }
 
-    private static void dfs(int in_si, int in_ei, int post_si, int post_ei) {
+    private static void dfs(int in_st, int in_en, int post_st, int post_en) {
 
-        // 분할 불가
-        if (in_si > in_ei || post_si > post_ei) {
-            return;
-        }
+        if (in_st >= in_en || post_st >= post_en) return;
 
-        int rootIndex = indexes[postorders[post_ei]];
-        int leftSize = rootIndex - in_si;
-        int rightSize = in_ei - rootIndex;
+        int root = postTree[post_en - 1];
 
-        sb.append(postorders[post_ei]).append(" ");
+        preTree[idx++] = root;
 
-        // 좌자식트리
-        dfs(in_si, rootIndex - 1, post_si, post_si + leftSize - 1);
-        // 우자식트리
-        dfs(rootIndex + 1, in_ei, post_si + leftSize, post_ei - 1);
+        int in_root_index = indexes[root];
+
+        int l_size = in_root_index - in_st; // 좌측 자식 트리 size
+        int r_size = in_en - in_root_index - 1; // 우측 자식 트리 size
+
+        int l_in_st = in_st;
+        int l_in_en = l_in_st + l_size;
+        int l_post_st = post_st;
+        int l_post_en = post_st + l_size;
+
+        int r_in_st = in_root_index + 1;
+        int r_in_en = r_in_st + r_size;
+        int r_post_st = post_st + l_size;
+        int r_post_en = r_post_st + r_size;
+
+        dfs(l_in_st, l_in_en, l_post_st, l_post_en);
+        dfs(r_in_st, r_in_en, r_post_st, r_post_en);
     }
 
-    private static int findRootInInorder(int value) {
-        for (int i = 0; i < N; i++) {
-            if (inorders[i] == value) {
-                return i;
-            }
-        }
-        return -1;
+
+    public static int read() throws Exception {
+        int c, n = System.in.read() & 15;
+        while ((c = System.in.read()) > 32) n = (n << 3) + (n << 1) + (c & 15);
+        return n;
     }
 }
