@@ -1,34 +1,33 @@
-import java.io.*;
-
 public class Main {
-    static int N, S, cnt = 0;
 
+    static int n, s, cnt;
     static int[] arr;
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    public static void main(String[] args) throws Exception {
+        n = read(); s = read();
+        arr = new int[n];
+        for (int i = 0; i < n; i++) arr[i] = read();
 
-        String[] l1 = br.readLine().split(" ");
-        String[] l2 = br.readLine().split(" ");
-
-        N = Integer.parseInt(l1[0]);
-        S = Integer.parseInt(l1[1]);
-
-        arr = new int[N];
-        for (int i = 0; i < N; i++)
-            arr[i] = Integer.parseInt(l2[i]);
-
-        func(0, 0);
-        if(S == 0) cnt--;
+        subsequenceSum(0, 0);
+        if (s == 0) cnt--;
         System.out.println(cnt);
     }
 
-    private static void func(int cur, int tot){
-        if(cur == N){
-            if(tot == S) cnt++;
+    private static void subsequenceSum(int depth, int sum) {
+        if (depth == n) {
+            if (sum == s) cnt++;
             return;
         }
-        func(cur + 1, tot);
-        func(cur + 1, tot + arr[cur]);
+
+        subsequenceSum(depth + 1, arr[depth] + sum);
+        subsequenceSum(depth + 1, sum);
+    }
+
+    public static int read() throws Exception {
+        int c, n = System.in.read() & 15;
+        boolean isNegative = n == 13;
+        if (isNegative) n = System.in.read() & 15;
+        while ((c = System.in.read()) > 32) n = (n << 3) + (n << 1) + (c & 15);
+        return isNegative ? ~n + 1 : n;
     }
 }
