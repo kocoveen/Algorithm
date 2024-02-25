@@ -1,44 +1,49 @@
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 
 public class Main {
+
+    static int R, C, mx;
+    static char[][] map;
+    static boolean[] visited = new boolean[26];
     static int[] dr = {1, 0, -1, 0};
     static int[] dc = {0, 1, 0, -1};
-    static int[][] board;
-    static int n, m, mx;
-    static boolean[] visit = new boolean[26];
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        String[] split = br.readLine().split(" ");
-        n = Integer.parseInt(split[0]);
-        m = Integer.parseInt(split[1]);
+        String[] token = br.readLine().split(" ");
+        R = Integer.parseInt(token[0]);
+        C = Integer.parseInt(token[1]);
 
-        board = new int[n][m];
-
-        for (int i = 0; i < n; i++) {
-            String s = br.readLine();
-            for (int j = 0; j < m; j++) {
-                board[i][j] = s.charAt(j) - 'A';
+        map = new char[R][C];
+        for (int i = 0; i < R; i++) {
+            String line = br.readLine();
+            for (int j = 0; j < C; j++) {
+                map[i][j] = line.charAt(j);
             }
         }
 
-        dfs(0, 0, 0);
+        dfs(0, 0);
         System.out.println(mx);
     }
 
-    private static void dfs(int r, int c, int count) {
-        if (visit[board[r][c]]) {
-            mx = Math.max(mx, count);
-            return;
-        }
-
-        visit[board[r][c]] = true;
+    private static void dfs(int r, int c) {
+        visited[map[r][c] - 'A'] = true;
+        mx = Math.max(mx, count(visited));
         for (int i = 0; i < 4; i++) {
-            int nr = dr[i] + r;
-            int nc = dc[i] + c;
-            if (nr >= n || nr < 0 || nc >= m || nc < 0) continue;
-            dfs(nr, nc, count + 1);
+            int nr = r + dr[i];
+            int nc = c + dc[i];
+            if (nr < 0 || R <= nr || nc < 0 || C <= nc) continue;
+            if (visited[map[nr][nc] - 'A']) continue;
+            visited[map[nr][nc] - 'A'] = true;
+            dfs(nr, nc);
+            visited[map[nr][nc] - 'A'] = false;
         }
-        visit[board[r][c]] = false;
+    }
+
+    private static int count(boolean[] visited) {
+        int cnt = 0;
+        for (boolean b : visited) if (b) cnt++;
+        return cnt;
     }
 }
