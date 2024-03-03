@@ -51,80 +51,17 @@ public class Main {
         int idx = 0; // 게임 첫 타자
 
         for (int inning = 0; inning < n; inning++) {
-            out = 0; // 현재 이닝에서 아웃의 수
-            boolean[] base = new boolean[4]; // true : 해당 베이스에 선수가 있음, false : 해당 베이스에 선수가 없음
-            
+            out = 0; // 아웃 초기화
+            int base = 0; // 3루, 2루, 1루, 홈 상태 초기화
+
             while (out < 3) {
-                switch (players[inning][battingOrder[idx]]) {
-                    // 1루타
-                    case 1: {
-                        if (base[3]) {
-                            run++;
-                            base[3] = false;
-                        }
-                        if (base[2]) {
-                            base[3] = true;
-                            base[2] = false;
-                        }
-                        if (base[1]) {
-                            base[2] = true;
-                        }
-                        base[1] = true;
-                        break;
-                    }
-                    // 2루타
-                    case 2: {
-                        if (base[3]) {
-                            run++;
-                            base[3] = false;
-                        }
-                        if (base[2]) {
-                            run++;
-                        }
-                        if (base[1]) {
-                            base[3] = true;
-                            base[1] = false;
-                        }
-                        base[2] = true;
-                        break;
-                    }
-                    // 3루타
-                    case 3: {
-                        if (base[3]) {
-                            run++;
-                        }
-                        if (base[2]) {
-                            run++;
-                            base[2] = false;
-                        }
-                        if (base[1]) {
-                            run++;
-                            base[1] = false;
-                        }
-                        base[3] = true;
-                        break;
-                    }
-                    // 홈런
-                    case 4: {
-                        if (base[3]) {
-                            run++;
-                            base[3] = false;
-                        }
-                        if (base[2]) {
-                            run++;
-                            base[2] = false;
-                        }
-                        if (base[1]) {
-                            run++;
-                            base[1] = false;
-                        }
-                        run++;
-                        break;
-                    }
-                    // 아웃(0)
-                    default: {
-                        out++;
-                    }
+                int batting = players[inning][battingOrder[idx]];
+                if (batting == 0) {
+                    out++;
+                } else {
+                    base = (base + 1) << batting; // 루타만큼 비트 이동
+                    run += Integer.bitCount(base >> 4); // 뒤에서 4번째 비트보다 큰 비트들의 1을 세어, 점수에 합
+                    base %= (1 << 4); // 뒤에서 4번째 비트보다 큰 비트는 전부 0으로 바꿈
                 }
                 // 다음 타자로
                 idx = (idx + 1) % 9;
