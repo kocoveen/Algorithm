@@ -1,25 +1,24 @@
-import java.io.*;
-
 public class Main {
-    static String[] l;
+   public static void main(String[] args) throws Exception {
+      long n = read(); long k = read();
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+      long len = 1, exp = 1, tmp;
+      while (k > (tmp = 9L * exp * len)) {
+         k -= tmp;
+         exp *= 10;
+         len++;
+      }
 
-        l = br.readLine().split(" ");
-        long n = Long.parseLong(l[0]);
-        long k = Long.parseLong(l[1]);
+      k--;
+      long target = exp + k / len;
 
-        long len = 1, exp = 1;
-        while (k > 9L * len * exp) {
-            k -= 9L * len * exp;
-            exp *= 10;
-            len++;
-        }
+      if (target > n) System.out.println(-1);
+      else System.out.println(String.valueOf(target).charAt((int) (k % len)));
+   }
 
-        long target = exp + (k - 1) / len;
-
-        if (target > n) System.out.println(-1);
-        else System.out.println(String.valueOf(target).charAt((int) ((k - 1) % len)));
-    }
+   static int read() throws Exception {
+      int c, n = System.in.read() & 15;
+      while ((c = System.in.read()) > 32) n = (n << 3) + (n << 1) + (c & 15);
+      return n;
+   }
 }
