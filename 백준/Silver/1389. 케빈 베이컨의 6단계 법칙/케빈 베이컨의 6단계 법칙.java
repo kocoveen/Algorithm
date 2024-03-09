@@ -2,58 +2,52 @@ import java.util.*;
 
 public class Main {
 
+    static int n, m;
     static int[][] graph;
-    static int[] level;
-    static int min = 5050;
-    static int minIdx;
+    static int[] depth;
+    static int mn = 5051, mnIdx;
 
-    public static void main(String[] args)  {
-        Scanner sc = new Scanner(System.in);
-
-        int n = sc.nextInt();
-        int m = sc.nextInt();
-
-        graph = new int[n][n];
-
+    public static void main(String[] args) throws Exception {
+        n = read(); m = read();
+        graph = new int[n + 1][n + 1];
         while (m-- > 0) {
-            int n1 = sc.nextInt() - 1;
-            int n2 = sc.nextInt() - 1;
-            graph[n1][n2] = 1;
-            graph[n2][n1] = 1;
+            int a = read(), b = read();
+            graph[a][b] = 1;
+            graph[b][a] = 1;
         }
 
-        Queue<Integer> q = new LinkedList<>();
-        for (int i = 0; i < n; i++) {
-            level = new int[n];
-            Arrays.fill(level, -1);
-
-            int kevin = bfs(q, i, n);
-            if (min > kevin) {
-                min = kevin;
-                minIdx = i;
+        Queue<Integer> q = new ArrayDeque<>();
+        for (int i = 1; i <= n; i++) {
+            int kevin = bfs(q, i);
+            if (mn > kevin) {
+                mn = kevin;
+                mnIdx = i;
             }
         }
-
-        System.out.println(minIdx + 1);
+        System.out.println(mnIdx);
     }
 
-    private static int bfs(Queue<Integer> q, int i, int n) {
-        q.offer(i);
-        level[i] = 0;
+    static int bfs(Queue<Integer> q, int num) {
+        depth = new int[n + 1];
+        Arrays.fill(depth, -1);
+
+        q.add(num);
         while (!q.isEmpty()) {
-            int cur = q.poll();
-            for (int j = 0; j < n; j++) {
-                if (graph[cur][j] > 0 && level[j] < 0) {
-                    q.offer(j);
-                    level[j] = level[cur] + 1;
+            int cur = q.remove();
+            for (int nxt = 1; nxt <= n; nxt++) {
+                if (graph[cur][nxt] > 0 && depth[nxt] < 0) {
+                    q.add(nxt);
+                    depth[nxt] = depth[cur] + 1;
                 }
             }
         }
 
-        return getKevins(level);
+        return Arrays.stream(depth).sum() + 1;
     }
 
-    private static int getKevins(int[] level) {
-        return Arrays.stream(level).sum();
+    static int read() throws Exception {
+        int c, n = System.in.read() & 15;
+        while ((c = System.in.read()) > 32) n = (n << 3) + (n << 1) + (c & 15);
+        return n;
     }
 }
