@@ -3,22 +3,35 @@ import java.util.*;
 public class Main {
 
     static int n, m;
-    static int[][] graph;
-    static int[] depth;
+    static List<Integer>[] graph;
+    static int[][] dist;
     static int mn = 5051, mnIdx;
 
     public static void main(String[] args) throws Exception {
         n = read(); m = read();
-        graph = new int[n + 1][n + 1];
+        graph = new List[n + 1];
+        for (int i = 1; i <= n; i++) graph[i] = new ArrayList<>();
+
         while (m-- > 0) {
             int a = read(), b = read();
-            graph[a][b] = 1;
-            graph[b][a] = 1;
+            graph[a].add(b);
+            graph[b].add(a);
         }
 
-        Queue<Integer> q = new ArrayDeque<>();
+        dist = new int[n + 1][n + 1];
         for (int i = 1; i <= n; i++) {
-            int kevin = bfs(q, i);
+            for (int j = 1; j <= n; j++) {
+                dist[i][j] = mn;
+            }
+            for (int j : graph[i]) {
+                dist[i][j] = 1;
+            }
+            dist[i][i] = 0;
+        }
+
+        floyd_warshall();
+        for (int i = 1; i <= n; i++) {
+            int kevin = sum(i);
             if (mn > kevin) {
                 mn = kevin;
                 mnIdx = i;
@@ -26,23 +39,19 @@ public class Main {
         }
         System.out.println(mnIdx);
     }
-
-    static int bfs(Queue<Integer> q, int num) {
-        depth = new int[n + 1];
-        Arrays.fill(depth, -1);
-
-        q.add(num);
-        while (!q.isEmpty()) {
-            int cur = q.remove();
-            for (int nxt = 1; nxt <= n; nxt++) {
-                if (graph[cur][nxt] > 0 && depth[nxt] < 0) {
-                    q.add(nxt);
-                    depth[nxt] = depth[cur] + 1;
+    
+    static void floyd_warshall() {
+        for (int k = 1; k <= n; k++) {
+            for (int i = 1; i <= n; i++) {
+                for (int j = 1; j <= n; j++) {
+                    dist[i][j] = Math.min(dist[i][j], dist[i][k] + dist[k][j]);
                 }
             }
         }
+    }
 
-        return Arrays.stream(depth).sum() + 1;
+    private static int sum(int i) {
+        return Arrays.stream(dist[i]).sum();
     }
 
     static int read() throws Exception {
