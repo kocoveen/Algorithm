@@ -1,44 +1,38 @@
-import java.io.*;
-import java.util.StringTokenizer;
-
 public class Main {
-    static int[] W;
-    static int[] V;
-    static Integer[][] dp;
-    static StringTokenizer st;
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    static int n, k;
+    static int[] weights, values;
+    static int[][] dp;
 
-        st = new StringTokenizer(br.readLine());
-        int N = Integer.parseInt(st.nextToken());
-        int L = Integer.parseInt(st.nextToken());
+    public static void main(String[] args) throws Exception {
+        n = read(); k = read();
 
-        W = new int[N];
-        V = new int[N];
-        dp = new Integer[N][L+1];
+        weights = new int[n + 1];
+        values = new int[n + 1];
 
-
-        for (int i = 0; i < N; i++) {
-            st = new StringTokenizer(br.readLine());
-            W[i] = Integer.parseInt(st.nextToken());
-            V[i] = Integer.parseInt(st.nextToken());
+        for (int i = 1; i <= n; i++) {
+            int w = read();
+            int v = read();
+            weights[i] = w;
+            values[i] = v;
         }
 
-        System.out.println(knapbag(N - 1, L));
+        dp = new int[n + 1][k + 1];
+
+
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= k; j++) {
+                if (j >= weights[i]) dp[i][j] = Math.max(dp[i - 1][j], dp[i - 1][j - weights[i]] + values[i]);
+                else dp[i][j] = dp[i - 1][j];
+            }
+        }
+
+        System.out.println(dp[n][k]);
     }
 
-    public static int knapbag(int i, int k) {
-        if (i < 0)
-            return 0;
-        if (dp[i][k] == null) {
-
-            if (W[i] > k)
-                dp[i][k] = knapbag(i - 1, k);
-            else if (W[i] <= k)
-                dp[i][k] = Math.max(knapbag(i - 1, k), knapbag(i - 1, k - W[i]) + V[i]);
-
-        }
-        return dp[i][k];
+    static int read() throws Exception {
+        int c, n = System.in.read() & 15;
+        while ((c = System.in.read()) > 32) n = (n << 3) + (n << 1) + (c & 15);
+        return n;
     }
 }
