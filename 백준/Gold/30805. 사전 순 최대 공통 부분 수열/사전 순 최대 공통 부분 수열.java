@@ -7,6 +7,8 @@ public class Main {
     static List<Integer> list = new ArrayList<>();
 
     public static void main(String[] args) throws Exception {
+        StringBuilder sb = new StringBuilder();
+
         N = read();
         A = new int[N];
         for (int i = 0; i < N; i++) A[i] = read();
@@ -38,8 +40,9 @@ public class Main {
             } else break;
         }
 
-        System.out.println(list.size());
-        for (int i : list) System.out.print(i + " ");
+        sb.append(list.size()).append('\n');
+        for (int i : list) sb.append(i).append(' ');
+        System.out.print(sb);
     }
 
     private static int read() throws Exception {
