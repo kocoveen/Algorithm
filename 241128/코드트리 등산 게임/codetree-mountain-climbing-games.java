@@ -38,9 +38,16 @@ public class Main {
 
                 // 산 삭제
                 case 300: {
-                    int idx = indexs.get(indexs.size() - 1);
-                    indexs.remove(idx);
-                    if (mountains.get(mountains.size() - 1).size() == 0) mountains.remove(mountains.size() - 1);
+                    if (!indexs.isEmpty()) {
+                        int idx = indexs.get(indexs.size() - 1);
+                        indexs.remove(indexs.size() - 1);
+                        if (mountains.get(idx).size() > 0) {
+                            mountains.get(idx).remove(mountains.get(idx).size() - 1);
+                        }
+                        if (mountains.get(idx).isEmpty()) {
+                            mountains.remove(idx);
+                        }
+                    }
                     break;
                 }
 
@@ -69,7 +76,6 @@ public class Main {
     }
 
     private static int binarySearch(int height) {
-        if (mountains.size() == 0) return 0;
         int l = 0, r = mountains.size() - 1, m;
         int idx = mountains.size();
         while (l <= r) {
