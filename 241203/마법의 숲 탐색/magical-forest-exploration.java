@@ -10,13 +10,16 @@ public class Main {
     static Forest forest;
 
     static class Forest {
-        int r, c, g;
+        int or, oc, g;
+        int r, c;
         int[][] map;
 
         Forest(int r, int c) {
-            this.r = r;
+            this.or = r;
+            this.oc = c;
+            this.r = or + 3;
             this.c = c;
-            this.map = new int[r][c];
+            this.map = new int[this.r][this.c];
             init();
         }
 
@@ -63,12 +66,14 @@ public class Main {
         private boolean isFull() {
             for (int i = 0; i < c; i++) {
                 if (map[0][i] > 0) return true;
+                if (map[1][i] > 0) return true;
+                if (map[2][i] > 0) return true;
             }
             return false;
         }
 
         private boolean isBoundarySouth(int gr, int gc) {
-            return gr + 2 <= R;
+            return gr + 2 < r;
         }
 
         private boolean isBoundaryWestSouth(int gr, int gc) {
@@ -101,7 +106,7 @@ public class Main {
 
             while (!q.isEmpty()) {
                 Point p = q.poll();
-                maxRow = Math.max(maxRow, p.r);
+                maxRow = Math.max(maxRow, p.r - 2);
                 for (int i = 0; i < 4; i++) {
                     int nr = p.r + dr[i];
                     int nc = p.c + dc[i];
@@ -123,7 +128,7 @@ public class Main {
 
         public void printMap() {
             for (int i = 0; i < r; i++) {
-                System.out.printf("%2d|", i);
+                System.out.printf("%2d|", i-2);
                 for (int j = 0; j < c; j++) {
                     System.out.printf("%2c ", printValue(map[i][j]));
                 }
@@ -145,7 +150,7 @@ public class Main {
         private final Forest f;
 
         Golem(int c, int d, Forest f) {
-            this.r = 0;
+            this.r = 1;
             this.c = c;
             this.d = d;
             this.f = f;
@@ -237,7 +242,7 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
         R = read(); C = read(); K = read();
-        forest = new Forest(R + 1, C);
+        forest = new Forest(R, C);
         for (int i = 0; i < K; i++) {
             int c = read()-1; int d = read();
             golems.add(new Golem(c, d, forest));
@@ -246,7 +251,6 @@ public class Main {
         int maxRowSum = 0;
         for (Golem golem : golems) {
             golem.move();
-            // forest.printMap();
 
             if (forest.isFull()) {
                 forest.clear();
@@ -254,7 +258,6 @@ public class Main {
             }
 
             int rowSum = golem.getMaxRowSum();
-            // System.out.println(rowSum);
             maxRowSum += rowSum;
         }
         System.out.println(maxRowSum);
