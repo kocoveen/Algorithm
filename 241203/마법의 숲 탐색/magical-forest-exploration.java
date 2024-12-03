@@ -36,31 +36,17 @@ public class Main {
         }
 
         private void printGolem(Golem golem) {
-            if (golem.r < 0) {
-                ++g;
 
-            } else if (golem.r == 0) {
-                map[golem.r][golem.c] = g++;
+            map[golem.r][golem.c] = g++;
 
-                map[golem.r][golem.c-1] = g;
-                map[golem.r][golem.c+1] = g;
-
-            } else {
-                map[golem.r][golem.c] = g++;
-
-                map[golem.r-1][golem.c] = g;
-                map[golem.r][golem.c-1] = g;
-                map[golem.r][golem.c+1] = g;
-            }
+            map[golem.r-1][golem.c] = g;
+            map[golem.r][golem.c-1] = g;
+            map[golem.r][golem.c+1] = g;
 
             map[golem.r+1][golem.c] = g;
             g++;
 
-            int nr = golem.r + dr[golem.d];
-            if (nr >= 0) {
-                map[golem.r + dr[golem.d]][golem.c + dc[golem.d]] = g;
-            }
-            g++;
+            map[golem.r + dr[golem.d]][golem.c + dc[golem.d]] = g++;
         }
 
         private boolean isFull() {
