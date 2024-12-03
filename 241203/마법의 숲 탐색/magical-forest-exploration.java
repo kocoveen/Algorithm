@@ -11,7 +11,6 @@ public class Main {
 
     static class Forest {
         int r, c, g;
-        int rowSum;
         int[][] map;
 
         Forest(int r, int c) {
@@ -34,13 +33,38 @@ public class Main {
         }
 
         private void printGolem(Golem golem) {
-            map[golem.r][golem.c] = g++;
-            map[golem.r][golem.c-1] = g;
-            map[golem.r][golem.c+1] = g;
-            map[golem.r-1][golem.c] = g;
+            if (golem.r < 0) {
+                ++g;
+
+            } else if (golem.r == 0) {
+                map[golem.r][golem.c] = g++;
+
+                map[golem.r][golem.c-1] = g;
+                map[golem.r][golem.c+1] = g;
+
+            } else {
+                map[golem.r][golem.c] = g++;
+
+                map[golem.r-1][golem.c] = g;
+                map[golem.r][golem.c-1] = g;
+                map[golem.r][golem.c+1] = g;
+            }
+
             map[golem.r+1][golem.c] = g;
-            map[golem.r + dr[golem.d]][golem.c + dc[golem.d]] = ++g;
             g++;
+
+            int nr = golem.r + dr[golem.d];
+            if (nr >= 0) {
+                map[golem.r + dr[golem.d]][golem.c + dc[golem.d]] = g;
+            }
+            g++;
+        }
+
+        private boolean isFull() {
+            for (int i = 0; i < c; i++) {
+                if (map[0][i] > 0) return true;
+            }
+            return false;
         }
 
         private boolean isBoundarySouth(int gr, int gc) {
@@ -106,14 +130,13 @@ public class Main {
                 System.out.print("|");
                 System.out.println();
             }
-            System.out.println();
         }
 
         private char printValue(int v) {
             if (v < 0) return ' ';
-            if (v % 3 == 0) return '@';
-            if (v % 3 == 1) return '+';
-            return '#';
+            if (v % 3 == 0) return '@'; // 정령
+            if (v % 3 == 1) return '+'; // 골렘 몸통
+            return '#'; // 문
         }
     }
 
@@ -134,8 +157,7 @@ public class Main {
                     if (canTranslate()) {
                         moveSouth();
                     } else {
-                        f.clear();
-                        return;
+                        break;
                     }
                 }
 
@@ -156,6 +178,7 @@ public class Main {
 
                 break;
             }
+
             f.printGolem(this);
         }
 
@@ -225,7 +248,13 @@ public class Main {
             golem.move();
             // forest.printMap();
 
+            if (forest.isFull()) {
+                forest.clear();
+                continue;
+            }
+
             int rowSum = golem.getMaxRowSum();
+            // System.out.println(rowSum);
             maxRowSum += rowSum;
         }
         System.out.println(maxRowSum);
