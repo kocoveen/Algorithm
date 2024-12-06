@@ -27,7 +27,6 @@ public class Main {
                 case 2: { moveWest(); break; }
                 case 3: { moveNorth(); break; }
             }
-            
 
             if (ver[v] > map[r][c]) {
                 d = (d + 1) % 4;
@@ -40,11 +39,12 @@ public class Main {
             h = (h + 1) % 4;
             ver[v] = hor[h];
             ver[(v + 2) % 4] = 7 - ver[v];
-            c += 1;
+            c += dc[d];
 
             if (c >= n) { 
                 d = (d + 2) % 4;
-                c -= 1;
+                moveWest();
+                moveWest();
             }
         }
 
@@ -52,11 +52,12 @@ public class Main {
             v = (v + 1) % 4;
             hor[h] = ver[v];
             hor[(h + 2) % 4] = 7 - hor[h];
-            r += 1;
+            r += dr[d];
 
             if (r >= n) { 
                 d = (d + 2) % 4;
-                r -= 1;
+                moveNorth();
+                moveNorth();
             }
         }
 
@@ -64,11 +65,12 @@ public class Main {
             h = (h + 3) % 4;
             ver[v] = hor[h];
             ver[(v + 2) % 4] = 7 - ver[v];
-            c -= 1;
+            c += dc[d];
 
-            if (c < 0) { 
+            if (c < 0) {
                 d = (d + 2) % 4;
-                c += 1;
+                moveEast();
+                moveEast();
             }
         }
 
@@ -76,11 +78,12 @@ public class Main {
             v = (v + 3) % 4;
             hor[h] = ver[v];
             hor[(h + 2) % 4] = 7 - hor[h];
-            c -= 1;
+            r += dr[d];
 
             if (r < 0) { 
                 d = (d + 2) % 4;
-                r += 1;
+                moveSouth();
+                moveSouth();
             }
         }
 
@@ -95,19 +98,23 @@ public class Main {
 
             while (!q.isEmpty()) {
                 Point p = q.poll();
+                            
                 for (int i = 0; i < 4; i++) {
                     int nr = p.r + dr[i];
                     int nc = p.c + dc[i];
-
                     if (nr < 0 || nr >= n || nc < 0 || nc >= n) continue;
+                    // System.out.println("1: [" + nr + ", " + nc + "]");
                     if (visited[nr][nc]) continue;
-                    if (map[nr][nc] != map[p.r][p.c]) continue;
+                    // System.out.println("2: [" + nr + ", " + nc + "]");
+                    if (map[nr][nc] != map[this.r][this.c]) continue;
+                    // System.out.println("3: [" + nr + ", " + nc + "] -> " + map[nr][nc]);
 
                     visited[nr][nc] = true;
                     q.add(new Point(nr, nc));
                     count++;
                 }
             }
+            // System.out.println();
             return count * map[this.r][this.c];
         }
     }
@@ -121,19 +128,33 @@ public class Main {
     }
 
     public static void main(String[] args) throws Exception {
-        n = read(); m = read();
+
+        Scanner sc = new Scanner(System.in);
+
+        n = sc.nextInt(); m = sc.nextInt();
         map = new int[n][n];
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
-                map[i][j] = read();
+                map[i][j] = sc.nextInt();
             }
         }
 
+        // for (int i = 0; i < n; i++) {
+        //     for (int j = 0; j < n; j++) {
+        //         System.out.print(map[i][j] + " ");
+        //     }
+        //     System.out.println();
+        // }
+
         Dice dice = new Dice();
 
-        while (m-- > 0) {
+        for (int i = 0; i < m; i++) {
             dice.move();
-            score += dice.getScore();
+
+            int s = dice.getScore();
+            // System.out.println("[" + dice.r + ", " + dice.c + "](" + dice.d + ")" + ", bot: " + dice.ver[dice.v] + ", score: " + s);
+            score += s;
+
         }
 
         System.out.println(score);
@@ -142,6 +163,7 @@ public class Main {
     private static int read() throws Exception {
         int c, n = System.in.read() & 15;
         while ((c = System.in.read()) > 32) n = (n << 3) + (n << 1) + (c & 15);
+        if (c == 13) System.in.read(); 
         return n;
     }
 }
