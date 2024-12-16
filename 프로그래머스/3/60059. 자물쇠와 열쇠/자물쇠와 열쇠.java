@@ -4,7 +4,7 @@ class Solution {
     public boolean solution(int[][] key, int[][] lock) {
         m = key.length; // (m <= n)
         n = lock.length;
-        pn = (m - 1) * 2 + n;
+        pn = (m - 1) * 2 + n; // 새로운 자물쇠 길이
 
         int[][] pLock = new int[pn][pn];
 
@@ -22,13 +22,13 @@ class Solution {
                     }
                 }
             }
-            key = rotation(key);
+            key = rotate(key);
         }
         return false;
     }
     
     // key 90도 회전
-    private int[][] rotation(int[][] key) {
+    private int[][] rotate(int[][] key) {
         int[][] newKey = new int[m][m];
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < m; j++) {
@@ -38,13 +38,13 @@ class Solution {
         return newKey;
     }
 
-    // key 와 padding 한 lock 이 전부 fit 한지
+    // key 와 padding 한 lock 이 전부 맞는지
     private boolean isUnlocked(int i, int j, int[][] key, int[][] pLock) {
         int[][] newLock = makeNewLock(pLock);
 
         for (int r = 0; r < m; r++) {
             for (int c = 0; c < m; c++) {
-                newLock[i + r][j + c] ^= key[r][c];
+                newLock[i + r][j + c] ^= key[r][c]; // XOR 연산
             }
         }
 
