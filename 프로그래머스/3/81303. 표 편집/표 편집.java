@@ -2,44 +2,48 @@ import java.util.*;
 
 class Solution {
     public String solution(int n, int k, String[] cmds) {
-
         int cursor = k;
+        
         Deque<Integer> deleted = new ArrayDeque<>();
-
+        
         for (String cmd : cmds) {
-            String[] st = cmd.split(" ");
-
-            switch (st[0]) {
+            String[] str = cmd.split(" ");
+            
+            switch (str[0]) {
                 case "D": {
-                    cursor += Integer.parseInt(st[1]);
+                    cursor += Integer.parseInt(str[1]);
+                    if (cursor == n - deleted.size()) { cursor--; }
                     break;
                 }
+                    
                 case "U": {
-                    cursor -= Integer.parseInt(st[1]);
+                    cursor -= Integer.parseInt(str[1]);
+                    if (cursor == -1) { cursor++; }
                     break;
                 }
+                    
                 case "C": {
                     deleted.push(cursor);
-                    if (cursor == n - deleted.size()) {
-                        cursor--;
-                    }
+                    if (cursor == n - deleted.size()) { cursor--; }
                     break;
                 }
+                    
                 case "Z": {
-                    int restore = deleted.pop();
-                    if (restore <= cursor) {
-                        cursor++;
-                    }
+                    int replaced = deleted.pop();
+                    if (cursor >= replaced) { cursor++; }
                     break;
                 }
             }
         }
-
-        String answer = "O".repeat(n - deleted.size());
-        StringBuilder sb = new StringBuilder(answer);
+        
+        
+        String str = "O".repeat(n - deleted.size());
+        StringBuilder sb = new StringBuilder(str);
         while (!deleted.isEmpty()) {
-            sb.insert(deleted.pop(), "X");
+            int index = deleted.pop();
+            sb.insert(index, "X");
         }
+        
         return sb.toString();
     }
 }
