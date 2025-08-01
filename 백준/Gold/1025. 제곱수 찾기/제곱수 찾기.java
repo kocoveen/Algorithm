@@ -1,24 +1,17 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.TreeSet;
 
 public class Main {
 
     static int n, m;
     static char[][] A;
-    static Set<Integer> set = new HashSet<>();
-    static TreeSet<Integer> nums = new TreeSet<>(Comparator.comparingInt(Integer::intValue).reversed());
-    // static char[] num = new char[10];
+    static int result = -1;
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String[] NM = br.readLine().split(" ");
 
-        // 1. 입력 받기
+        // 입력 받기
         n = Integer.parseInt(NM[0]); m = Integer.parseInt(NM[1]);
         A = new char[n][m];
         for (int i = 0; i < n; i++) {
@@ -28,62 +21,35 @@ public class Main {
             }
         }
 
-        // 2. 완전제곱수 집합 만들기
-        for (int i = 0; i < 32000; i++) {
-            set.add(i * i);
-        }
-
+        // 초기위치 (r0, c0), 변위 (dr, dc)
         for (int r0 = 0; r0 < n; r0++) {
             for (int c0 = 0; c0 < m; c0++) {
-                char[] numChar = new char[10];
 
-                for (int rx = -n + 1; rx < n; rx++) {
-                    for (int ry = -m + 1; ry < m; ry++) {
+                for (int dr = -n + 1; dr < n; dr++) {
+                    for (int dc = -m + 1; dc < m; dc++) {
 
-                        // 0, 0 이면 mux를 곱할 필요가 없어, 따로 처리
-                        if (rx == 0 && ry == 0) {
-                            numChar[0] = A[r0][c0];
-                            int num = getInteger(numChar, 0);
-                            nums.add(num);
-                            continue;
-                        }
+                        int r = r0;
+                        int c = c0;
+                        int num = 0;
+                        
+                        // 바운더리를 넘어가기 전까지만 계산.
+                        while (r < n && c < m && r >= 0 && c >= 0) {
+                            num += A[r][c] - '0';
+                            int sqrtInt = (int) Math.sqrt(num);
+                            if ( sqrtInt * sqrtInt == num ) result = Math.max(result, num);
 
-                        for (int mux = 0; mux < 10; mux++) {
-                            int r = r0 + rx * mux;
-                            int c = c0 + ry * mux;
-                            if (r < 0 || r >= n || c < 0 || c >= m) continue;
+                            if (dr == 0 && dc == 0) break; // 0, 0 이면 10 곱하기 전 한번만 계산
 
-                            numChar[mux] = A[r][c];
-                            int num = getInteger(numChar, mux);
-                            int num2 = getReversedInteger(numChar, mux);
-
-                            nums.add(num);
-                            nums.add(num2);
-
+                            num *= 10;
+                            // 등차 더하기
+                            r += dr;
+                            c += dc;
                         }
 
                     }
                 }
             }
         }
-
-        // 3. 완전제곱수 찾기
-        for (int num : nums) {
-            if (set.contains(num)) {
-                System.out.println(num);
-                return;
-            }
-        }
-        System.out.println(-1);
-    }
-
-    static int getInteger(char[] num, int last) {
-        return Integer.parseInt(String.valueOf(num, 0, last + 1));
-    }
-
-    static int getReversedInteger(char[] num, int last) {
-        StringBuilder sb = new StringBuilder();
-        sb.append(num, 0, last + 1).reverse();
-        return Integer.parseInt(sb.toString());
+        System.out.println(result);
     }
 }
