@@ -4,65 +4,35 @@ public class Main {
 
     static int n;
     static int[] buildings;
-    static double[][] slopes;
+    static int[] counts;
     static int result = 0;
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         n = Integer.parseInt(sc.nextLine());
-        // 입력 받기
         String[] tmp = sc.nextLine().split(" ");
         buildings = new int[n];
         for (int i = 0; i < n; i++) {
             buildings[i] = Integer.parseInt(tmp[i]);
         }
 
-        // 기울기 계산 slopes[a][b] = (buildings[a] - buildings[b]) / (a - b);
-        slopes = new double[n][n];
+        counts = new int[n];
+
         for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                if (i == j) continue;
-                slopes[i][j] = (double) (buildings[i] - buildings[j]) / (i - j);
+            double maxSlope = Integer.MIN_VALUE;
+            for (int j = i + 1; j < n; j++) {
+                double slope = (double) (buildings[j] - buildings[i]) / (j - i);
+                
+                // 지금까지 가장 큰 기울기보다 크면, 건물이 보임.
+                if (slope > maxSlope) {
+                    maxSlope = slope;
+                    counts[i]++; counts[j]++; // building[i]가 보이면, building[j]도 보임.
+                }
             }
         }
 
-        switch (n) {
-            case 1:
-            case 2:
-            case 3:
-                System.out.println(n - 1);
-                return;
-        }
-
-
-        for (int x = 0; x < n; x++) {
-            // x 왼쪽
-            int lcount = x == 0 ? 0 : 1;
-            for (int xl = x-2; xl >= 0; xl--) {
-                boolean flag = true;
-                for (int xa = xl + 1; xa < x; xa++) {
-                    if (slopes[x][xl] >= slopes[x][xa]) {
-                        flag = false;
-                        break;
-                    }
-                }
-                if (flag) lcount++;
-            }
-
-            // x 오른쪽
-            int rcount = x == n-1 ? 0 : 1;
-            for (int xr = x+2; xr < n; xr++) {
-                boolean flag = true;
-                for (int xb = xr - 1; xb > x; xb--) {
-                    if (slopes[x][xr] <= slopes[x][xb]) {
-                        flag = false;
-                        break;
-                    }
-                }
-                if (flag) rcount++;
-            }
-
-            result = Math.max(lcount + rcount, result);
+        for (int count : counts) {
+            result = Math.max(result, count);
         }
         System.out.println(result);
     }
