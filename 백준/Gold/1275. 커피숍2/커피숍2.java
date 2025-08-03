@@ -1,78 +1,96 @@
-import java.util.*;
-import java.io.*;
-
 public class Main {
-    public static void main(String[] args) throws Exception{
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-        StringTokenizer str = new StringTokenizer(br.readLine());
+    static int n, q;
+    static long[] num;
+    static int[][] turns;
+    static StringBuilder sb = new StringBuilder();
 
-        int n = Integer.parseInt(str.nextToken());
-        int q = Integer.parseInt(str.nextToken());
+    public static void main(String[] args) throws Exception {
+        // 입력받기
+        n = read();
+        q = read();
 
-        SegmentTree st = new SegmentTree(n);
-        long[] arr = new long[n+1];
-
-        str = new StringTokenizer(br.readLine());
-        for(int i = 1; i <= n; i++) {
-            arr[i] = Long.parseLong(str.nextToken());
+        num = new long[n + 1];
+        for (int i = 1; i <= n; i++) {
+            num[i] = read();
         }
 
-        st.init(arr, 1, 1, n);
-
-        for(int i = 0; i < q; i++) {
-            str = new StringTokenizer(br.readLine());
-            int x = Integer.parseInt(str.nextToken());
-            int y = Integer.parseInt(str.nextToken());
-            long ans = x < y ? st.sum(1, 1, n, x, y) : st.sum(1, 1, n, y, x);
-
-            st.update(1, 1, n, Integer.parseInt(str.nextToken()), Integer.parseInt(str.nextToken()));
-            bw.write(ans + "\n");
-            bw.flush();
+        turns = new int[q][4];
+        for (int i = 0; i < q; i++) {
+            turns[i][0] = read(); // x
+            turns[i][1] = read(); // y
+            turns[i][2] = read(); // a
+            turns[i][3] = read(); // b
         }
 
-        br.close();
-        bw.close();
+        // 세그먼트 트리
+        SegmentTree st = new SegmentTree(num);
+
+        for (int i = 0; i < q; i++) {
+            int l = Math.min(turns[i][0], turns[i][1]);
+            int r = Math.max(turns[i][0], turns[i][1]);
+            int a = turns[i][2];
+            int b = turns[i][3];
+
+            sb.append(st.query(l, r)).append('\n'); // 부분합 구하기
+            st.update(a, b); // 갱신
+        }
+        System.out.print(sb.toString());
     }
-    
+
     static class SegmentTree {
-        public long[] tree;
+        long[] tree;
+        int treeSize;
 
-        SegmentTree(int n){
-            double height = Math.ceil(Math.log(n)/Math.log(2)) + 1;
-            long node = Math.round(Math.pow(2, height));
-            tree = new long[Math.toIntExact(node)];
-        }
-        long init(long[] arr, int node, int start, int end) {
-            if(start == end) {
-                return tree[node] = arr[start];
-            } else {
-                return tree[node] = init(arr, node * 2, start, (start+end)/2) +
-                        init(arr, node * 2 +1, (start + end)/2 + 1, end);
-            }
+        SegmentTree(long[] arr) {
+            int h = (int) Math.ceil(Math.log(n) / Math.log(2));
+            treeSize = (int) Math.pow(2, h + 1);
+            tree = new long[treeSize];
+            build(arr, 1, 1, n);
         }
 
-        long sum(int node, int start, int end, int left, int right) {
-            if(left > end || right < start) {
-                return 0;
-            } else if(left <= start && right >= end) {
-                return tree[node];
-            } else {
-                return sum(node * 2, start, (start + end)/2, left, right) +
-                        sum(node * 2 + 1, (start + end) / 2 + 1, end, left, right);
+        private void build(long[] arr, int node, int start, int end) {
+            if (start == end) {
+                tree[node] = arr[start];
+                return;
             }
+            int mid = start + (end - start) / 2;
+            build(arr, 2 * node, start, mid);
+            build(arr, 2 * node + 1, mid + 1, end);
+            tree[node] = tree[2 * node] + tree[2 * node + 1];
         }
 
-        long update(int node, int start, int end, int index, long changeValue) {
-            if(index < start || index > end) {
-                return tree[node];
-            } else if(start == index && end == index) {
-                return tree[node] = changeValue;
-            } else {
-                return tree[node] = update(node * 2, start, (start+end)/2, index, changeValue) +
-                        update(node * 2 + 1, (start + end)/2 + 1, end, index, changeValue);
+        public long query(int l, int r) {
+            return query(1, 1, n, l, r);
+        }
+
+        private long query(int node, int start, int end, int l, int r) {
+            if (r < start || end < l) return 0;
+            if (l <= start && end <= r) return tree[node];
+            int mid = start + (end - start) / 2;
+            return query(2 * node, start, mid, l, r) + query(2 * node + 1, mid + 1, end, l, r);
+        }
+
+        public void update(int idx, long val) {
+            update(1, 1, n, idx, val);
+        }
+
+        private void update(int node, int start, int end, int idx, long val) {
+            if (start == end) tree[node] = val;
+            else {
+                int mid = start + (end - start) / 2;
+                if (idx <= mid) update(2 * node, start, mid, idx, val);
+                else update(2 * node + 1, mid + 1, end, idx, val);
+                tree[node] = tree[2 * node] + tree[2 * node + 1];
             }
         }
+    }
+
+    static int read() throws Exception {
+        int c, n = System.in.read() & 15;
+        boolean isNegative = n == 13;
+        if (isNegative) n = System.in.read() & 15;
+        while ((c = System.in.read()) > 32) n = (n << 3) + (n << 1) + (c & 15);
+        return isNegative ? ~n + 1 : n;
     }
 }
