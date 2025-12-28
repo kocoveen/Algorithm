@@ -1,79 +1,86 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.IOException;
 import java.util.*;
+import java.io.*;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st;
-        StringBuilder sb = new StringBuilder();
-
-        int N = Integer.parseInt(br.readLine());
-
-        Queue Q = new Queue(N);
-
-        for (int i = 0; i < N; i++) {
-            st = new StringTokenizer(br.readLine());
-            String command = st.nextToken();
-            switch (command) {
-                case "push": {
-                    int X = Integer.parseInt(st.nextToken());
-                    Q.push(X);
-                    break;
-                }
-                case "pop":
-                    sb.append(Q.pop()).append("\n");
-                    break;
-                case "size":
-                    sb.append(Q.size()).append("\n");
-                    break;
-                case "empty":
-                    sb.append(Q.empty()).append("\n");
-                    break;
-                case "front":
-                    sb.append(Q.front()).append("\n");
-                    break;
-                case "back":
-                    sb.append(Q.back()).append("\n");
-                    break;
-            }
+  public static void main(String args[]) throws Exception {
+    BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+    BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(System.out));
+    
+    int N = Integer.parseInt(reader.readLine());
+    
+    Queue queue = new Queue(N);
+    
+    while(N-- > 0) {
+      String[] line = reader.readLine().split(" ");
+      switch (line[0]) {
+        case "push": {
+          int x = Integer.parseInt(line[1]);
+          queue.push(x);
+          break;
         }
-        System.out.print(sb);
+        case "pop": {
+          writer.write(String.valueOf(queue.pop()));
+          writer.newLine();
+          break;
+        }
+        case "size": {
+          writer.write(String.valueOf(queue.size()));
+          writer.newLine();
+          break;
+        }
+        case "empty": {
+          writer.write(String.valueOf(queue.empty()));
+          writer.newLine();
+          break;
+        }
+        case "front": { 
+          writer.write(String.valueOf(queue.front()));
+          writer.newLine();
+          break;
+        }
+        case "back": { 
+          writer.write(String.valueOf(queue.back()));
+          writer.newLine();
+          break;
+        }
+      }
     }
-    private static class Queue {
-        int[] data;
-        int front;
-        int back;
-
-        public Queue(int N) {
-            this.data = new int[N];
-            this.front = -1;
-            this.back = -1;
-        }
-
-        public void push(int X) {
-            this.data[++this.back] = X;
-        }
-
-        public int pop() {
-            return this.empty() == 1 ? -1 : this.data[++this.front];
-        }
-
-        public int size() {
-            return this.back - this.front;
-        }
-
-        public int empty() {
-            return this.front == this.back ? 1 : 0;
-        }
-
-        public int front() {
-            return this.empty() == 1 ? -1 : this.data[this.front + 1];
-        }
-
-        public int back() {
-            return this.empty() == 1 ? -1 : this.data[this.back];
-        }
+    writer.flush();
+  }
+  
+  static class Queue {
+    private int[] data;
+    private int front;
+    private int back;
+    
+    public Queue(int N) {
+      this.data = new int[N];
+      this.front = -1;
+      this.back = -1;
     }
+    
+    public void push(int x) {
+      data[++back] = x;
+    }
+    
+    public int pop() {
+      return empty() == 1 ? -1 : data[++front];
+    }
+    
+    public int size() {
+      return back - front;
+    }
+    
+    public int empty() {
+      return size() == 0 ? 1 : 0;
+    }
+    
+    public int front() {
+      return empty() == 1 ? -1 : data[front + 1];
+    }
+    
+    public int back() {
+      return empty() == 1 ? -1 : data[back];
+    }
+  }
 }
