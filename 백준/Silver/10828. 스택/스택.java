@@ -1,64 +1,75 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.IOException;
 import java.util.*;
+import java.io.*;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st;
-        StringBuilder sb = new StringBuilder();
-
-        int N = Integer.parseInt(br.readLine());
-        Stack S = new Stack(N);
-
-        for (int i = 0; i < N; i++) {
-            st = new StringTokenizer(br.readLine());
-            String command = st.nextToken();
-            switch (command) {
-                case "push": {
-                    int X = Integer.parseInt(st.nextToken());
-                    S.push(X);
-                    break;
-                }
-                case "pop": sb.append(S.pop()).append("\n"); break;
-                case "size": sb.append(S.size()).append("\n"); break;
-                case "empty": sb.append(S.empty()).append("\n"); break;
-                case "top": sb.append(S.top()).append("\n"); break;
-            }
+  public static void main(String args[]) throws Exception {
+    BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+    BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(System.out));
+    
+    int N = Integer.parseInt(reader.readLine());
+    
+    Stack stack = new Stack(N);
+    
+    while(N-- > 0) {
+      String[] line = reader.readLine().split(" ");
+      switch (line[0]) {
+        case "push": {
+          int x = Integer.parseInt(line[1]);
+          stack.push(x);
+          break;
         }
-
-        System.out.print(sb);
-
+        case "pop": {
+          writer.write(String.valueOf(stack.pop()));
+          writer.newLine();
+          break;
+        }
+        case "size": {
+          writer.write(String.valueOf(stack.size()));
+          writer.newLine();
+          break;
+        }
+        case "empty": {
+          writer.write(String.valueOf(stack.empty()));
+          writer.newLine();
+          break;
+        }
+        case "top": { 
+          writer.write(String.valueOf(stack.top()));
+          writer.newLine();
+          break;
+        }
+      }
     }
-
-    private static class Stack {
-        int[] data;
-        int top;
-
-        public Stack(int N) {
-            this.data = new int[N];
-            this.top = -1;
-        }
-
-        public void push(int X) {
-            this.data[++this.top] = X;
-        }
-
-        public int pop() {
-            return this.empty() == 1 ? this.top : this.data[this.top--];
-        }
-
-        public int size() {
-            return this.top + 1;
-        }
-
-        public int empty() {
-            return this.top == -1 ? 1 : 0;
-        }
-
-        public int top() {
-            return this.empty() == 1 ? this.top : this.data[this.top];
-        }
+    writer.flush();
+  }
+  
+  static class Stack {
+    private int[] data;
+    private int top;
+    
+    public Stack(int N) {
+      this.data = new int[N];
+      this.top = -1;
     }
+    
+    public void push(int x) {
+      data[++top] = x;
+    }
+    
+    public int pop() {
+      return empty() == 1 ? -1 : data[top--];
+    }
+    
+    public int size() {
+      return top + 1;
+    }
+    
+    public int empty() {
+      return size() == 0 ? 1 : 0;
+    }
+    
+    public int top() {
+      return empty() == 1 ? -1 : data[top];
+    }
+  }
 }
