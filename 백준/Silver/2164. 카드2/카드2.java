@@ -1,26 +1,26 @@
-import java.io.*;
 import java.util.*;
+import java.io.*;
 
 public class Main {
-    static StringBuilder sb = new StringBuilder();
-    static StringTokenizer st;
-
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
-        int N = Integer.parseInt(br.readLine());
-
-        Queue<Integer> deck = new LinkedList<>();
-
-        for (int i = 1; i <= N; i++)
-            deck.add(i);
-
-        while (deck.size() != 1) {
-            deck.remove();
-            deck.add(deck.remove());
-        }
-
-        System.out.println(deck.remove());
-
+  public static void main(String[] args) throws Exception {
+    int n = read();
+    
+    Deque<Integer> dq = new ArrayDeque<>();
+    while (n > 0) {
+      dq.addFirst(n--);
     }
+    
+    while (dq.size() > 1) {
+      dq.removeFirst();
+      dq.addLast(dq.removeFirst());
+    }
+    
+    System.out.println(dq.removeFirst());
+  }
+  
+  private static int read() throws Exception {
+    int c, n = System.in.read() & 15;
+    while ((c = System.in.read()) > 32) n = (n << 3) + (n << 1) + (c & 15);
+    return n;
+  }
 }
