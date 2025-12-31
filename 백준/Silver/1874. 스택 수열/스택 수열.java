@@ -1,38 +1,33 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.IOException;
 import java.util.*;
+import java.io.*;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringBuilder sb = new StringBuilder();
-        StringTokenizer st;
+  public static void main(String[] args) throws Exception {
+    var reader = new BufferedReader(new InputStreamReader(System.in));
+    
+    StringBuilder sb = new StringBuilder();
+    
+    int n = Integer.parseInt(reader.readLine());
 
-        int N = Integer.parseInt(br.readLine());
+    Deque<Integer> stack= new ArrayDeque<>(); // 입력된 수열을 만들 스택
+    
+    int k = 1;
+    
+    for (int i = 0; i < n; i++) {
+      int target = Integer.parseInt(reader.readLine());
+      while (k <= target) {
+          stack.addLast(k++);
+          sb.append("+\n");
+      }
 
-        Stack<Integer> S = new Stack<>();
-
-        int n = 1; int pushCount = 0; int popCount = 0;
-        while (N > 0) {
-            int a = Integer.parseInt(br.readLine());
-            while (n <= a) {
-                S.push(n++);
-                pushCount++;
-                sb.append("+").append("\n");
-            }
-
-            if (S.peek() == a) {
-                S.pop();
-                popCount++;
-                sb.append("-").append("\n");
-            }
-            N--;
-        }
-
-        if (pushCount == popCount)
-            System.out.print(sb);
-        else
-            System.out.println("NO");
+      if (!stack.isEmpty() && stack.getLast() == target) {
+          stack.removeLast();
+          sb.append("-\n");
+      } else {
+          System.out.println("NO");
+          return;
+      }
     }
+    System.out.println(sb);
+  }
 }
