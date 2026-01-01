@@ -4,39 +4,21 @@ import java.io.*;
 public class Main {
   public static void main(String[] args) throws Exception {
     var reader = new BufferedReader(new InputStreamReader(System.in));
+    var writer = new BufferedWriter(new OutputStreamWriter(System.out));
     
     int N = Integer.parseInt(reader.readLine());
     String[] line = reader.readLine().split(" ");
     
-    int[] tops = new int[N];
-    int[] nums = new int[N];
-    for (int i = 0; i < N; i++) {
-      nums[i] = -1;
-    }
-    
-    for (int i = 0; i < N; i++) {
-      tops[i] = Integer.parseInt(line[i]);
-    }
-    
     Deque<Tuple> dq = new ArrayDeque<>();
+    dq.addLast(new Tuple(0, 100000001));
     
-    for (int i = 0; i < N; i++) {
-      while (!dq.isEmpty() && dq.getLast().val <= tops[i]) {
-        Tuple t = dq.removeLast();
-        nums[t.idx] = dq.isEmpty() ? 0 : dq.getLast().idx + 1;
-      }
-      dq.addLast(new Tuple(i, tops[i]));
+    for (int i = 1; i <= N; i++) {
+      int h = Integer.parseInt(line[i-1]);
+      while (dq.getLast().val < h) { dq.removeLast(); }
+      writer.write(dq.getLast().idx + " ");
+      dq.addLast(new Tuple(i, h));
     }
-    
-    while (!dq.isEmpty()) {
-      Tuple t = dq.removeLast();
-      nums[t.idx] = dq.isEmpty() ? 0 : dq.getLast().idx + 1;
-    }
-    
-    
-    for (int num : nums) {
-      System.out.print(num + " ");
-    }
+    writer.flush();
   }
   
   static class Tuple {
