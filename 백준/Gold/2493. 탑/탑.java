@@ -1,38 +1,50 @@
-import java.io.*;
 import java.util.*;
-
-class Top {
-    int index;
-    int height;
-
-    Top(int index, int height) {
-        this.index = index;
-        this.height = height;
-    }
-}
+import java.io.*;
 
 public class Main {
-    static StringBuilder sb = new StringBuilder();
-    static StringTokenizer st;
-
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
-        int N = Integer.parseInt(br.readLine());
-
-        Stack<Top> S = new Stack<>();
-        S.push(new Top(0, 100000001));
-
-        st = new StringTokenizer(br.readLine());
-        for (int i = 1; i <= N; i++) {
-            int h = Integer.parseInt(st.nextToken());
-            while (S.peek().height < h)
-                S.pop();
-            sb.append(S.peek().index).append(" ");
-            S.push(new Top(i, h));
-        }
-
-        System.out.println(sb);
-
+  public static void main(String[] args) throws Exception {
+    var reader = new BufferedReader(new InputStreamReader(System.in));
+    
+    int N = Integer.parseInt(reader.readLine());
+    String[] line = reader.readLine().split(" ");
+    
+    int[] tops = new int[N];
+    int[] nums = new int[N];
+    for (int i = 0; i < N; i++) {
+      nums[i] = -1;
     }
+    
+    for (int i = 0; i < N; i++) {
+      tops[i] = Integer.parseInt(line[i]);
+    }
+    
+    Deque<Tuple> dq = new ArrayDeque<>();
+    
+    for (int i = 0; i < N; i++) {
+      while (!dq.isEmpty() && dq.getLast().val <= tops[i]) {
+        Tuple t = dq.removeLast();
+        nums[t.idx] = dq.isEmpty() ? 0 : dq.getLast().idx + 1;
+      }
+      dq.addLast(new Tuple(i, tops[i]));
+    }
+    
+    while (!dq.isEmpty()) {
+      Tuple t = dq.removeLast();
+      nums[t.idx] = dq.isEmpty() ? 0 : dq.getLast().idx + 1;
+    }
+    
+    
+    for (int num : nums) {
+      System.out.print(num + " ");
+    }
+  }
+  
+  static class Tuple {
+    int idx, val;
+    
+    Tuple(int idx, int val) {
+      this.idx = idx;
+      this.val = val;
+    }
+  }
 }
