@@ -1,35 +1,32 @@
+import java.util.*;
 import java.io.*;
-import java.util.HashMap;
-import java.util.Map;
 
 public class Main {
-    static String[] l;
-
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringBuilder sb = new StringBuilder();
-
-        l = br.readLine().split(" ");
-        int n = Integer.parseInt(l[0]);
-        int m = Integer.parseInt(l[1]);
-
-        int num = 1;
-        Map<String, Integer> dict1 = new HashMap<>();
-        String[] dict2 = new String[n + 1];
-        while (n-- > 0) {
-            String mon = br.readLine();
-            dict2[num] = mon;
-            dict1.put(mon, num++);
-        }
-
-        while (m-- > 0) {
-            String tmp = br.readLine();
-            if ('0' <= tmp.charAt(0) && tmp.charAt(0) <= '9')
-                sb.append(dict2[Integer.parseInt(tmp)]).append('\n');
-            else
-                sb.append(dict1.get(tmp)).append('\n');
-        }
-
-        System.out.print(sb);
+  public static void main(String[] args) throws Exception {
+    var reader = new BufferedReader(new InputStreamReader(System.in));
+    var writer = new BufferedWriter(new OutputStreamWriter(System.out));
+    
+    String[] input = reader.readLine().split(" ");
+    
+    int N = Integer.parseInt(input[0]);
+    int M = Integer.parseInt(input[1]);
+    
+    String[] dic1 = new String[N+1];
+    Map<String, Integer> dic2 = new HashMap<>();
+    
+    for (int i = 1; i <= N; i++) {
+      dic1[i] = reader.readLine();
+      dic2.put(dic1[i], i);
     }
+    
+    for (int i = 1; i <= M; i++) {
+      String str = reader.readLine();
+      if ('0' <= str.charAt(0) && str.charAt(0) <= '9') {
+        writer.write(dic1[Integer.parseInt(str)] + "\n");
+      } else {
+        writer.write(dic2.get(str) + "\n");
+      }
+    }
+    writer.flush();
+  }
 }
