@@ -1,28 +1,25 @@
+import java.util.*;
 import java.io.*;
-import java.util.TreeMap;
 
 public class Main {
-
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        TreeMap<String, Integer> trees = new TreeMap<>();
-        StringBuilder sb = new StringBuilder();
-
-        String treeName;
-        while ((treeName = br.readLine()) != null && !treeName.isEmpty()) {
-            trees.merge(treeName, 1, Integer::sum);
-        }
-
-        int sum = trees.values().stream()
-                .mapToInt(Integer::intValue)
-                .sum();
-
-        trees.forEach((k, v) ->
-                sb.append(k)
-                    .append(" ")
-                    .append(String.format("%.4f", (double) v / sum * 100))
-                    .append("\n"));
-
-        System.out.print(sb);
+  public static void main(String[] args) throws Exception {
+    var reader = new BufferedReader(new InputStreamReader(System.in));
+    var writer = new BufferedWriter(new OutputStreamWriter(System.out));
+    
+    TreeMap<String, Integer> map = new TreeMap<>();
+    
+    int sum = 0;
+    String input;
+    while ((input = reader.readLine()) != null) {
+      map.merge(input, 1, Integer::sum);
+      sum++;
     }
+    
+    for (Map.Entry<String, Integer> entry : map.entrySet()) {
+      writer.write(entry.getKey() + " ");
+      writer.write("%.4f\n".formatted((double) entry.getValue() / sum * 100));
+    }
+
+    writer.flush();
+  }
 }
