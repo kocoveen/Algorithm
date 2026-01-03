@@ -1,80 +1,109 @@
-import java.io.*;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class Main {
-    static StringBuilder sb = new StringBuilder();
-    static StringTokenizer st;
-
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-
-        int N = Integer.parseInt(br.readLine());
-        Heap H = new Heap(N);
-        for (int i = 0; i < N; i++) {
-            int cmd = Integer.parseInt(br.readLine());
-
-            if (cmd == 0) {
-                System.out.println(H.remove());
-            } else {
-                H.insert(cmd);
-            }
-
+  public static void main(String[] args) throws Exception {
+    int N = read();
+    PriorityQueue<Integer> pq = new PriorityQueue<>((i1, i2) -> i1- i2);
+    
+    while (N-- > 0) {
+      int x = read();
+      if (x == 0) {
+        if (pq.isEmpty()) {
+          System.out.println(0);
+        } else {
+          System.out.println(pq.remove());
         }
+      } else {
+        pq.insert(x);
+      }
     }
-
-    public static class Heap {
-        int[] data;
-        int size;
-        int capacity;
-
-        public Heap(int N) {
-            this.data = new int[N + 1];
-            this.size = 0;
-            this.capacity = N;
-        }
-
-        public void insert(int item) {
-            this.size++;
-            this.data[this.size] = item;
-            this.upHeap();
-        }
-
-        public int remove() {
-            if (this.size == 0) {
-                return 0;
-            }
-            int item = this.data[1];
-            this.data[1] = this.data[this.size];
-            this.size--;
-            this.downHeap();
-            return item;
-        }
-
-        private void upHeap() {
-            int i = this.size;
-            int key = this.data[i];
-            while (i != 1 && key > this.data[i / 2]) {
-                this.data[i] = this.data[i / 2];
-                i /= 2;
-            }
-            this.data[i] = key;
-        }
-
-        private void downHeap() {
-            int key = this.data[1];
-            int parent = 1; int child = 2;
-            while (child <= this.size) {
-                if (child < this.size && this.data[child] < this.data[child + 1])
-                    child++;
-                if (key >= this.data[child])
-                    break;
-                this.data[parent] = this.data[child];
-                parent = child;
-                child *= 2;
-            }
-            this.data[parent] = key;
-        }
-
+  }
+  
+  static class PriorityQueue<T> {
+    private final List<T> queue;
+    private final Comparator<? super T> comparator;
+    
+    public PriorityQueue(int capacity) {
+      this(null);
     }
+    
+    public PriorityQueue(Comparator<T> comparator) {
+      this.queue = new ArrayList<>();
+      this.comparator = comparator;
+    }
+    
+    public void insert(T item) {
+      queue.add(item);
+      upHeap(queue.size() - 1);
+    }
+    
+    public T remove() {
+      if (queue.isEmpty()) return null;
+      
+      T root = queue.get(0);
+      T lastItem = queue.remove(queue.size() - 1);
+      
+      if (!queue.isEmpty()) {
+        queue.set(0, lastItem);
+        downHeap(0);
+      }
+      return root;
+    }
+    
+    private void upHeap(int index) {
+      T key = queue.get(index);
+      while (index > 0) {
+        int parentIdx = (index - 1) / 2;
+        T parent = queue.get(parentIdx);
+        
+        if (compare(key, parent) <= 0) break;
+        
+        queue.set(index, parent);
+        index = parentIdx;
+      }
+      queue.set(index, key);
+    }
+    
+    private void downHeap(int index) {
+      T key = queue.get(index);
+      int size = queue.size();
+      
+      while (index < size / 2) {
+        int leftChild = 2 * index + 1;
+        int rightChild = leftChild + 1;
+        int largerChild = leftChild;
+        
+        if (rightChild < size && compare(queue.get(leftChild), queue.get(rightChild)) < 0) {
+          largerChild = rightChild;
+        }
+        
+        if (compare(key, queue.get(largerChild)) >= 0) break;
+        
+        queue.set(index, queue.get(largerChild));
+        index = largerChild;
+      }
+      queue.set(index, key);
+    }
+    
+    private int compare(T a, T b) {
+      if (comparator != null) {
+        return comparator.compare(a, b);
+      }
+      return ((Comparable<? super T>) a).compareTo(b);
+    }
+    
+    public int size() {
+      return queue.size();
+    }
+    
+    public boolean isEmpty() {
+      return queue.isEmpty();
+    }
+  }
+  
+  static int read() throws Exception {
+    int c, n = System.in.read() & 15;
+    while ((c = System.in.read()) > 32) n = (n << 3) + (n << 1) + (c & 15);
+    return n;
+  }
 }
