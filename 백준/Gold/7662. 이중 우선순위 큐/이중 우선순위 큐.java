@@ -1,58 +1,54 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.*;
+import java.io.*;
+
 
 public class Main {
-
-    static int T, k;
-    static TreeMap<Integer, Integer> tm;
-
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringBuilder sb = new StringBuilder();
-
-        T = Integer.parseInt(br.readLine());
-
-        while (T-- > 0) {
-            k = Integer.parseInt(br.readLine());
-            tm = new TreeMap<>();
-
-            while (k-- > 0) {
-                String[] cmdLine = br.readLine().split(" ");
-                String cmd = cmdLine[0];
-                int param = Integer.parseInt(cmdLine[1]);
-
-                if (cmd.equals("D")) {
-                    if (tm.isEmpty()) continue;
-                    if (param == -1) {
-                        int minKey = tm.firstKey();
-                        if (tm.get(minKey) == 1) {
-                            tm.remove(minKey);
-                        } else {
-                            tm.put(minKey, tm.get(minKey) - 1);
-                        }
-                    } else {
-                        int maxKey = tm.lastKey();
-                        if (tm.get(maxKey) == 1) {
-                            tm.remove(maxKey);
-                        } else {
-                            tm.put(maxKey, tm.get(maxKey) - 1);
-                        }
-                    }
-                } else {
-                    tm.put(param, tm.getOrDefault(param, 0) + 1);
-                }
+  public static void main(String[] args) throws Exception {
+    var reader = new BufferedReader(new InputStreamReader(System.in));
+    var writer = new BufferedWriter(new OutputStreamWriter(System.out));
+    int T = Integer.parseInt(reader.readLine());
+    
+    while (T-- > 0) {
+      TreeMap<Integer, Integer> dpq = new TreeMap<>();
+      int k = Integer.parseInt(reader.readLine());
+      
+      while (k-- > 0) {
+        String[] line = reader.readLine().split(" ");
+        String cmd = line[0];
+        int arg = Integer.parseInt(line[1]);
+        if (cmd.equals("I")) {
+          dpq.merge(arg, 1, Integer::sum);
+        } else {
+          if (dpq.isEmpty()) {
+            continue;
+          }
+          if (arg > 0) {
+            // 최대값
+            int key = dpq.lastKey();
+            if (dpq.get(key) == 1) {
+              dpq.remove(key);
+            } else {
+              dpq.merge(key, -1, Integer::sum);
             }
-
-            if (tm.isEmpty()) {
-                sb.append("EMPTY").append("\n");
-                continue;
+          } else {
+            // 최소값
+            int key = dpq.firstKey();
+            if (dpq.get(key) == 1) {
+              dpq.remove(key);
+            } else {
+              dpq.merge(key, -1, Integer::sum);
             }
-            sb.append(tm.lastKey()).append(" ").append(tm.firstKey()).append("\n");
+          }
         }
-
-        System.out.print(sb);
-
+      }
+      
+      if (dpq.isEmpty()) {
+        writer.write("EMPTY");
+      } else {
+        writer.write(dpq.lastKey() + " " + dpq.firstKey());
+      }
+      writer.write("\n");
+      writer.flush();
     }
+  }
 }
