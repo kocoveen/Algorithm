@@ -1,66 +1,59 @@
-import com.sun.source.tree.Tree;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.*;
+import java.io.*;
+
 
 public class Main {
-
-    static String[] tokens;
-    static int n, p, l, m;
-
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringBuilder sb = new StringBuilder();
-
-        // tm<lv, tm<pid, lv>>
-        TreeMap<Integer, TreeMap<Integer, Integer>> problemMap = new TreeMap<>();
-        Map<Integer, Integer> problems = new HashMap<>();
-
-        n = Integer.parseInt(br.readLine());
-        while (n-- > 0) {
-            tokens = br.readLine().split(" ");
-            p = Integer.parseInt(tokens[0]);
-            l = Integer.parseInt(tokens[1]);
-            problemMap.computeIfAbsent(l, l -> new TreeMap<>()).put(p, l);
-            problems.put(p, l);
-
-        }
-
-        m = Integer.parseInt(br.readLine());
-        while (m-- > 0) {
-            tokens = br.readLine().split(" ");
-            switch (tokens[0]) {
-                case "add": {
-                    p = Integer.parseInt(tokens[1]);
-                    l = Integer.parseInt(tokens[2]);
-                    problemMap.computeIfAbsent(l, l -> new TreeMap<>()).put(p, l);
-                    problems.put(p, l);
-                    break;
-                }
-                case "solved": {
-                    p = Integer.parseInt(tokens[1]);
-                    l = problems.get(p);
-                    problemMap.get(l).remove(p);
-                    if (problemMap.get(l).size() == 0) {
-                        problemMap.remove(l);
-                    }
-                    problems.remove(p);
-                    break;
-                }
-                case "recommend": {
-                    int x = Integer.parseInt(tokens[1]);
-                    if (x == 1) {
-                        p = problemMap.get(problemMap.lastKey()).lastKey();
-                    } else {
-                        p = problemMap.get(problemMap.firstKey()).firstKey();
-                    }
-                    sb.append(p).append("\n");
-                    break;
-                }
-            }
-        }
-        System.out.print(sb);
+  public static void main(String[] args) throws Exception {
+    var reader = new BufferedReader(new InputStreamReader(System.in));
+    var writer = new BufferedWriter(new OutputStreamWriter(System.out));
+    
+    TreeMap<Integer, TreeSet<Integer>> pq = new TreeMap<>();
+    // <난이도, <문제>>
+    Map<Integer, Integer> map = new TreeMap<>();
+    // <문제, 난이도>
+    
+    int N = Integer.parseInt(reader.readLine());
+    while (N-- > 0) {
+      String[] line = reader.readLine().split(" ");
+      int problem = Integer.parseInt(line[0]);
+      int level = Integer.parseInt(line[1]);
+      
+      pq.computeIfAbsent(level, k -> new TreeSet<>()).add(problem);
+      map.put(problem, level);
     }
+    
+    int M = Integer.parseInt(reader.readLine());
+    while (M-- > 0) {
+      String[] line = reader.readLine().split(" ");
+      String cmd = line[0];
+      
+      switch (cmd) {
+        case "add" -> {
+          int arg1 = Integer.parseInt(line[1]); // 문제
+          int arg2 = Integer.parseInt(line[2]); // 난이도
+          
+          pq.computeIfAbsent(arg2, k -> new TreeSet<>()).add(arg1);
+          map.put(arg1, arg2);
+        }
+        case "recommend" -> {
+          int arg1 = Integer.parseInt(line[1]);
+          if (arg1 > 0) {
+            writer.write(pq.lastEntry().getValue().last() + "\n");
+          } else {
+            writer.write(pq.firstEntry().getValue().first() + "\n");
+          }
+        }
+        case "solved" -> {
+          int arg1 = Integer.parseInt(line[1]);
+          int level = map.remove(arg1);
+          pq.get(level).remove(arg1);
+          
+          if (pq.get(level).isEmpty()) {
+            pq.remove(level);
+          }
+        }
+      }
+      writer.flush();
+    }
+  }
 }
