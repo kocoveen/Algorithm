@@ -1,54 +1,44 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 public class Main {
-
-    static List<List<Integer>> graph = new ArrayList<>();
-    static int[] parent;
-
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringBuilder sb = new StringBuilder();
-        int n = Integer.parseInt(br.readLine());
-        parent = new int[n + 1];
-        for (int i = 0; i <= n; i++) {
-            graph.add(new ArrayList<>());
+    public static void main(String[] args) throws Exception {
+        int n = read();
+        Set<Integer>[] graph = new HashSet[n + 1]; // 무향 그래프
+        for (int i = 1; i <= n; i++) {
+            graph[i] = new HashSet<>();
         }
 
-        for (int i = 0; i < n - 1; i++) {
-            String[] split = br.readLine().split(" ");
-            int a = Integer.parseInt(split[0]);
-            int b = Integer.parseInt(split[1]);
-
-            graph.get(a).add(b);
-            graph.get(b).add(a);
+        for (int i = 0; i < n-1; i++) {
+            int u = read();
+            int v = read();
+            graph[u].add(v);
+            graph[v].add(u);
         }
 
-        bfs();
+        // 무향그래프를 이용해 부모 발견
+        int[] parent = new int[n + 1];
+        boolean[] visited = new boolean[n + 1]; // 방문 
 
-        for (int i = 2; i <= n; i++) {
-            System.out.println(parent[i]);
-        }
-    }
-
-    private static void bfs() {
-        Queue<Integer> q = new LinkedList<>();
-        q.offer(1);
-        parent[1] = 1;
-
+        Deque<Integer> q = new ArrayDeque<>();
+        q.addLast(1);
         while (!q.isEmpty()) {
-            int cur = q.poll();
-            for (int next : graph.get(cur)) {
-                if (parent[next] != 0) continue;
-                parent[next] = cur;
-                q.offer(next);
+            int curr = q.removeFirst();
+            visited[curr] = true;
+            for (int next : graph[curr]) {
+                if (visited[next]) continue;
+                parent[next] = curr;
+                q.addLast(next);
             }
         }
+
+        for (int node = 2; node <= n; node++) {
+            System.out.println(parent[node]);
+        }
     }
 
+    private static int read() throws Exception {
+        int c, n = System.in.read() & 15;
+        while ((c = System.in.read()) > 32) n = (n << 3) + (n << 1) + (c & 15);
+        return n;
+    }
 }
