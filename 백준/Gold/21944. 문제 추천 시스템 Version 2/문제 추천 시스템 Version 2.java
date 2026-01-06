@@ -1,123 +1,125 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.StringTokenizer;
-import java.util.TreeSet;
+import java.io.*;
+import java.util.*;
 
 public class Main {
+    static String[] line;
+    
+    public static void main(String[] args) throws Exception {
+        var reader = new BufferedReader(new InputStreamReader(System.in));
+        // <문제번호, 문제> Map
+        TreeMap<Integer, Problem> map = new TreeMap<>();
+        
+        // <분류, 문제> Map
+        TreeMap<Integer, TreeSet<Problem>> groupMap = new TreeMap<>();
 
-    public static void main(String[] args) throws IOException {
-        StringBuilder sb = new StringBuilder();
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int N = Integer.parseInt(br.readLine());
-        TreeSet<Problem> tree = new TreeSet<>();
-        List<TreeSet<Problem>> subtrees = new ArrayList<>();
-        for (int i = 0; i <= 100; i++) {
-            subtrees.add(new TreeSet<Problem>());
+        // <난이도, 문제번호> Map
+        NavigableMap<Integer, TreeSet<Integer>> levelMap = new TreeMap<>();
+
+        line = reader.readLine().split(" ");
+        int N = Integer.parseInt(line[0]);
+        while (N-- > 0) {
+            line = reader.readLine().split(" ");
+            int P = Integer.parseInt(line[0]);
+            int L = Integer.parseInt(line[1]);
+            int G = Integer.parseInt(line[2]);
+
+            Problem p = new Problem(P, L, G);
+            map.put(P, p); // 문제번호
+            levelMap.computeIfAbsent(L, levelKey -> new TreeSet<>()).add(P);
+            groupMap.computeIfAbsent(G, groupKey -> new TreeSet<>()).add(p);
         }
-        HashMap<Integer, int[]> hMap = new HashMap<>();
 
+        line = reader.readLine().split(" ");
+        int M = Integer.parseInt(line[0]);
 
-        for (int i = 0; i < N; i++) {
-            StringTokenizer st = new StringTokenizer(br.readLine());
-            int no = Integer.parseInt(st.nextToken());
-            int level = Integer.parseInt(st.nextToken());
-            int group = Integer.parseInt(st.nextToken());
-            subtrees.get(group).add(new Problem(no, level, group));
-            tree.add(new Problem(no, level, group));
-            hMap.put(no, new int[] {level, group});
+        while (M-- > 0) {
+            line = reader.readLine().split(" ");
+            String cmd = line[0];
+            Integer problem = switch (cmd) {
+                case "add": {
+                    int P = Integer.parseInt(line[1]);
+                    int L = Integer.parseInt(line[2]);
+                    int G = Integer.parseInt(line[3]);
+
+                    Problem p = new Problem(P, L, G);
+                    map.put(P, p); // 문제번호
+                    levelMap.computeIfAbsent(L, levelKey -> new TreeSet<>()).add(P);
+                    groupMap.computeIfAbsent(G, groupKey -> new TreeSet<>()).add(p);
+                    yield 0;
+                }
+
+                case "recommend": {
+                    int G = Integer.parseInt(line[1]);
+                    int x = Integer.parseInt(line[2]);
+
+                    yield x == 1 ? groupMap.get(G).last().number : groupMap.get(G).first().number;
+                }
+
+                case "recommend2": {
+                    int x = Integer.parseInt(line[1]);
+                    yield x == 1 
+                        ? levelMap.get(levelMap.lastKey()).last() 
+                        : levelMap.get(levelMap.firstKey()).first();
+                }
+
+                case "recommend3": {
+                    int x = Integer.parseInt(line[1]);
+                    int L = Integer.parseInt(line[2]);
+                    yield x == 1 
+                        ? levelMap.ceilingKey(L) != null ? levelMap.get(levelMap.ceilingKey(L)).first() : -1
+                        : levelMap.lowerKey(L) != null ? levelMap.get(levelMap.lowerKey(L)).last() : -1;
+                }
+
+                case "solved": {
+                    int P = Integer.parseInt(line[1]);
+                    Problem p = map.remove(P);
+
+                    groupMap.get(p.group).remove(p);
+                    if (groupMap.get(p.group).isEmpty()) {
+                        groupMap.remove(p.group);
+                    }
+
+                    levelMap.get(p.level).remove(p.number);
+                    if (levelMap.get(p.level).isEmpty()) {
+                        levelMap.remove(p.level);
+                    }
+
+                    yield 0;
+                }
+
+                default: {
+                    yield 0;
+                }
+            };
+
+            if (problem != 0) { System.out.println(problem); } else {}
         }
-
-
-        int M = Integer.parseInt(br.readLine());
-        for (int i = 0; i < M; i++) {
-            StringTokenizer st = new StringTokenizer(br.readLine());
-            String command = st.nextToken();
-            if (command.equals("recommend")) {
-                int group = Integer.parseInt(st.nextToken());
-                int x = Integer.parseInt(st.nextToken());
-                if (x == 1) {
-                    sb.append(subtrees.get(group).last().no+"\n");
-                } else {
-                    sb.append(subtrees.get(group).first().no+"\n");
-                }
-            } else if (command.equals("recommend2")) {
-                int x = Integer.parseInt(st.nextToken());
-                if (x == 1) {
-                    sb.append(tree.last().no+"\n");
-                } else {
-                    sb.append(tree.first().no+"\n");
-                }
-            } else if (command.equals("recommend3")) {
-                int x = Integer.parseInt(st.nextToken());
-                int level = Integer.parseInt(st.nextToken());
-                if (x == 1) {
-                    if (tree.ceiling(new Problem(0, level, 0)) == null) sb.append("-1\n");
-                    else sb.append(tree.ceiling(new Problem(0, level, 0)).no+"\n");
-                } else {
-                    if (tree.lower(new Problem(0, level, 0)) == null) sb.append("-1\n");
-                    else sb.append(tree.lower(new Problem(0, level, 0)).no+"\n");
-                }
-            } else if (command.equals("add")) {
-                int no = Integer.parseInt(st.nextToken());
-                int level = Integer.parseInt(st.nextToken());
-                int group = Integer.parseInt(st.nextToken());
-                subtrees.get(group).add(new Problem(no, level, group));
-                tree.add(new Problem(no, level, group));
-                hMap.put(no, new int[] {level, group});
-            } else {
-                int no = Integer.parseInt(st.nextToken());
-                if (!hMap.containsKey(no)) continue;
-                int level = hMap.get(no)[0];
-                int group = hMap.get(no)[1];
-                hMap.remove(no);
-                tree.remove(new Problem(no, level, group));
-                subtrees.get(group).remove(new Problem(no, level, group));
-            }
-        }
-        System.out.println(sb.toString());
     }
 
+    private static int read() throws Exception {
+        int c, n = System.in.read() & 15;
+        while ((c = System.in.read()) > 32) n = (n << 3) + (n << 1) + (c & 15);
+        return n;
+    }
 
-    static class Problem implements Comparable<Problem> {
-        int no;
+    private static class Problem implements Comparable<Problem> {
+        int number;
         int level;
         int group;
 
-        public Problem(int no, int level, int group) {
-            this.no = no;
+        public Problem(int number, int level, int group) {
+            this.number = number;
             this.level = level;
             this.group = group;
         }
 
         @Override
         public int compareTo(Problem o) {
-            if (level == o.level) {
-                return Integer.compare(no, o.no);
+            if (this.level == o.level) {
+                return this.number - o.number;
             }
-            return Integer.compare(level, o.level);
+            return this.level - o.level;
         }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (this == obj)
-                return true;
-            if (obj == null)
-                return false;
-            if (getClass() != obj.getClass())
-                return false;
-            Problem other = (Problem) obj;
-            if (group != other.group)
-                return false;
-            if (level != other.level)
-                return false;
-            if (no != other.no)
-                return false;
-            return true;
-        }
+        
     }
-
 }
