@@ -1,66 +1,75 @@
+
 import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+
 
 public class Main {
-    static int[][] graph;
-    static StringBuilder sb = new StringBuilder();
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int n = Integer.parseInt(br.readLine());
-        graph = new int[n][2];
+    static class Node {
+        private final String value;
+        Node left, right;
 
-        while (n-- > 0) {
-            String[] split = br.readLine().split(" ");
-            int p = split[0].charAt(0) - 'A';
-
-            if (split[1].equals(".")) {
-                graph[p][0] = -1;
-            } else {
-                graph[p][0] = split[1].charAt(0) - 'A';
-            }
-
-            if (split[2].equals(".")) {
-                graph[p][1] = -1;
-            } else {
-                graph[p][1] = split[2].charAt(0) - 'A';
-            }
-
+        public Node(String value) {
+            this.value = value;
         }
-
-        preorder(0); sb.append("\n");
-        inorder(0); sb.append("\n");
-        postorder(0); sb.append("\n");
-        System.out.print(sb);
     }
 
-    private static void preorder(int root) {
-        if (root == -1) {
-            return;
+    static Map<String, Node> nodes = new HashMap<>();
+    static String[] line;
+
+    public static void main(String[] args) throws Exception {
+        var reader = new BufferedReader(new InputStreamReader(System.in));
+    
+        line = reader.readLine().split(" ");
+        int N = Integer.parseInt(line[0]);
+
+        for (int i = 0; i < N; i++) {
+            String value = String.valueOf((char) (i + 'A'));
+            nodes.put(value, new Node(value));
         }
-        sb.append((char) (root + 'A'));
-        preorder(graph[root][0]);
-        preorder(graph[root][1]);
+
+        for (int i = 0; i < N; i++) {
+            line = reader.readLine().split(" ");
+            Node node = nodes.get(line[0]);
+
+            if (!line[1].equals(".")) node.left = nodes.get(line[1]);
+            if (!line[2].equals(".")) node.right = nodes.get(line[2]);
+        }
+
+        preorder(nodes.get("A"));
+        System.out.println();
+        inorder(nodes.get("A"));
+        System.out.println();
+        postorder(nodes.get("A"));
     }
 
-    private static void inorder(int root) {
-        if (root == -1) {
+    public static void preorder(Node node) {
+        if (node == null) {
             return;
         }
-        inorder(graph[root][0]);
-        sb.append((char) (root + 'A'));
-        inorder(graph[root][1]);
+        System.out.print(node.value);
+        preorder(node.left);
+        preorder(node.right);
     }
 
-    private static void postorder(int root) {
-        if (root == -1) {
+    public static void inorder(Node node) {
+        if (node == null) {
             return;
         }
-        postorder(graph[root][0]);
-        postorder(graph[root][1]);
-        sb.append((char) (root + 'A'));
+        inorder(node.left);
+        System.out.print(node.value);
+        inorder(node.right);
+    }
+
+
+    public static void postorder(Node node) {
+        if (node == null) {
+            return;
+        }
+        postorder(node.left);
+        postorder(node.right);
+        System.out.print(node.value);
     }
 }
