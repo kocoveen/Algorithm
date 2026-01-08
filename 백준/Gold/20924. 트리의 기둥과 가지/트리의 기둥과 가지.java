@@ -64,7 +64,7 @@ public class Main {
 
     private static int getChildren(int node) {
         return graph[node].size() 
-            - (int) graph[node].parallelStream().filter(i -> visited[i.v]).count();
+            - (int) graph[node].stream().filter(i -> visited[i.v]).count();
     }
 
     private static void traversalBranch(boolean isFirst, int size, int node) {
