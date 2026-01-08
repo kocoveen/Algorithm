@@ -1,59 +1,30 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.util.*;
 
 public class Main {
 
-    static class Node {
-        int num;
-        Node left, right;
-
-        Node(int num) {
-            this.num = num;
+    static int count = 0;
+    static int[] tree = new int[10001];
+    public static void main(String[] args) throws Exception {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNextInt()) {
+            tree[count++] = scanner.nextInt();
         }
 
-        Node(int num, Node left, Node right) {
-            this.num = num;
-            this.left = left;
-            this.right = right;
-        }
-
-        void insert(int num) {
-            if (num < this.num) {
-                if (left == null) {
-                    left = new Node(num);
-                } else {
-                    left.insert(num);
-                }
-            } else {
-                if (right == null) {
-                    right = new Node(num);
-                } else {
-                    right.insert(num);
-                }
-            }
-        }
+        postorder(0, count - 1);
     }
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    private static void postorder(int start, int end) throws Exception {
+        if (start > end) return;
 
-        Node root = new Node(Integer.parseInt(br.readLine()));
-        String input;
-        while ((input = br.readLine()) != null) {
-            root.insert(Integer.parseInt(input));
+        int parent = tree[start];
+        
+        int mid = start + 1;
+        while (mid <= end && tree[mid] < parent) {
+            mid++;
         }
-        
-        
-        postOrder(root);
-    }
 
-    private static void postOrder(Node node) {
-        if (node == null) {
-            return;
-        }
-        postOrder(node.left);
-        postOrder(node.right);
-        System.out.println(node.num);
+        postorder(start + 1, mid - 1);
+        postorder(mid, end);
+        System.out.println(parent);
     }
 }
