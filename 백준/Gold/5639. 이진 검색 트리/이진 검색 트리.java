@@ -1,30 +1,50 @@
-import java.util.*;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
 
 public class Main {
 
-    static int count = 0;
-    static int[] tree = new int[10001];
-    public static void main(String[] args) throws Exception {
-        Scanner scanner = new Scanner(System.in);
-        while (scanner.hasNextInt()) {
-            tree[count++] = scanner.nextInt();
+    static class Node {
+        private int value;
+        private Node left, right;
+
+        public Node(int value) {
+            this.value = value;
         }
 
-        postorder(0, count - 1);
+        public void insert(int value) {
+            if (this.value > value) {
+                if (left == null) {
+                    left = new Node(value);
+                } else {
+                    left.insert(value);
+                }
+            } else {
+                if (right == null) {
+                    right = new Node(value);
+                } else {
+                    right.insert(value);
+                }
+            }
+        }
+    }
+    public static void main(String[] args) throws Exception {
+        var br = new BufferedReader(new InputStreamReader(System.in));
+        Node root = new Node(Integer.parseInt(br.readLine()));
+        String value;
+        while ((value = br.readLine()) != null) {
+            root.insert(Integer.parseInt(value));
+        }
+        postorder(root);
     }
 
-    private static void postorder(int start, int end) throws Exception {
-        if (start > end) return;
-
-        int parent = tree[start];
-        
-        int mid = start + 1;
-        while (mid <= end && tree[mid] < parent) {
-            mid++;
+    private static void postorder(Node node) {
+        if (node == null) {
+            return;
         }
-
-        postorder(start + 1, mid - 1);
-        postorder(mid, end);
-        System.out.println(parent);
+        postorder(node.left);
+        postorder(node.right);
+        System.out.println(node.value);
     }
 }
