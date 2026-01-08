@@ -4,7 +4,7 @@
 
 ### 성능 요약
 
-메모리: 31092 KB, 시간: 400 ms
+메모리: 31288 KB, 시간: 320 ms
 
 ### 분류
 
@@ -12,7 +12,7 @@
 
 ### 제출 일자
 
-2026년 1월 8일 12:45:53
+2026년 1월 8일 12:48:50
 
 ### 문제 설명
 
@@ -27,7 +27,7 @@
 
 <p>예를 들어, 수열 1 3 4 5 8 9 15 30 31 32를 위의 규칙을 이용해 트리를 만들면 아래 그림과 같이 된다.</p>
 
-<p style="text-align: center;"><img alt="" src="" style="height:245px; width:320px"></p>
+<p style="text-align: center;"><img alt="" src="https://www.acmicpc.net/upload/images/cc.png" style="height:245px; width:320px"></p>
 
 <p>두 노드의 부모는 다르지만, 두 부모가 형제(sibling)일 때 두 노드를 사촌이라고 한다.</p>
 
