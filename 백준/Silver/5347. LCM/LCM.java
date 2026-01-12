@@ -1,30 +1,24 @@
-import java.io.*;
+import java.util.Scanner;
 
 public class Main {
-    static String[] l;
-
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringBuilder sb = new StringBuilder();
-
-        int n = Integer.parseInt(br.readLine());
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        long n = scanner.nextLong();
 
         while (n-- > 0) {
-            l = br.readLine().split(" ");
-            int a = Integer.parseInt(l[0]);
-            int b = Integer.parseInt(l[1]);
+            long a = scanner.nextLong();
+            long b = scanner.nextLong();
 
-            sb.append(lcm(a, b)).append('\n');
+            System.out.println(lcm(a, b));
         }
-        System.out.print(sb);
     }
 
     private static long lcm(long a, long b) {
-        return a / gcb(a, b) * b;
+        return a / gcd(a, b) * b;
     }
 
-    private static long gcb(long a, long b) {
+    private static long gcd(long a, long b) {
         if (b == 0) return a;
-        return gcb(b, a % b);
+        return gcd(b, a % b);
     }
 }
