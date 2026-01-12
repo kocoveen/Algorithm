@@ -1,38 +1,35 @@
-import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
 public class Main {
-    static StringBuilder sb = new StringBuilder();
-    static String[] l;
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        int t = scanner.nextInt();
 
-    static int t, n;
-    static long sum;
-
-    static long[] arr;
-
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
-        t = Integer.parseInt(br.readLine());
-
-        while (t-- > 0) {
-            sum = 0;
-            l = br.readLine().split(" ");
-            n = Integer.parseInt(l[0]);
-            arr = new long[n];
-            for (int i = 0; i < n; i++) {
-                arr[i] = Integer.parseInt(l[i + 1]);
+        long[][] arr = new long[t][];
+        for (int i = 0; i < t; i++) {
+            int n = scanner.nextInt();
+            arr[i] = new long[n];
+            for (int j = 0; j < n; j++) {
+                arr[i][j] = scanner.nextInt();
             }
-
-            for (int i = 0; i < n - 1; i++)
-                for (int j = i + 1; j < n; j++)
-                    sum += gcd(arr[i], arr[j]);
-
-            sb.append(sum).append('\n');
         }
-        System.out.print(sb);
+
+        for (int k = 0; k < t; k++) {
+            List<Long> list = new ArrayList<>();
+            for (int i = 0; i < arr[k].length - 1; i++) {
+                for (int j = i + 1; j < arr[k].length; j++) {
+                    list.add(gcd(arr[k][i], arr[k][j]));
+                }
+            }
+            long sum = list.stream().mapToLong(Long::longValue).sum();
+            System.out.println(sum);
+        }
     }
 
     private static long gcd(long a, long b) {
-        return b == 0 ? a : gcd(b, a % b);
+        if (b == 0) return a;
+        return gcd(b, a % b);
     }
 }
