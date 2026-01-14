@@ -1,27 +1,24 @@
-import java.io.*;
 import java.util.Arrays;
+import java.util.Scanner;
 
 public class Main {
-    static String[] l;
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
 
-    static int N, max = 0;
-
-    static int[] R;
-
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
-        N = Integer.parseInt(br.readLine());
-        R = new int[N];
-
-        for (int i = 0; i < N; i++) R[i] = Integer.parseInt(br.readLine());
-
-        Arrays.sort(R);
-
+        int N = scanner.nextInt();
+        int[] arr = new int[N];
         for (int i = 0; i < N; i++) {
-            max = Math.max(R[i] * (N - i), max);
+            arr[i] = scanner.nextInt();
+        }
+
+        Arrays.sort(arr);
+
+        int max = 0;
+        for (int i = 0; i < N; i++) {
+            max = Math.max(max, arr[i] * (N - i));
         }
 
         System.out.println(max);
+
     }
 }
