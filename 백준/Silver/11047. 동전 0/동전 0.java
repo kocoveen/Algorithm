@@ -1,27 +1,25 @@
-import java.io.*;
+import java.util.Scanner;
 
 public class Main {
-    static String[] l;
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
 
-    static int N, K;
+        int N = scanner.nextInt();
+        int K = scanner.nextInt();
 
-    static int[] value;
-
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
-        l = br.readLine().split(" ");
-        N = Integer.parseInt(l[0]);
-        K = Integer.parseInt(l[1]);
-        value = new int[N];
-        for (int i = 0; i < N; i++)
-            value[i] = Integer.parseInt(br.readLine());
-
-        int ans = 0;
-        for (int i = N - 1; i >= 0; i--) {
-            ans += K / value[i];
-            K %= value[i];
+        int[] arr = new int[N];
+        for (int i = N-1; i >= 0; i--) {
+            arr[i] = scanner.nextInt();
         }
-        System.out.println(ans);
+
+        int count = 0;
+        for (int i = 0; i < N; i++) {
+            if (K < arr[i]) {
+                continue;
+            }
+            count += K / arr[i];
+            K %= arr[i];
+        }
+        System.out.println(count);
     }
 }
