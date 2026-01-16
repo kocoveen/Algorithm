@@ -21,7 +21,7 @@ public class Main {
         D = new long[N - 1];
         st = new StringTokenizer(br.readLine());
         for (int i = 0; i < N - 1; i++)
-            D[i] = Integer.parseInt(st.nextToken());
+            D[i] = Long.parseLong(st.nextToken());
 
         DSum = new long[N];
         for (int i = N - 2; i >= 0; i--)
@@ -31,7 +31,7 @@ public class Main {
         st = new StringTokenizer(br.readLine());
         for (int i = 0; i < N; i++) {
             P[i][0] = i;
-            P[i][1] = Integer.parseInt(st.nextToken());
+            P[i][1] = Long.parseLong(st.nextToken());
         }
 
         Arrays.sort(P, (o1, o2) -> {
@@ -40,7 +40,7 @@ public class Main {
             return Math.toIntExact(o1[1] - o2[1]);
         });
 
-        int total = 0;
+        long total = 0;
         long l = N - 1;
         for (long[] p : P) {
             if (p[0] == N - 1 || p[0] >= l)
@@ -50,5 +50,6 @@ public class Main {
         }
 
         System.out.println(total);
+
     }
 }
