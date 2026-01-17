@@ -1,39 +1,26 @@
-import java.io.*;
-import java.sql.SQLOutput;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.StringTokenizer;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.Objects;
 
 public class Main {
-    static StringTokenizer st;
-    static StringBuilder sb = new StringBuilder();
-    static int N;
-    static String[] op;
-    static String[] NumStr;
-    static int[] Num;
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+    public static void main(String[] args) throws Exception {
+        var reader = new BufferedReader(new InputStreamReader(System.in));
+        String[] exp = reader.readLine().split("(?=\\D)|(?<=\\D)");
 
-        String formula = br.readLine();
-        NumStr = formula.split("\\D");
-        op = formula.split("\\d+");
-        Num = new int[NumStr.length];
+        // IO.println(Arrays.toString(exp));
 
-        for (int i = 0; i < Num.length; i++)
-            Num[i] = Integer.parseInt(NumStr[i]);
-
-        int sum = Num[0]; int i = 1;
-        while (i < Num.length && op[i].equals("+")) {
-            sum += Num[i];
-            i++;
+        int totalSum = 0;
+        int subSum = 0;
+        for (int i = exp.length - 2; i >= 1; i -= 2) {
+            if (Objects.equals(exp[i], "+")) {
+                subSum += Integer.parseInt(exp[i+1]);
+            } else if (Objects.equals(exp[i], "-")) {
+                totalSum -= Integer.parseInt(exp[i+1]) + subSum;
+                subSum = 0;
+            }
         }
 
-        int tmp = 0;
-        for (int j = i; j < Num.length; j++)
-            tmp += Num[j];
-
-        System.out.println(sum - tmp);
+        System.out.print(totalSum + Integer.parseInt(exp[0]) + subSum);
     }
 }
