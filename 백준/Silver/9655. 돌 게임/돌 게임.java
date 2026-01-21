@@ -1,11 +1,10 @@
-import java.io.*;
+import java.util.*;
 
 public class Main {
-    static int N;
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        N = Integer.parseInt(br.readLine());
-        System.out.println(N % 2 != 0 ? "SK" : "CY");
+    static Integer[][] arr;
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println(scanner.nextInt() % 2 != 0 ? "SK" : "CY");
     }
 }
