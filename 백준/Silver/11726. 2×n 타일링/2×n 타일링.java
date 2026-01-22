@@ -1,29 +1,30 @@
-import java.io.*;
+import java.util.Scanner;
 
 public class Main {
-    static String[] l;
 
-    static Integer[] dp;
-    static int C = 10007;
+    static Integer[] num;
+    static int C = 10_007;
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int N = sc.nextInt();
+        
+        num = new Integer[N+1];
+        num[0] = 1;
+        num[1] = 1;
 
-        int N = Integer.parseInt(br.readLine());
-
-        dp = new Integer[1005];
-
-        dp[1] = 1;
-        dp[2] = 2;
-        System.out.println(func(N));
+        System.out.println(solve(N));
     }
 
-    private static int func(int n) {
-        if (n == 1) return dp[1];
-        if (dp[n] == null) {
-            dp[n] = (func(n - 1) % C + func(n - 2) % C) % C;
+    private static int solve(int i) {
+        if (i < 0) {
+            return 0;
         }
-        return dp[n];
-    }
 
+        if (num[i] != null) {
+            return num[i];
+        }
+
+        return num[i] = (solve(i-1) % C + solve(i-2) % C) % C;
+    }
 }
