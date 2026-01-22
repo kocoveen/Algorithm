@@ -1,20 +1,25 @@
 import java.io.*;
+import java.util.StringTokenizer;
 
 public class Main {
-
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
-        int A = Integer.parseInt(br.readLine());
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        int i = Integer.parseInt(br.readLine());
         int cnt = 0;
-
-        while (A % 5 != 0 && A >= 3) {
-            A -= 3;
-            cnt++;
+        while(i % 5 != 0 && i >= 3) {
+            i -= 3; cnt++;
         }
 
-        if (A == 1 || A == 2) System.out.println(-1);
-        else System.out.println(A / 5 + cnt);
+        if (i == 1 || i == 2) {
+            bw.write("-1");
+        } else {
+            cnt += i / 5;
+            bw.write(cnt + "");
+        }
 
+        bw.flush();
+        br.close();
+        bw.close();
     }
 }
