@@ -1,24 +1,26 @@
-import java.io.*;
+import java.util.Scanner;
 
 public class Main {
-    static int n;
+
+    static Integer[] memo;
     static int C = 10007;
 
-    static Integer[] dp;
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        memo = new Integer[n+1];
+        memo[0] = 1;
+        memo[1] = 1;
 
-        n = Integer.parseInt(br.readLine());
-        dp = new Integer[1001];
-        dp[0] = 0;
-        dp[1] = 1;
-        dp[2] = 3;
+        System.out.print(func(n));
+    }
 
-        for (int i = 3; i <= n; i++) {
-            dp[i] = (dp[i - 1] % C + 2 * dp[i - 2] % C) % C;
+    private static int func(int n) {
+        if (memo[n] != null) {
+            return memo[n];
         }
 
-        System.out.println(dp[n]);
+        return memo[n] = (func(n-1) + 2 * func(n-2)) % C;
     }
 }
