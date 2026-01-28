@@ -1,9 +1,10 @@
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class Main {
 
     static int[] arr;
-    static Integer[][] dp;
+    static int[][] dp;
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
@@ -16,28 +17,21 @@ public class Main {
             arr[i] = sc.nextInt();
         }
 
-        dp = new Integer[n+1][k+1];
-
+        dp = new int[n+1][k+1];
         int answer = 0;
+
         for (int i = 1; i <= n; i++) {
-            for (int j = 1; j <= k; j++) {
-                answer = Math.max(answer, dp(i, j));
+            for (int j = 0; j <= k; j++) {
+                if (arr[i] % 2 == 0) {
+                    dp[i][j] = dp[i - 1][j] + 1;
+                } else {
+                    if (j == 0) continue;
+                    dp[i][j] = dp[i - 1][j - 1];
+                }
+                answer = Math.max(answer, dp[i][j]);
             }
         }
         
         System.out.println(answer);
-
-    }
-
-    private static int dp(int i, int j) {
-        if (i == 0 || j < 0) {
-            return 0;
-        }
-
-        if (dp[i][j] != null) {
-            return dp[i][j];
-        }
-
-        return dp[i][j] = arr[i] % 2 == 0 ? dp(i-1, j) + 1 : dp(i-1, j-1); 
     }
 }
