@@ -1,44 +1,44 @@
-import java.io.*;
+import java.util.Scanner;
 
 public class Main {
-    static StringBuilder sb = new StringBuilder();
-    static String[] l;
-    static int T, N;
+    static int t, n;
+    static int[][] arr;
+    static Integer[][] dp;
 
-    static int[][] stickers;
-    static int[][] dp;
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        t = sc.nextInt();
 
-        T = Integer.parseInt(br.readLine());
+        while (t-- > 0) {
+            n = sc.nextInt();
+            arr = new int[3][n + 1];
+            for (int i = 1; i <= n; i++) { arr[1][i] = sc.nextInt(); }
+            for (int i = 1; i <= n; i++) { arr[2][i] = sc.nextInt(); }
+            dp = new Integer[3][n + 1];
 
-        while (T-- > 0) {
-            N = Integer.parseInt(br.readLine());
-            stickers = new int[3][N + 1];
-            dp = new int[3][N + 1];
+            for (int i = 0; i <= n; i++) { arr[0][i] = 0; }
+            dp[1][1] = arr[1][1];
+            dp[2][1] = arr[2][1];
+            for (int i = 0; i <= 2; i++) { arr[i][0] = 0; }
 
-            for (int i = 1; i <= 2; i++) {
-                l = br.readLine().split(" ");
-                for (int j = 1; j <= N; j++)
-                    stickers[i][j] = Integer.parseInt(l[j - 1]);
-            }
-
-            dp[1][1] = stickers[1][1];
-            dp[2][1] = stickers[2][1];
-
-            for (int j = 2; j <= N; j++)
-                for (int i = 1; i <= 2; i++) {
-                    int max = 0;
-                    max = Math.max(max, dp[1][j - 2]);
-                    max = Math.max(max, dp[2][j - 2]);
-                    if (i == 1) max = Math.max(max, dp[2][j - 1]);
-                    else max = Math.max(max, dp[1][j - 1]);
-                    dp[i][j] = max + stickers[i][j];
-                }
-           
-            sb.append(Math.max(dp[1][N], dp[2][N])).append('\n');
+            System.out.println(Math.max(dp(1, n), dp(2, n)));
         }
-        System.out.print(sb);
+    }
+
+    private static int dp(int r, int c) {
+        if (c < 0) {
+            return 0;
+        }
+
+        if (dp[r][c] != null) {
+            return dp[r][c];
+        }
+        
+        if (r == 1) {
+            return dp[1][c] = Math.max(dp(2, c-1), dp(2, c-2)) + arr[1][c];
+        } else {
+            return dp[2][c] = Math.max(dp(1, c-1), dp(1, c-2)) + arr[2][c];
+        }
     }
 }
