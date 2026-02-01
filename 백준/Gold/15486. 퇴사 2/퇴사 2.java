@@ -1,33 +1,33 @@
-import java.io.*;
+import java.util.Scanner;
 
 public class Main {
-    static String[] l;
-
-    static int N;
-
+    static int n;
     static int[] T, P;
     static int[] dp;
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        
+        n = sc.nextInt();
 
-        N = Integer.parseInt(br.readLine());
-        T = new int[N + 2];
-        P = new int[N + 2];
-        dp = new int[N + 2];
+        T = new int[n + 1];
+        P = new int[n + 1];
+        dp = new int[n + 1];
 
-        for (int i = 1; i <= N; i++) {
-            l = br.readLine().split(" ");
-            T[i] = Integer.parseInt(l[0]);
-            P[i] = Integer.parseInt(l[1]);
+        for (int i = 0; i < n; i++) {
+            T[i] = sc.nextInt();
+            P[i] = sc.nextInt();
         }
 
-        for (int i = 1; i <= N; i++) {
-            if (i + T[i] <= N + 1) {
-                dp[i + T[i]] = Math.max(dp[i + T[i]], dp[i] + P[i]);
-            }
-            dp[i + 1] = Math.max(dp[i + 1], dp[i]);
+        for (int i = n-1; i >= 0; i--) {
+            // 상담 안하는 경우
+            int skip = dp[i + 1];
+
+            // 상담 하는 경우
+            int take = (i + T[i] <= n) ? P[i] + dp[i + T[i]] : 0;
+            
+            dp[i] = Math.max(skip, take);
         }
-        System.out.println(dp[N + 1]);
+        System.out.println(dp[0]);
     }
 }
