@@ -1,29 +1,27 @@
-import java.io.*;
+import java.util.Arrays;
+import java.util.Scanner;
 
 public class Main {
-    static String[] l;
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
 
-    static int n, k;
+        int n = sc.nextInt();
+        int k = sc.nextInt();
 
-    static int[] value;
-    static int[] dp;
+        int[] coins = new int[n];
+        for (int i = 0; i < n; i++) {
+            coins[i] = sc.nextInt();
+        }
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
-        l = br.readLine().split(" ");
-        n = Integer.parseInt(l[0]);
-        k = Integer.parseInt(l[1]);
-
-        value = new int[10005];
-        dp = new int[10005];
-        for (int i = 0; i < n; i++) value[i] = Integer.parseInt(br.readLine());
+        int[] dp = new int[k + 1];
 
         dp[0] = 1;
-        for (int i = 0; i < n; i++)
-            for (int j = value[i]; j <= k; j++)
-                dp[j] += dp[j - value[i]];
-        
+        for (int i = 0; i < n; i++) {
+            for (int j = coins[i]; j <= k; j++) {
+                dp[j] += dp[j - coins[i]];
+            }
+        }
+
         System.out.println(dp[k]);
     }
 }
