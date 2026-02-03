@@ -4,7 +4,7 @@
 
 ### 성능 요약
 
-메모리: 320720 KB, 시간: 2004 ms
+메모리: 41492 KB, 시간: 840 ms
 
 ### 분류
 
@@ -12,13 +12,13 @@
 
 ### 제출 일자
 
-2026년 2월 3일 11:31:49
+2026년 2월 3일 11:34:16
 
 ### 문제 설명
 
 <p>네모 왕국의 왕인 진경대왕은 왕국의 영토를 편하게 통치하기 위해서 1X1의 단위 구역을 여러 개 묶어서 하나의 거대 행정구역인 주지수(州地數, 마을의 땅을 셈)를 만들 예정이다. 진경대왕은 주지수를 만들기 위해서 일정한 직사각형 범위 내에 살고 있는 사람 수를 참고 자료로 쓰고 싶어한다.</p>
 
-<p style="text-align: center;"><img alt="" src="" style="width: 426px; height: 112px;"></p>
+<p style="text-align: center;"><img alt="" src="https://onlinejudgeimages.s3-ap-northeast-1.amazonaws.com/problem/15724/1.jpg" style="width: 426px; height: 112px;"></p>
 
 <p>진경대왕은 굉장히 근엄한 왕이기 때문에 당신에게 4개의 숫자로 직사각형 범위를 알려줄 것이다.</p>
 
