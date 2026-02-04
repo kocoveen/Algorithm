@@ -20,7 +20,7 @@ public class Main {
             }
         }
         dp = new Integer[N][M][3];
-        
+
         int min = Integer.MAX_VALUE;
         for (int j = 0; j < M; j++) {
             for (int k = 0; k < 3; k++) {
@@ -35,15 +35,9 @@ public class Main {
         if (i == 0) return dp[i][j][dir] = arr[i][j];
         if (dp[i][j][dir] != null) return dp[i][j][dir];
 
-        return switch (dir) {
-            case 0 -> dp[i][j][0] = Math.min(dp(i-1, j, 1), dp(i-1, j+1, 2)) + arr[i][j];
-            case 1 -> dp[i][j][1] = Math.min(dp(i-1, j-1, 0), dp(i-1, j+1, 2)) + arr[i][j];
-            case 2 -> dp[i][j][2] = Math.min(dp(i-1, j-1, 0), dp(i-1, j, 1)) + arr[i][j];
-            default -> Integer.MAX_VALUE;
-        };
-    }
+        int d1 = (dir+1)%3;
+        int d2 = (dir+2)%3;
 
-    private static int min(Integer... values) {
-        return Stream.of(values).min(Integer::compare).orElse(C);
+        return dp[i][j][dir] = Math.min(dp(i-1, j+d1-1, d1), dp(i-1, j+d2-1, d2)) + arr[i][j];
     }
 }
