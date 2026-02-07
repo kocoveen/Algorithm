@@ -1,4 +1,3 @@
-import java.util.Scanner;
 
 public class Main {
 
@@ -7,23 +6,21 @@ public class Main {
     static Integer[][] dp;
 
     public static void main(String[] args) throws Exception {
-        Scanner sc = new Scanner(System.in);
-
-        n = sc.nextInt();
+        n = read();
 
         arr = new int[n+1];
         for (int i = 1; i <= n; i++) {
-            arr[i] = sc.nextInt();
+            arr[i] = read();
         }
 
         dp = new Integer[n+1][n+1];
 
-        int t = sc.nextInt();
+        int t = read();
 
         StringBuilder sb = new StringBuilder(); // 출력 모으기
         while (t-- > 0) {
-            int i = sc.nextInt();
-            int j = sc.nextInt();
+            int i = read();
+            int j = read();
 
             sb.append(dp(i, j)).append("\n");
         }
@@ -40,5 +37,11 @@ public class Main {
         }
 
         return dp[i][j] = arr[i] == arr[j] ? dp(i+1, j-1) : 0;
+    }
+
+    private static int read() throws Exception {
+        int c, n = System.in.read() & 15;
+        while ((c = System.in.read()) > 32) n = (n << 3) + (n << 1) + (c & 15);
+        return n; 
     }
 }
