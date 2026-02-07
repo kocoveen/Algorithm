@@ -1,42 +1,54 @@
-import java.io.*;
+import java.util.Arrays;
+import java.util.Scanner;
 
 public class Main {
-    static StringBuilder sb = new StringBuilder();
 
-    static String[] l;
-    static int N, M;
+    static int n, m;
     static int[][] arr;
-    static int[][] dp;
+    static Integer[][] dp;
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    public static void main(String[] args) throws Exception {
+        Scanner sc = new Scanner(System.in);
 
-        l = br.readLine().split(" ");
-        N = Integer.parseInt(l[0]);
-        M = Integer.parseInt(l[1]);
-        arr = new int[N + 1][M + 1];
-        dp = new int[N + 1][M + 1];
-        for (int i = 1; i <= N; i++) {
-            l = br.readLine().split("");
-            for (int j = 1; j <= M; j++)
-                arr[i][j] = Integer.parseInt(l[j - 1]);
-        }
+        n = sc.nextInt();
+        m = sc.nextInt();
 
-        int ans = 0;
-        for(int i = 1; i <= N; i++) {
-            for(int j = 1; j <= M; j++) {
-                if (arr[i][j] == 1) {
-                    dp[i][j] = findMin(dp[i - 1][j], dp[i][j - 1], dp[i - 1][j - 1]) + 1;
-                    ans = Math.max(ans, dp[i][j]);
-                }
+        arr = new int[n][m];
+        for (int i = 0; i < n; i++) {
+            String s = sc.next();
+            for (int j = 0; j < m; j++) {
+                arr[i][j] = s.charAt(j) - '0';
             }
         }
-        System.out.println(ans * ans);
+
+        dp = new Integer[n][m];
+
+        int max = 0;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                max = Math.max(max, dp(i, j));
+            }
+        }
+        System.out.print(max * max);
     }
 
-    private static int findMin(int... ints) {
-        int min = Integer.MAX_VALUE;
-        for (int i : ints) if (min > i) min = i;
-        return min;
+    private static int dp(int n, int m) {
+        if (n < 0 || m < 0) {
+            return 0;
+        }
+
+        if (dp[n][m] != null) {
+            return dp[n][m];
+        }
+
+        if (arr[n][m] == 1) {
+            return dp[n][m] = min(dp(n-1, m), dp(n, m-1), dp(n-1, m-1)) + 1;
+        } else {
+            return dp[n][m] = 0;
+        }
+    }
+
+    private static int min(int... values) {
+        return Arrays.stream(values).min().orElse(987654321);
     }
 }
