@@ -1,50 +1,42 @@
-import java.io.*;
-import java.util.StringTokenizer;
+import java.util.Scanner;
 
 public class Main {
-
-    static StringTokenizer st;
-
+    static int N, M;
     static int[][] map;
-    static Integer[][] cnt;
+    static Integer[][] dp;
 
-    static int[] dr = {1, 0, -1, 0}, dc = {0, 1, 0, -1};
-    static int m, n;
+    static int[] dr = {1, 0, -1, 0};
+    static int[] dc = {0, 1, 0, -1};
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    public static void main(String[] args) throws Exception {
+        Scanner sc = new Scanner(System.in);
+        N = sc.nextInt();
+        M = sc.nextInt();
 
-        st = new StringTokenizer(br.readLine());
-        m = Integer.parseInt(st.nextToken());
-        n = Integer.parseInt(st.nextToken());
+        map = new int[N][M];
+        dp = new Integer[N][M];
 
-        map = new int[m][n];
-        cnt = new Integer[m][n];
-
-        for (int i = 0; i < m; i++) {
-            st = new StringTokenizer(br.readLine());
-            for (int j = 0; j < n; j++) {
-                map[i][j] = Integer.parseInt(st.nextToken());
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < M; j++) {
+                map[i][j] = sc.nextInt();
             }
         }
-        
-        cnt[0][0] = 1;
-        System.out.println(dp(m-1, n-1));
+
+        System.out.println(dp(N-1, M-1));
     }
 
     private static int dp(int r, int c) {
-        if (cnt[r][c] != null) {
-            return cnt[r][c];
-        }
+        if (r == 0 && c == 0) { return 1; }
+        if (dp[r][c] != null) { return dp[r][c]; }
 
         int sum = 0;
-        for (int i = 0; i < 4; i++) {
-            int nr = r + dr[i];
-            int nc = c + dc[i];
-            if (nr < 0 || m <= nr || nc < 0 || n <= nc) continue;
-            if (map[nr][nc] <= map[r][c]) continue;
+        for (int d = 0; d < 4; d++) {
+            int nr = r + dr[d];
+            int nc = c + dc[d];
+            if (nr < 0 || nr >= N || nc < 0 || nc >= M) { continue; }
+            if (map[r][c] >= map[nr][nc]) { continue; }
             sum += dp(nr, nc);
         }
-        return cnt[r][c] = sum;
+        return dp[r][c] = sum;
     }
 }
