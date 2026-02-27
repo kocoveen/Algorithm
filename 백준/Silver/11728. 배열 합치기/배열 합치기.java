@@ -1,36 +1,43 @@
-import java.io.*;
+import java.util.Scanner;
 
 public class Main {
-    static String[] l;
+    static int N, M;
+    static int[] A, B;
 
-    static StringBuilder sb = new StringBuilder();
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        StringBuilder sb = new StringBuilder();
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        N = sc.nextInt();
+        M = sc.nextInt();
 
-        l = br.readLine().split(" ");
-        int N = Integer.parseInt(l[0]);
-        int M = Integer.parseInt(l[1]);
-
-        int[] A = new int[N];
-        int[] B = new int[M];
-        int[] C = new int[N + M];
-
-        l = br.readLine().split(" ");
-        for (int i = 0; i < N; i++) A[i] = Integer.parseInt(l[i]);
-
-        l = br.readLine().split(" ");
-        for (int i = 0; i < M; i++) B[i] = Integer.parseInt(l[i]);
-
-        int ai = 0, bi = 0, ci = 0;
-        while (ai < N || bi < M) {
-            if (ai == N) C[ci++] = B[bi++];
-            else if (bi == M) C[ci++] = A[ai++];
-            else if (A[ai] <= B[bi]) C[ci++] = A[ai++];
-            else if (A[ai] > B[bi]) C[ci++] = B[bi++];
+        A = new int[N];
+        for (int i = 0; i < N; i++) {
+            A[i] = sc.nextInt();
+        }
+        B = new int[M];
+        for (int j = 0; j < M; j++) {
+            B[j] = sc.nextInt();
         }
 
-        for (int i : C) sb.append(i).append(" ");
-        System.out.println(sb);
+        int i = 0, j = 0, k = 0;
+        while (i < N && j < M) {
+            if (A[i] < B[j]) {
+                sb.append(A[i++]);
+            } else {
+                sb.append(B[j++]);
+            }
+            sb.append(" ");
+        }
+
+        while (i < N) {
+            sb.append(A[i++]).append(" ");
+        }
+
+        while (j < M) {
+            sb.append(B[j++]).append(" ");
+        }
+
+        System.out.print(sb.toString());
     }
 }
