@@ -21,7 +21,7 @@ public class Main {
         int i = 0, j = i + X;
         int max = 0;
         int count = 0;
-        while (i < j && j <= N) {
+        while (j <= N) {
             int visit = S[j++] - S[i++];
             if (max < visit) {
                 max = visit;
