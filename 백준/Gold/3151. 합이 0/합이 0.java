@@ -1,53 +1,49 @@
-import java.io.*;
 import java.util.Arrays;
-
-import static java.lang.Math.*;
+import java.util.Scanner;
 
 public class Main {
-    static String[] l;
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    static int N;
+    static int[] A;
 
-        int n = Integer.parseInt(br.readLine());
-        int[] arr = new int[n];
-        l = br.readLine().split(" ");
-        for (int i = 0; i < n; i++)
-            arr[i] = Integer.parseInt(l[i]);
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
 
-        Arrays.sort(arr);
+        N = sc.nextInt();
+        A = new int[N];
+        for (int i = 0; i < N; i++) {
+            A[i] = sc.nextInt();
+        }
 
-        long cnt = 0;
-        for (int i = 0; i < n - 1; i++) {
-            for (int j = i + 1; j < n; j++) {
-                int target = arr[i] + arr[j];
-                cnt += diff(arr, j + 1, arr.length - 1, -target);
+        Arrays.sort(A);
+
+        long count = 0;
+        for (int i = 0; i < N-1; i++) {
+            for (int j = i+1; j < N; j++) {
+                int target = A[i] + A[j];
+                count += upperBound(j+1, A.length, -target) - lowerBound(j+1, A.length, -target) + 1;
             }
         }
-        System.out.println(cnt);
+        System.out.println(count);
     }
 
-    private static int diff(int[] arr, int st, int en, int target) {
-        return upperBound(arr, st, en, target) - lowerBound(arr, st, en, target) + 1;
-    }
-
-    private static int lowerBound(int[] arr, int st, int en, int target) {
-        int l = st, r = en + 1, m = (l + r) / 2;
+    private static int upperBound(int st, int en, int target) {
+        int l = st, r = en, m = (l + r) / 2;
         while (l < r) {
-            if (arr[m] < target) l = m + 1;
-            else if (arr[m] >= target) r = m;
+            if (A[m] <= target) l = m+1;
+            else if (A[m] > target) r = m;
+            m = (l + r) / 2;
+        }
+        return m-1;
+    }
+
+    private static int lowerBound(int st, int en, int target) {
+        int l = st, r = en, m = (l + r) / 2;
+        while (l < r) {
+            if (A[m] < target) l = m+1;
+            else if (A[m] >= target) r = m;
             m = (l + r) / 2;
         }
         return m;
-    }
-
-    private static int upperBound(int[] arr, int st, int en, int target) {
-        int l = st, r = en + 1, m = (l + r) / 2;
-        while (l < r) {
-            if (arr[m] <= target) l = m + 1;
-            else if (arr[m] > target) r = m;
-            m = (l + r) / 2;
-        }
-        return m - 1;
     }
 }
