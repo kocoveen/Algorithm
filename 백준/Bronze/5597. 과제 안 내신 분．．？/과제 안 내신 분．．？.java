@@ -1,23 +1,26 @@
-import java.io.*;
-import java.util.StringTokenizer;
-
 public class Main {
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-        int[] arr = new int[31];
+    static int submitStatus;
+
+    public static void main(String[] args) throws Exception {
         for (int i = 0; i < 28; i++) {
-            int a = Integer.parseInt(br.readLine());
-            arr[a] = 1;
-        }
-        for (int i = 1; i <= 30; i++) {
-            if (arr[i] == 0)
-                bw.write(i + "\n");
+            int n = read();
+            submitStatus |= (1 << n);
         }
 
-        br.close();
-        bw.flush();
-        bw.close();
+        int allPresent = 0x7FFFFFFE;
+        int missing = allPresent & ~submitStatus;
+
+        int first = Integer.numberOfTrailingZeros(missing);
+        System.out.println(first);
+
+        int second = 31 - Integer.numberOfLeadingZeros(missing);
+        System.out.println(second);
+    }
+
+    private static int read() throws Exception {
+        int c, n = System.in.read() & 15;
+        while ((c = System.in.read()) > 32) n = (n << 3) + (n << 1) + (c & 15);
+        return n;
     }
 }
