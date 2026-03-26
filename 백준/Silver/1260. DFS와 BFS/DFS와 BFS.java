@@ -1,73 +1,70 @@
 import java.util.*;
 
 public class Main {
+    
+    static int N, M, V;
+    static int[][] graph;
 
-    static Map<Integer, TreeSet<Integer>> mapBfs = new HashMap<>();
-    static Map<Integer, TreeSet<Integer>> mapDfs = new HashMap<>();
-    static boolean[] visited;
-
-    public static void main(String[] args)  {
+    static StringBuilder sb = new StringBuilder();
+    
+    public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
-        int n = sc.nextInt();
-        int m = sc.nextInt();
-        int s = sc.nextInt();
+        N = sc.nextInt();
+        M = sc.nextInt();
+        V = sc.nextInt();
 
-        for (int i = 1; i <= n; i++) {
-            mapBfs.put(i, new TreeSet<>());
-            mapDfs.put(i, new TreeSet<>(Collections.reverseOrder()));
+        graph = new int[N+1][N+1];
+        for (int i = 0; i < M; i++) {
+            int u = sc.nextInt();
+            int v = sc.nextInt();
+
+            graph[u][v] = 1;
+            graph[v][u] = 1;
         }
-
-        while (m-- > 0) {
-            int n1 = sc.nextInt();
-            int n2 = sc.nextInt();
-            mapBfs.get(n1).add(n2); mapBfs.get(n2).add(n1);
-            mapDfs.get(n1).add(n2); mapDfs.get(n2).add(n1);
-        }
-
-        System.out.println(dfs(s, n));
-        System.out.println(bfs(s, n));
+        
+        dfs(new boolean[N+1]);
+        sb.append("\n");
+        bfs(new boolean[N+1]);
+        System.out.print(sb);
     }
 
-    public static String dfs(int st, int n) {
-        visited = new boolean[n + 1];
-        StringBuilder sb = new StringBuilder();
-        Stack<Integer> S = new Stack<>();
-        S.push(st);
+    private static void dfs(boolean[] visit) {
+        Deque<Integer> stack = new ArrayDeque<>();
 
-        while (!S.isEmpty()) {
-            int cur = S.pop();
-            if (visited[cur]) {
-                continue;
-            }
-            visited[cur] = true;
-            sb.append(cur).append(" ");
-            for (int i : mapDfs.get(cur)) {
-                if (visited[i]) continue;
-                S.push(i);
+        stack.push(V);
+
+        while (!stack.isEmpty()) {
+            int u = stack.pop();
+            if (visit[u]) continue;
+            visit[u] = true;
+            sb.append(u).append(" ");
+
+            for (int v = N; v >= 1; v--) {
+                if (!visit[v] && graph[u][v] == 1) {
+                    stack.push(v);
+                }
             }
         }
-        return sb.toString();
     }
 
-    public static String bfs(int st, int n) {
-        visited = new boolean[n + 1];
-        StringBuilder sb = new StringBuilder();
-        Queue<Integer> Q = new LinkedList<>();
-        Q.add(st);
+    private static void bfs(boolean[] visit) {
+        Deque<Integer> queue = new ArrayDeque<>();
 
-        while (!Q.isEmpty()) {
-            int cur = Q.remove();
-            if (visited[cur]) {
-                continue;
-            }
-            visited[cur] = true;
-            sb.append(cur).append(" ");
-            for (int i : mapBfs.get(cur)) {
-                if (visited[i]) continue;
-                Q.add(i);
+        queue.add(V);
+        
+        while (!queue.isEmpty()) {
+            int u = queue.poll();
+            if (visit[u]) continue;
+            visit[u] = true;
+
+            sb.append(u).append(" ");
+
+            for (int v = 1; v <= N; v++) {
+                if (!visit[v] && graph[u][v] == 1) {
+                    queue.add(v);
+                }
             }
         }
-        return sb.toString();
     }
 }
