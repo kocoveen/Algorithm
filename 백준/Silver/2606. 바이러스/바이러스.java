@@ -1,50 +1,40 @@
-import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
 public class Main {
+    
+    static int N, M, count;
+    static int[][] graph;
+    static boolean[] visit;
+    
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
 
-    static int n, m, answer;
-    static List<Integer>[] networks;
-    static boolean[] visited;
+        N = sc.nextInt();
+        M = sc.nextInt();
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        graph = new int[N+1][N+1];
+        visit = new boolean[N+1];
 
-        int n = Integer.parseInt(br.readLine());
-        int m = Integer.parseInt(br.readLine());
+        while (M-- > 0) {
+            int u = sc.nextInt();
+            int v = sc.nextInt();
 
-        boolean[] visited = new boolean[n + 1];
-        networks = new List[n + 1];
-        for (int i = 0; i <= n; i++) {
-            networks[i] = new ArrayList<>();
+            graph[u][v] = 1;
+            graph[v][u] = 1;
         }
 
-        while (m-- > 0) {
-            String[] link = br.readLine().split(" ");
-            int node1 = Integer.parseInt(link[0]);
-            int node2 = Integer.parseInt(link[1]);
+        infect(1);
+        System.out.print(count);
+    }
 
-            networks[node1].add(node2);
-            networks[node2].add(node1);
-        }
+    private static void infect(int u) {
+        visit[u] = true;
 
-        Stack<Integer> S = new Stack<>();
-        S.push(1);
-        visited[1] = true;
-
-        while (!S.isEmpty()) {
-            int cur = S.pop();
-            for (int next : networks[cur]) {
-                if (!visited[next]) {
-                    S.push(next);
-                    visited[next] = true;
-                    answer++;
-                }
+        for (int v = 1; v <= N; v++) {
+            if (!visit[v] && graph[u][v] == 1) {
+                infect(v);
+                count++;
             }
         }
-
-        System.out.println(answer);
     }
 }
