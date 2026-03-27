@@ -1,101 +1,90 @@
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.*;
 
 public class Main {
-
-    static String[] st;
-    static String str;
+    
     static int R, C, N;
-    static int[][] times;
-    static boolean[][] isBombs;
-    static Deque<int[]> removed = new ArrayDeque<>();
+    static int[][] map;
     static int[] dr = {1, 0, -1, 0};
     static int[] dc = {0, 1, 0, -1};
 
+    static Queue<Point> q = new ArrayDeque<>();
 
-    public static void main(String[] args) throws IOException {
+    static class Point {
+        int r, c;
+        Point(int r, int c) {
+            this.r = r;
+            this.c = c;
+        }
+    }
+
+    public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        st = br.readLine().split(" ");
-        R = Integer.parseInt(st[0]);
-        C = Integer.parseInt(st[1]);
-        N = Integer.parseInt(st[2]);
+        String[] split = br.readLine().split(" ");
+        R = Integer.parseInt(split[0]);
+        C = Integer.parseInt(split[1]);
+        N = Integer.parseInt(split[2]);
 
-        isBombs = new boolean[R][C];
-        times = new int[R][C];
+        map = new int[R][C];
 
         for (int i = 0; i < R; i++) {
-            str = br.readLine();
+            String line = br.readLine();
             for (int j = 0; j < C; j++) {
-                if (str.charAt(j) == 'O') {
-                    isBombs[i][j] = true;
-                    times[i][j] = 3;
-                }
+                if (line.charAt(j) == 'O') map[i][j] = 3;
             }
         }
 
-        for (int i = 0; i <= N; i++) {
-            if (i > 0 && i % 2 == 0) {
-                addBombsInEmptyArea();
+        for (int k = 0; k < N; k++) {
+            // 시간 경과 및 폭탄 터짐
+            timeIsTicking();
+            if (k % 2 != 0) {
+                // 폭탄 추가
+                addBomb();
             }
-            removedBombs();
-            running();
         }
-        printBombs();
-    }
 
-    private static void addBombsInEmptyArea() {
+        StringBuilder sb = new StringBuilder();
         for (int i = 0; i < R; i++) {
             for (int j = 0; j < C; j++) {
-                if (!isBombs[i][j]) {
-                    times[i][j] = 3;
-                    isBombs[i][j] = true;
-                }
+                sb.append(map[i][j] > 0 ? 'O' : '.');
             }
+            sb.append("\n");
         }
+        System.out.print(sb);
     }
 
-    private static void removedBombs() {
-        while (!removed.isEmpty()) {
-            int[] pos = removed.pollLast();
-            isBombs[pos[0]][pos[1]] = false;
-            times[pos[0]][pos[1]] = 0;
-            for (int i = 0; i < 4; i++) {
-                int nr = pos[0] + dr[i];
-                int nc = pos[1] + dc[i];
-                if (0 <= nr && nr < R && 0 <= nc && nc < C) {
-                    isBombs[nr][nc] = false;
-                    times[nr][nc] = 0;
-                }
-            }
-        }
-    }
-
-    private static void running() {
+    private static void timeIsTicking() {
         for (int i = 0; i < R; i++) {
             for (int j = 0; j < C; j++) {
-                if (isBombs[i][j]) {
-                    times[i][j]--;
-                    if (times[i][j] == 0) {
-                        removed.add(new int[]{i, j});
+                if (map[i][j] > 0) {
+                    map[i][j]--;
+                    if (map[i][j] == 0) {
+                        q.add(new Point(i, j));
+                        for (int k = 0; k < 4; k++) {
+                            int nr = i + dr[k];
+                            int nc = j + dc[k];
+                            if (nr < 0 || nr >= R || nc < 0 || nc >= C) continue;
+                            q.add(new Point(nr, nc));
+                        }
                     }
                 }
             }
         }
+
+        // 한번에 터뜨리기
+        while (!q.isEmpty()) {
+            Point p = q.poll();
+            map[p.r][p.c] = 0;
+        }
     }
 
-    private static void printBombs() {
-        StringBuilder sb = new StringBuilder();
-        for (boolean[] isBomb : isBombs) {
-            for (boolean b : isBomb) {
-                if (b) {
-                    sb.append('O');
-                } else {
-                    sb.append('.');
-                }
+    private static void addBomb() {
+        for (int i = 0; i < R; i++) {
+            for (int j = 0; j < C; j++) {
+                if (map[i][j] == 0) map[i][j] = 3;
             }
-            sb.append('\n');
         }
-        System.out.println(sb);
     }
 }
