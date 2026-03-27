@@ -1,73 +1,70 @@
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 public class Main {
-
-    static int n, m, mx;
+    
+    static int N, M;
     static List<Integer>[] graph;
-    static boolean[] visit;
-    static Integer[] count;
-    static Queue<Integer> q;
-    static StringBuilder sb = new StringBuilder();
+    static int[] visit;
 
+    static Integer[] children;
+    
     public static void main(String[] args) throws Exception {
-        n = read();
-        m = read();
-        graph = new List[n+1];
-        for (int i = 1; i <= n; i++) {
+        N = read();
+        M = read();
+
+        graph = new ArrayList[N+1];
+        for (int i = 1; i <= N; i++) {
             graph[i] = new ArrayList<>();
         }
 
-        for (int i = 0; i < m; i++) {
-            int a = read();
-            int b = read();
-            graph[b].add(a);
+        children = new Integer[N+1];
+        visit = new int[N+1];
+
+        for (int i = 0; i < M; i++) {
+            int u = read();
+            int v = read();
+
+            graph[v].add(u);
+        }
+        
+        int max = 0;
+        for (int i = 1; i <= N; i++) {
+            children[i] = getChildrenCountOf(i);
+            max = Math.max(max, children[i]);
         }
 
-        count = new Integer[n+1];
-        for (int i = 1; i <= n; i++) {
-            count[i] = getTrustCompany(i);
-            mx = Math.max(mx, count[i]);
+        StringBuilder sb = new StringBuilder();
+        for (int i = 1; i <= N; i++) {
+            if (children[i] != max) continue;
+            sb.append(i).append(" ");
         }
-
-        for (int i = 1; i <= n; i++) {
-            if (count[i] == mx) {
-                sb.append(i).append(" ");
-            }
-        }
-        System.out.println(sb);
+        System.out.print(sb);
     }
 
-    private static int getTrustCompany(int num) {
-        if (count[num] != null) {
-            return count[num];
-        }
+    private static int getChildrenCountOf(int u) {
+        Queue<Integer> q = new ArrayDeque<>();
 
-        int cnt = 0;
-        visit = new boolean[n+1];
-        q = new LinkedList<>();
-        q.add(num);
-        visit[num] = true;
-        while (!q.isEmpty()) {
-            int cur = q.remove();
-            for (int i : graph[cur]) {
-                if (visit[i]) continue;
-                q.add(i);
-                cnt++;
-                visit[i] = true;
+        q.add(u);
+        visit[u] = u;
+        int count = 0;
+
+        while(!q.isEmpty()) {
+            int poll = q.poll();
+            for (int n : graph[poll]) {
+                if (visit[n] != u) {
+                    visit[n] = u;
+                    q.add(n);
+                    count++;
+                }
             }
         }
 
-        count[num] = cnt;
-        return cnt;
+        return count;
     }
 
     private static int read() throws Exception {
         int c, n = System.in.read() & 15;
         while ((c = System.in.read()) > 32) n = (n << 3) + (n << 1) + (c & 15);
-        if (c == 13) System.in.read();
         return n;
     }
 }
