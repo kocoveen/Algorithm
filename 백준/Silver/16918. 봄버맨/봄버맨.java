@@ -62,12 +62,6 @@ public class Main {
                     map[i][j]--;
                     if (map[i][j] == 0) {
                         q.add(new Point(i, j));
-                        for (int k = 0; k < 4; k++) {
-                            int nr = i + dr[k];
-                            int nc = j + dc[k];
-                            if (nr < 0 || nr >= R || nc < 0 || nc >= C) continue;
-                            q.add(new Point(nr, nc));
-                        }
                     }
                 }
             }
@@ -77,6 +71,12 @@ public class Main {
         while (!q.isEmpty()) {
             Point p = q.poll();
             map[p.r][p.c] = 0;
+            for (int k = 0; k < 4; k++) {
+                int nr = p.r + dr[k];
+                int nc = p.c + dc[k];
+                if (nr < 0 || nr >= R || nc < 0 || nc >= C) continue;
+                map[nr][nc] = 0;
+            }
         }
     }
 
