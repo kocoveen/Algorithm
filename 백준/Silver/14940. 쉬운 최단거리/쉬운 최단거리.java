@@ -1,74 +1,72 @@
-import java.io.*;
-import java.util.ArrayDeque;
-import java.util.Arrays;
-import java.util.Queue;
+import java.util.*;
 
 public class Main {
-    static StringBuilder sb = new StringBuilder();
-    static String[] l;
-
+    
     static int n, m;
-    static Pair sp;
-
-    static int[][] board;
-    static int[][] vis;
-
+    static int[][] map, dist;
     static int[] dr = {1, 0, -1, 0};
     static int[] dc = {0, 1, 0, -1};
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
-        l = br.readLine().split(" ");
-        n = Integer.parseInt(l[0]);
-        m = Integer.parseInt(l[1]);
-
-        vis = new int[n][m];
-        for (int i = 0; i < n; i++) Arrays.fill(vis[i], -1);
-
-        board = new int[n][m];
-        for (int i = 0; i < n; i++) {
-            l = br.readLine().split(" ");
-            for (int j = 0; j < m; j++) {
-                board[i][j] = Integer.parseInt(l[j]);
-                if (board[i][j] == 2) {
-                    sp = new Pair(i, j);
-                    vis[i][j] = 0;
-                }
-                if (board[i][j] == 0) vis[i][j] = 0;
-            }
-        }
-
-        Queue<Pair> Q = new ArrayDeque<>();
-        Q.add(sp);
-        while (!Q.isEmpty()) {
-            Pair cur = Q.remove();
-            int d = vis[cur.r][cur.c];
-            for (int i = 0; i < 4; i++) {
-                int nr = cur.r + dr[i];
-                int nc = cur.c + dc[i];
-                if (nr < 0 || nr >= n || nc < 0 || nc >= m) continue;
-                if (vis[nr][nc] != -1) continue;
-                Q.add(new Pair(nr, nc));
-                vis[nr][nc] = d + 1;
-            }
-        }
-
-        for (int[] d : vis) {
-            for (int i : d)
-                sb.append(i).append(' ');
-            sb.append('\n');
-        }
-        System.out.println(sb);
-    }
-
-    private static class Pair {
-        int r;
-        int c;
-
-        public Pair(int r, int c) {
+    static class Point {
+        int r, c;
+        Point(int r, int c) {
             this.r = r;
             this.c = c;
         }
+    };
+
+    static Point sp;
+    static final int INF = 987654321;
+
+    public static void main(String[] args) throws Exception {
+        Scanner sc = new Scanner(System.in);
+        n = sc.nextInt();
+        m = sc.nextInt();
+
+        map = new int[n][m];
+        dist = new int[n][m];
+        
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                map[i][j] = sc.nextInt();
+                if (map[i][j] == 2) {
+                    sp = new Point(i, j);
+                    dist[i][j] = 0;
+                } else if (map[i][j] == 0) {
+                    dist[i][j] = 0;
+                } else {
+                    dist[i][j] = -1;
+                }
+            }
+        }
+
+        // bfs
+        Queue<Point> q = new ArrayDeque<>();
+        q.add(sp);
+
+        while (!q.isEmpty()) {
+            Point p = q.poll();
+
+            for (int i = 0; i < 4; i++) {
+                int nr = p.r + dr[i];
+                int nc = p.c + dc[i];
+
+                if (0 > nr || nr >= n || 0 > nc || nc >= m) continue;
+
+                if (dist[nr][nc] == -1 && map[nr][nc] == 1) {
+                    dist[nr][nc] = dist[p.r][p.c] + 1;
+                    q.add(new Point(nr, nc));
+                }
+            }
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                sb.append(dist[i][j]).append(' ');
+            }
+            sb.append('\n');
+        }
+        System.out.println(sb);
     }
 }
