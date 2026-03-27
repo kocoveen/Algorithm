@@ -1,44 +1,55 @@
 import java.util.*;
 
 public class Main {
-    public static void main(String[] args) throws Exception {
-        int n = read();
-        Set<Integer>[] graph = new HashSet[n + 1]; // 무향 그래프
-        for (int i = 1; i <= n; i++) {
+    
+    static int N;
+    static Set<Integer>[] graph;
+    static boolean[] visit;
+
+    static int[] parent;
+    
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        
+        N = sc.nextInt();
+
+        graph = new HashSet[N+1];
+        for (int i = 1; i <= N; i++) {
             graph[i] = new HashSet<>();
         }
 
-        for (int i = 0; i < n-1; i++) {
-            int u = read();
-            int v = read();
+        visit = new boolean[N+1];
+        parent = new int[N+1];
+
+        for (int i = 0; i < N-1; i++) {
+            int u = sc.nextInt();
+            int v = sc.nextInt();
+
             graph[u].add(v);
             graph[v].add(u);
         }
 
-        // 무향그래프를 이용해 부모 발견
-        int[] parent = new int[n + 1];
-        boolean[] visited = new boolean[n + 1]; // 방문 
+        fn();
 
-        Deque<Integer> q = new ArrayDeque<>();
-        q.addLast(1);
-        while (!q.isEmpty()) {
-            int curr = q.removeFirst();
-            visited[curr] = true;
-            for (int next : graph[curr]) {
-                if (visited[next]) continue;
-                parent[next] = curr;
-                q.addLast(next);
-            }
-        }
-
-        for (int node = 2; node <= n; node++) {
-            System.out.println(parent[node]);
+        for (int i = 2; i <= N; i++) {
+            System.out.println(parent[i]);
         }
     }
 
-    private static int read() throws Exception {
-        int c, n = System.in.read() & 15;
-        while ((c = System.in.read()) > 32) n = (n << 3) + (n << 1) + (c & 15);
-        return n;
+    private static void fn() {
+        Deque<Integer> queue = new ArrayDeque<>();
+
+        queue.add(1);
+
+        while(!queue.isEmpty()) {
+            int u = queue.poll();
+            visit[u] = true;
+
+            for (int v : graph[u]) {
+                if (visit[v]) continue;
+                parent[v] = u;
+                queue.add(v);
+            }
+        }
     }
 }
