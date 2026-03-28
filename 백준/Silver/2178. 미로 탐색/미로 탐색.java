@@ -1,56 +1,56 @@
-import java.io.*;
 import java.util.*;
 
 public class Main {
-    static StringBuilder sb = new StringBuilder();
-    static StringTokenizer st;
+    
+    static int N, M;
+    static int[][] map, dis;
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
-        st = new StringTokenizer(br.readLine());
-        int n = Integer.parseInt(st.nextToken());
-        int m = Integer.parseInt(st.nextToken());
-
-        //
-        int[][] board = new int[n][m];
-        Integer[][] dis = new Integer[n][m];
-
-        for (int i = 0; i < n; i++) {
-            String line = br.readLine();
-            for (int j = 0; j < m; j++)
-                board[i][j] = line.charAt(j) - '0';
+    static class Point {
+        int r, c;
+        Point(int r, int c) {
+            this.r = r;
+            this.c = c;
         }
+    }
 
-        int[] dx = {1, 0, -1, 0};
-        int[] dy = {0, 1, 0, -1};
+    static int[] dr = {1, 0, -1, 0};
+    static int[] dc = {0, 1, 0, -1};
 
-        Queue<Pair> Q = new ArrayDeque<>();
-        Q.add(new Pair(0, 0));
-        dis[0][0] = 0;
+    public static void main(String[] args) throws Exception {
+        Scanner sc = new Scanner(System.in);
 
-        while (!Q.isEmpty()) {
-            Pair cur = Q.remove();
-            for (int i = 0; i < 4; i++) {
-                int nx = cur.x + dx[i];
-                int ny = cur.y + dy[i];
-                if (nx < 0 || nx >= n || ny < 0 || ny >= m) continue;
-                if (dis[nx][ny] != null || board[nx][ny] != 1) continue;
-                Q.add(new Pair(nx, ny));
-                dis[nx][ny] = dis[cur.x][cur.y] + 1;
+        N = sc.nextInt();
+        M = sc.nextInt();
+
+        map = new int[N][M];
+        dis = new int[N][M];
+
+        for (int i = 0; i < N; i++) {
+            String line = sc.next();
+            for (int j = 0; j < M; j++) {
+                map[i][j] = line.charAt(j) - '0';
             }
         }
 
-        System.out.println(dis[n-1][m-1] + 1);
-    }
+        Queue<Point> q = new ArrayDeque<>();
 
-    public static class Pair {
-        Integer x;
-        Integer y;
+        q.add(new Point(0, 0));
+        dis[0][0] = 1;
 
-        public Pair(Integer x, Integer y) {
-            this.x = x;
-            this.y = y;
+        while (!q.isEmpty()) {
+            Point p = q.poll();
+
+            for (int i = 0; i < 4; i++) {
+                int nr = p.r + dr[i];
+                int nc = p.c + dc[i];
+
+                if (nr < 0 || nr >= N || nc < 0 || nc >= M) continue;
+                if (dis[nr][nc] > 0 || map[nr][nc] == 0) continue;
+                q.add(new Point(nr, nc));
+                dis[nr][nc] = dis[p.r][p.c] + 1;
+            }
         }
+
+        System.out.println(dis[N-1][M-1]);
     }
 }
