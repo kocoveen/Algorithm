@@ -5,7 +5,7 @@ public class Main {
     static int N, M, T;
     static int[][] map, dist;
     static final int INF = 987654321;
-    static int gr = -1, gc = -1, gt = INF;
+    static int gr = -1, gc = -1;
 
     static int[] dr = {1, 0, -1, 0};
     static int[] dc = {0, 1, 0, -1};
@@ -63,17 +63,12 @@ public class Main {
             }
         }
 
-        // 검에 도달할 수 있을 때
-        if (!(gr == -1 && gc == -1)) {
-            gt = dist[gr][gc];
-        }
-
         int min = Math.min(
             // 칼 안들고 갈때
             dist[N-1][M-1],
 
             // 칼 들고 벽 뚫을때
-            Math.abs(N-1 - gr) + Math.abs(M-1 - gc) + gt
+            Math.abs(N-1 - gr) + Math.abs(M-1 - gc) + dist[gr][gc]
         );
 
         // 두 값이 T 시간 이하면
