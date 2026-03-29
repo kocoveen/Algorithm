@@ -26,25 +26,23 @@ public class Main {
         }
 
         for (int i = 0; i < N; i++) {
-            dfs(i, 0, new HashSet<>());
+            boolean[] vis = new boolean[N];
+            dfs(i, 0, vis);
         }
         System.out.println(0);
     }
 
-    private static void dfs(int i, int dep, Set<Integer> vis) {
+    private static void dfs(int i, int dep, boolean[] vis) {
         if (dep == 5) {
-            if (vis.size() == 5) {
-                System.out.println(1);
-                System.exit(0);
-            }
-            return;
+            System.out.println(1);
+            System.exit(0);
         }
 
         for (int next : graph[i]) {
-            if (!vis.contains(next)) {
-                vis.add(next);
+            if (!vis[next]) {
+                vis[next] = true;
                 dfs(next, dep + 1, vis);
-                vis.remove(next);
+                vis[next] = false;
             }
         }
     }
