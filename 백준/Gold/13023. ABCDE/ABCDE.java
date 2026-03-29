@@ -27,13 +27,14 @@ public class Main {
 
         for (int i = 0; i < N; i++) {
             boolean[] vis = new boolean[N];
+            vis[i] = true;
             dfs(i, 0, vis);
         }
         System.out.println(0);
     }
 
     private static void dfs(int i, int dep, boolean[] vis) {
-        if (dep == 5) {
+        if (dep == 4) {
             System.out.println(1);
             System.exit(0);
         }
