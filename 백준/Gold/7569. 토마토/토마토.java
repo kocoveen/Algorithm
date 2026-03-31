@@ -1,94 +1,73 @@
-import java.io.*;
 import java.util.*;
 
 public class Main {
-    static StringBuilder sb = new StringBuilder();
-    static StringTokenizer st;
+    
+    static int M, N, H; // 가로 세로 높이
+    static int[][][] board;
+    static Queue<Point> q = new ArrayDeque<>();
+
     static int[] dx = {1, 0, -1, 0, 0, 0};
     static int[] dy = {0, 1, 0, -1, 0, 0};
     static int[] dz = {0, 0, 0, 0, 1, -1};
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+    static class Point {
+        int x, y, z;
+        Point(int x, int y, int z) {
+            this.x = x;
+            this.y = y;
+            this.z = z;
+        }
+    }
 
-        st = new StringTokenizer(br.readLine());
-        int Y = Integer.parseInt(st.nextToken());
-        int X = Integer.parseInt(st.nextToken());
-        int Z = Integer.parseInt(st.nextToken());
-        int[][][] board = new int[Z][X][Y];
-        int[][][] tomato = new int[Z][X][Y];
+    public static void main(String[] args) throws Exception {
+        Scanner sc = new Scanner(System.in);
 
-        Queue<Triplet> Q = new ArrayDeque<>();
+        M = sc.nextInt();
+        N = sc.nextInt();
+        H = sc.nextInt();
 
-        for (int k = 0; k < Z; k++)
-            for (int i = 0; i < X; i++) {
-                st = new StringTokenizer(br.readLine());
-                for (int j = 0; j < Y; j++) {
-                    board[k][i][j] = Integer.parseInt(st.nextToken());
-                    if (board[k][i][j] == 1) {
-                        Q.add(new Triplet(k, i, j, 0));
-                        tomato[k][i][j] = 1;
+        board = new int[H][N][M];
+        for (int z = 0; z < H; z++) {
+            for (int y = 0; y < N; y++) {
+                for (int x = 0; x < M; x++) {
+                    board[z][y][x] = sc.nextInt();
+
+                    if (board[z][y][x] == 1) {
+                        q.add(new Point(x, y, z));
                     }
-
-                    if (board[k][i][j] == -1)
-                        tomato[k][i][j] = -1;
-
                 }
             }
-
-        boolean isRiped = true;
-        for (int[][] a : board)
-            for (int[] b : a)
-                for (int c : b)
-                    if (c == 0) {
-                        isRiped = false;
-                        break;
-                    }
-
-        if (isRiped) {
-            System.out.println(0);
-            System.exit(0);
         }
 
-        while (!Q.isEmpty()) {
-            Triplet cur = Q.remove();
+        while (!q.isEmpty()) {
+            Point p = q.poll();
+
             for (int i = 0; i < 6; i++) {
-                int nz = cur.z + dz[i];
-                int nx = cur.x + dx[i];
-                int ny = cur.y + dy[i];
-                if (nx < 0 || nx >= X || ny < 0 || ny >= Y || nz < 0 || nz >= Z) continue;
-                if (tomato[nz][nx][ny] > 0 || board[nz][nx][ny] == -1) continue;
-                Q.add(new Triplet(nz, nx, ny, cur.day + 1));
-                tomato[nz][nx][ny] = cur.day + 1;
+                int nx = p.x + dx[i];
+                int ny = p.y + dy[i];
+                int nz = p.z + dz[i];
+
+                if (nx < 0 || nx >= M || ny < 0 || ny >= N || nz < 0 || nz >= H) continue;
+                if (board[nz][ny][nx] != 0) continue;
+
+                q.add(new Point(nx, ny, nz));
+                board[nz][ny][nx] = board[p.z][p.y][p.x] + 1;
             }
         }
 
         int max = 0;
-        for (int[][] a : tomato)
-            for (int[] b : a)
-                for (int c : b) {
-                    if (c == 0) {
+        for (int z = 0; z < H; z++) {
+            for (int y = 0; y < N; y++) {
+                for (int x = 0; x < M; x++) {
+                    if (board[z][y][x] == 0) {
                         System.out.println(-1);
                         System.exit(0);
                     }
-                    max = Math.max(max, c);
+                    max = Math.max(max, board[z][y][x]);
                 }
-
-        System.out.println(max);
-    }
-
-    private static class Triplet {
-        int x;
-        int y;
-        int z;
-        int day;
-
-        public Triplet(int z, int x, int y, int day) {
-            this.x = x;
-            this.y = y;
-            this.z = z;
-            this.day = day;
+            }
         }
+    
+        System.out.println(max - 1);
     }
 }
