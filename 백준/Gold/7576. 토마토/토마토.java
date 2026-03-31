@@ -1,3 +1,5 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.*;
 
 public class Main {
@@ -18,15 +20,17 @@ public class Main {
     }
 
     public static void main(String[] args) throws Exception {
-        Scanner sc = new Scanner(System.in);
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        N = sc.nextInt();
-        M = sc.nextInt();
+        String[] st = br.readLine().split(" ");
+        N = Integer.parseInt(st[0]);
+        M = Integer.parseInt(st[1]);
 
         board = new int[M][N];
         for (int i = 0; i < M; i++) {
+            st = br.readLine().split(" ");
             for (int j = 0; j < N; j++) {
-                int value = sc.nextInt();
+                int value = Integer.parseInt(st[j]);
                 board[i][j] = value;
 
                 if (board[i][j] == 1) {
@@ -61,7 +65,6 @@ public class Main {
                 }
             }
         }
-
         System.out.println(max - 1);
     }
 }
