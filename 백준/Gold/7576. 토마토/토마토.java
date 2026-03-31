@@ -1,69 +1,67 @@
-import java.io.*;
 import java.util.*;
 
 public class Main {
-    static StringTokenizer st;
+    
+    static int N, M;
+    static int[][] board;
+    static Queue<Point> q = new ArrayDeque<>();
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    static int[] dr = {1, 0, -1, 0};
+    static int[] dc = {0, 1, 0, -1};
 
-        st = new StringTokenizer(br.readLine());
-        int m = Integer.parseInt(st.nextToken());
-        int n = Integer.parseInt(st.nextToken());
-
-        int[][] board = new int[n][m];
-        int[][] dist = new int[n][m];
-
-        for (int i = 0; i < n; i++) {
-            st = new StringTokenizer(br.readLine());
-            for (int j = 0; j < m; j++)
-                board[i][j] = Integer.parseInt(st.nextToken());
+    static class Point {
+        int r, c;
+        Point(int r, int c) {
+            this.r = r;
+            this.c = c;
         }
-
-        int[] dx = {1, 0, -1, 0};
-        int[] dy = {0, 1, 0, -1};
-
-        Queue<Pair> Q = new ArrayDeque<>();
-        for (int i = 0; i < n; i++)
-            for (int j = 0; j < m; j++) {
-                if (board[i][j] == 1)
-                    Q.add(new Pair(i, j));
-                if (board[i][j] == 0)
-                    dist[i][j] = -1;
-            }
-
-        while (!Q.isEmpty()) {
-            Pair cur = Q.remove();
-            for (int i = 0; i < 4; i++) {
-                int nx = cur.x + dx[i];
-                int ny = cur.y + dy[i];
-                if (nx < 0 || nx >= n || ny < 0 || ny >= m) continue;
-                if (dist[nx][ny] >= 0) continue;
-                Q.add(new Pair(nx, ny));
-                dist[nx][ny] = dist[cur.x][cur.y] + 1;
-            }
-        }
-
-        int ans = 0;
-        for (int[] b : dist) {
-            for (int i : b) {
-                if (i == -1) {
-                    System.out.println(-1);
-                    System.exit(0);
-                }
-                ans = Math.max(ans, i);
-            }
-        }
-        System.out.println(ans);
     }
 
-    public static class Pair {
-        Integer x;
-        Integer y;
+    public static void main(String[] args) throws Exception {
+        Scanner sc = new Scanner(System.in);
 
-        public Pair(Integer x, Integer y) {
-            this.x = x;
-            this.y = y;
+        N = sc.nextInt();
+        M = sc.nextInt();
+
+        board = new int[M][N];
+        for (int i = 0; i < M; i++) {
+            for (int j = 0; j < N; j++) {
+                int value = sc.nextInt();
+                board[i][j] = value;
+
+                if (board[i][j] == 1) {
+                    q.add(new Point(i, j));
+                }
+            }
         }
+
+        while (!q.isEmpty()) {
+            Point p = q.poll();
+
+            for (int i = 0; i < 4; i++) {
+                int nr = p.r + dr[i];
+                int nc = p.c + dc[i];
+
+                if (nr < 0 || nr >= M || nc < 0 || nc >= N) continue;
+                if (board[nr][nc] != 0) continue;
+
+                board[nr][nc] = board[p.r][p.c] + 1;
+                q.add(new Point(nr, nc));
+            }
+        }
+        
+        int max = 0;
+        for (int i = 0; i < M; i++) {
+            for (int j = 0; j < N; j++) {
+                if (board[i][j] == 0) {
+                    System.out.println(-1);
+                    System.exit(0);
+                } else {
+                    max = Math.max(max, board[i][j]);
+                }
+            }
+        }
+
+        System.out.println(max - 1);
     }
 }
