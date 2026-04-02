@@ -1,97 +1,92 @@
 import java.util.*;
 
 public class Main {
-    static int n, l, r, t;
-    static int[][] A, newA;
-    static boolean[][] visited;
-    static int[] dr = {1, 0, -1, 0}, dc = {0, 1, 0, -1};
-    static class Pair {
-        int r, c;
-        public Pair(int r, int c) {
-            this.r = r;
-            this.c = c;
-        }
-    }
+    static int N, L, R;
+
+    static int[][] A;
+    static boolean[][] V;
+
+    static int[] dr = {1, 0, -1, 0};
+    static int[] dc = {0, 1, 0, -1};
+
+    static List<int[]> list;
 
     public static void main(String[] args) throws Exception {
-        n = read(); l = read(); r = read();
-        A = new int[n][n];
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                A[i][j] = read();
+        Scanner sc = new Scanner(System.in);
+
+        N = sc.nextInt();
+        L = sc.nextInt();
+        R = sc.nextInt();
+
+        A = new int[N][N];
+
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++) {
+                A[i][j] = sc.nextInt();
             }
         }
 
-        do {
-            visited = new boolean[n][n];
-            Queue<Pair> q = new ArrayDeque<>();
+        int day = 0;
+        while (true) {
+            boolean moved = false;
+            V = new boolean[N][N];
 
-            newA = new int[n][n];
-            for (int i = 0; i < n; i++) {
-                for (int j = 0; j < n; j++) {
-                    newA[i][j] = A[i][j];
-                }
-            }
+            for (int i = 0; i < N; i++) {
+                for (int j = 0; j < N; j++) {
+                    if (V[i][j]) continue;
+                    
+                    int sum = bfs(i, j);
 
-            for (int i = 0; i < n; i++) {
-                for (int j = 0; j < n; j++) {
-                    if (visited[i][j]) continue;
-
-                    List<Pair> alliance = new ArrayList<>();
-
-                    visited[i][j] = true;
-                    q.add(new Pair(i, j));
-                    while (!q.isEmpty()) {
-                        Pair cur = q.remove();
-                        alliance.add(cur);
-                        for (int k = 0; k < 4; k++) {
-                            int nr = cur.r + dr[k];
-                            int nc = cur.c + dc[k];
-                            if (nr < 0 || nc < 0 || n <= nr || n <= nc) continue;
-                            if (visited[nr][nc]) continue;
-                            if (Math.abs(newA[cur.r][cur.c] - newA[nr][nc]) < l || Math.abs(newA[cur.r][cur.c] - newA[nr][nc]) > r) continue;
-                            visited[nr][nc] = true;
-                            q.add(new Pair(nr, nc));
+                    if (list.size() > 1) {
+                        int avg = sum / list.size();
+                        for(int[] p : list) {
+                            A[p[0]][p[1]] = avg;
                         }
-                    }
-
-                    int population = sum(alliance) / alliance.size();
-
-                    for (Pair p : alliance) {
-                        newA[p.r][p.c] = population;
+                        moved = true;
                     }
                 }
             }
 
-            if (arrayEquals(A, newA)) break;
-            A = newA;
-            t++;
-        } while (true);
-
-        System.out.println(t);
-    }
-
-    static boolean arrayEquals(int[][] oldA, int[][] newA) {
-        for (int i = 0; i < n; i++) {
-            for(int j = 0; j < n; j++) {
-                if (oldA[i][j] != newA[i][j]) return false;
+            if (!moved) {
+                break;
             }
+            day++;
         }
-        return true;
+
+        System.out.println(day);
     }
 
-    private static int sum(List<Pair> alliance) {
-        int sum = 0;
-        for (Pair p : alliance) {
-            sum += A[p.r][p.c];
+    static int bfs(int r, int c) {
+        Queue<int[]> q = new ArrayDeque<>();
+        list = new ArrayList<>();
+        
+        q.add(new int[]{r, c});
+        list.add(new int[]{r, c});
+        V[r][c] = true;
+
+        int sum = A[r][c];
+
+        while (!q.isEmpty()) {
+            int[] info = q.poll();
+            r = info[0];
+            c = info[1];
+
+            for (int i = 0; i < 4; i++) {
+                int nr = r + dr[i];
+                int nc = c + dc[i];
+
+                if (nr < 0 || nr >= N || nc < 0 || nc >= N) continue;
+
+                int diff = Math.abs(A[nr][nc] - A[r][c]);
+                if (diff < L || R < diff) continue;
+                if (V[nr][nc]) continue;
+
+                V[nr][nc] = true;
+                q.add(new int[]{nr, nc});
+                list.add(new int[]{nr, nc});
+                sum += A[nr][nc];
+            }
         }
         return sum;
-    }
-
-    static int read() throws Exception {
-        int c, n = System.in.read() & 15;
-        while ((c = System.in.read()) > 32) n = (n << 3) + (n << 1) + (c & 15);
-        if (c == 13) System.in.read();
-        return n;
     }
 }
