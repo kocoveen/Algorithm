@@ -1,62 +1,54 @@
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class Main {
-    static class Node {
-        int num, cost;
-        public Node(int num, int cost) {
-            this.num = num;
-            this.cost = cost;
-        }
-    }
-
-    static Set<Node>[] graph;
-    static boolean[] visited;
-    static int maxCost, maxNum;
+    static int n;
+    static List<int[]>[] graphs;
+    static int cost, max, maxIndex;
 
     public static void main(String[] args) throws Exception {
-        int n = read();
-        graph = new HashSet[n + 1];
+        Scanner sc = new Scanner(System.in);
+        n = sc.nextInt();
+        graphs = new ArrayList[n+1];
         for (int i = 0; i <= n; i++) {
-            graph[i] = new HashSet<>();
+            graphs[i] = new ArrayList<>();
         }
 
-        for (int i = 0; i < n - 1; i++) {
-            int u = read();
-            int v = read();
-            int cost = read();
+        for (int i = 0; i < n-1; i++) {
+            int p = sc.nextInt();
+            int c = sc.nextInt();
+            int v = sc.nextInt();
 
-            graph[u].add(new Node(v, cost));
-            graph[v].add(new Node(u, cost));
+            graphs[p].add(new int[]{c, v});
+            graphs[c].add(new int[]{p, v});
         }
 
-        visited = new boolean[n + 1];
-        visited[1] = true;
-        traversal(1, 0);
-        
-        visited = new boolean[n + 1];
-        visited[maxNum] = true;
-        traversal(maxNum, 0);
-        System.out.println(maxCost);
+        boolean[] v = new boolean[n+1];
+        v[0] = true;
+        v[1] = true;
+        dfs(1, v);
+
+        v[1] = false;
+        v[maxIndex] = true;
+        dfs(maxIndex, v);
+        int l = max;
+
+        System.out.print(l);
     }
 
-    private static void traversal(int num, int cost) {
-        if (maxCost < cost) {
-            maxCost = cost;
-            maxNum = num;
-        }
+    private static void dfs(int p, boolean[] v) {
+        for (int[] c : graphs[p]) {
+            if (v[c[0]]) continue;
+            v[c[0]] = true;
+            cost += c[1];
+            dfs(c[0], v);
 
-        for (Node n : graph[num]) {
-            if (visited[n.num]) continue;
-            visited[n.num] = true;
-            traversal(n.num, cost + n.cost);
-            visited[n.num] = false;
-        }
-    } 
+            if (max < cost) {
+                max = cost;
+                maxIndex = c[0];
+            }
 
-    private static int read() throws Exception {
-        int c, n = System.in.read() & 15;
-        while ((c = System.in.read()) > 32) n = (n << 3) + (n << 1) + (c & 15);
-        return n;
+            cost -= c[1];
+            v[c[0]] = false;
+        }
     }
 }
