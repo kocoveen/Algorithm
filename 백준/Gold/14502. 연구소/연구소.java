@@ -1,96 +1,109 @@
-import java.io.*;
 import java.util.*;
 
 public class Main {
-    static String[] l;
-
-    static int N, M, max = 0;
-
-    static int[][] board;
+    static int N, M;
+    static int[][] map;
+    static int max;
+    static Queue<int[]> q = new ArrayDeque<>();
     static boolean[][] vis;
-    static boolean[][] visBlock;
 
-    static List<Pair> V = new ArrayList<>();
-    static Queue<Pair> Q = new ArrayDeque<>();
+    static List<int[]> virus = new ArrayList<>();
 
     static int[] dr = {1, 0, -1, 0};
     static int[] dc = {0, 1, 0, -1};
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    public static void main(String[] args) throws Exception {
+        Scanner sc = new Scanner(System.in);
+        N = sc.nextInt();
+        M = sc.nextInt();
 
-        l = br.readLine().split(" ");
-        N = Integer.parseInt(l[0]);
-        M = Integer.parseInt(l[1]);
-
-        board = new int[N][M];
+        map = new int[N][M];
         vis = new boolean[N][M];
-        visBlock = new boolean[N][M];
+
         for (int i = 0; i < N; i++) {
-            l = br.readLine().split(" ");
             for (int j = 0; j < M; j++) {
-                board[i][j] = Integer.parseInt(l[j]);
-                if (board[i][j] == 2) V.add(new Pair(i, j));
+                map[i][j] = sc.nextInt();
+
+                if (map[i][j] == 2) {
+                    virus.add(new int[]{i, j});
+                }
             }
         }
 
-        func(0);
+        dfs(0);
         System.out.println(max);
     }
 
-    private static void func(int depth) {
+    static void dfs(int depth) {
         if (depth == 3) {
-            for (int i = 0; i < N; i++) Arrays.fill(vis[i], false);
-            max = Math.max(bfs(), max);
-            for (int i = 0; i < N; i++)
-                for (int j = 0; j < M; j++)
-                    if (board[i][j] == -1) board[i][j] = 0;
+            max = Math.max(max, bfs());
             return;
         }
 
-        for (int i = 0; i < N; i++)
+        for (int i = 0; i < N; i++) {
             for (int j = 0; j < M; j++) {
-                if (board[i][j] != 0) continue;
-                board[i][j] = 1;
-                func(depth + 1);
-                board[i][j] = 0;
+                if (map[i][j] == 2 || map[i][j] == 1) continue;
+                map[i][j] = 1;
+                dfs(depth + 1);
+                map[i][j] = 0;
             }
+        }
     }
 
-    private static int bfs() {
-        for (Pair P : V) {
-            Q.add(P);
-            vis[P.r][P.c] = true;
-        }
+    static int bfs() {
+        int[][] tmp = init();
 
-        while (!Q.isEmpty()) {
-            Pair cur = Q.remove();
+        while (!q.isEmpty()) {
+            int[] p = q.poll();
+
             for (int i = 0; i < 4; i++) {
-                int nr = cur.r + dr[i];
-                int nc = cur.c + dc[i];
+                int nr = p[0] + dr[i];
+                int nc = p[1] + dc[i];
+
                 if (nr < 0 || nr >= N || nc < 0 || nc >= M) continue;
-                if (board[nr][nc] == 1 || vis[nr][nc]) continue;
-                Q.add(new Pair(nr, nc));
-                board[nr][nc] = -1;
+                if (vis[nr][nc] || tmp[nr][nc] == 1) continue;
+
+                q.add(new int[]{nr, nc});
                 vis[nr][nc] = true;
+                tmp[nr][nc] = 2;
             }
         }
 
-        int cnt = 0;
-        for (int[] b : board)
-            for (int i : b)
-                if (i == 0) cnt++;
-        return cnt;
+        // for (int i = 0; i < N; i++) {
+        //     for (int j = 0; j < M; j++) {
+        //         IO.print(tmp[i][j] + " ");
+        //     }
+        //     IO.println();
+        // }
+        // IO.println();
+
+        int safeZone = 0;
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < M; j++) {
+                if (tmp[i][j] == 0) safeZone++;
+            }
+        }
+        return safeZone;
     }
 
-
-    private static class Pair {
-        int r;
-        int c;
-
-        public Pair(int r, int c) {
-            this.r = r;
-            this.c = c;
+    static int[][] init() {
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < M; j++) {
+                vis[i][j] = false;
+            }
         }
+
+        for (int[] v : virus) {
+            q.add(v);
+            vis[v[0]][v[1]] = true;
+        }
+
+        int[][] tmp = new int[N][M];
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < M; j++) {
+                tmp[i][j] = map[i][j];
+            }
+        }
+        return tmp;
     }
 }
