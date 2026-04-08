@@ -1,95 +1,89 @@
-import java.io.*;
 import java.util.*;
 
 public class Main {
-    static StringBuilder sb = new StringBuilder();
-    static StringTokenizer st;
 
-    static int K, H, W;
+    static int K, R, C;
+    static int[][] map;
+    static int[][][] count;
 
-    static int[][] board;
-    static int[][][] dist;
-
-    static int[] dx = {1, 0, -1, 0};
-    static int[] dy = {0, 1, 0, -1};
-    static int[] hx = {2, 1, -1, -2, -2, -1, 1, 2};
-    static int[] hy = {1, 2, 2, 1, -1, -2, -2, -1};
-
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
-        K = Integer.parseInt(br.readLine());
-        st = new StringTokenizer(br.readLine());
-        W = Integer.parseInt(st.nextToken());
-        H = Integer.parseInt(st.nextToken());
-
-        board = new int[H][W];
-        dist = new int[K + 1][H][W];
-        for (int i = 0; i < H; i++) {
-            st = new StringTokenizer(br.readLine());
-            for (int j = 0; j < W; j++)
-                board[i][j] = Integer.parseInt(st.nextToken());
+    static class Point {
+        int r, c, k;
+        Point(int r, int c, int k) {
+            this.r = r;
+            this.c = c;
+            this.k = k;
         }
+    }
 
-        for (int i = 0; i <= K; i++)
-            for (int j = 0; j < H; j++)
-                Arrays.fill(dist[i][j], -1);
+    static int[] dr = {1, 0, -1, 0};
+    static int[] dc = {0, 1, 0, -1};
 
-        Queue<Pair> Q = new ArrayDeque<>();
-        Q.add(new Pair(0, 0, 0));
-        for (int i = 0; i <= K; i++)
-            dist[i][0][0] = 0;
+    static int[] dhr = {2, 1, -1, -2, -2, -1, 1, 2};
+    static int[] dhc = {1, 2, 2, 1, -1, -2, -2, -1};
 
-        if (0 == H - 1 && 0 == W - 1) {
+    public static void main(String[] args) throws Exception {
+        Scanner sc = new Scanner(System.in);
+        K = sc.nextInt();
+        C = sc.nextInt();
+        R = sc.nextInt();
+
+        if (R == 1 && C == 1) {
             System.out.println(0);
             System.exit(0);
         }
-        while (!Q.isEmpty()) {
-            Pair cur = Q.remove();
-            int next = dist[cur.horse][cur.x][cur.y] + 1;
-            if (cur.horse < K) {
-                for (int i = 0; i < 8; i++) {
-                    int nx = cur.x + hx[i];
-                    int ny = cur.y + hy[i];
-                    if (nx == H - 1 && ny == W - 1) {
-                        System.out.println(next);
-                        System.exit(0);
-                    }
-                    if (!isInBoundary(nx, ny)) continue;
-                    if (dist[cur.horse + 1][nx][ny] != -1 || board[nx][ny] == 1) continue;
-                    Q.add(new Pair(nx, ny, cur.horse + 1));
-                    dist[cur.horse + 1][nx][ny] = next;
-                }
+
+        map = new int[R][C];
+        for (int i = 0; i < R; i++) {
+            for (int j = 0; j < C; j++) {
+                map[i][j] = sc.nextInt();
             }
+        }
+
+        count = new int[K+1][R][C];
+
+        Queue<Point> q = new ArrayDeque<>();
+        q.add(new Point(0, 0, 0));
+        count[0][0][0] = 1;
+        while (!q.isEmpty()) {
+            Point p = q.poll();
+
             for (int i = 0; i < 4; i++) {
-                int nx = cur.x + dx[i];
-                int ny = cur.y + dy[i];
-                if (nx == H - 1 && ny == W - 1) {
-                    System.out.println(next);
+                int nr = p.r + dr[i];
+                int nc = p.c + dc[i];
+
+                if (nr < 0 || nr >= R || nc < 0 || nc >= C) continue;
+                if (map[nr][nc] != 0) continue;
+                if (count[p.k][nr][nc] > 0) continue;
+
+                if (nr == R-1 && nc == C-1) {
+                    System.out.println(count[p.k][p.r][p.c]);
                     System.exit(0);
                 }
-                if (!isInBoundary(nx, ny)) continue;
-                if (dist[cur.horse][nx][ny] != -1 || board[nx][ny] == 1) continue;
-                Q.add(new Pair(nx, ny, cur.horse));
-                dist[cur.horse][nx][ny] = next;
+
+                q.add(new Point(nr, nc, p.k));
+                count[p.k][nr][nc] = count[p.k][p.r][p.c] + 1;
+            }
+
+            if (p.k < K) {
+                for (int i = 0; i < 8; i++) {
+                    int nr = p.r + dhr[i];
+                    int nc = p.c + dhc[i];
+                    int nk = p.k + 1;
+
+                    if (nr < 0 || nr >= R || nc < 0 || nc >= C) continue;
+                    if (map[nr][nc] != 0) continue;
+                    if (count[nk][nr][nc] > 0) continue;
+
+                    if (nr == R-1 && nc == C-1) {
+                        System.out.println(count[p.k][p.r][p.c]);
+                        System.exit(0);
+                    }
+
+                    q.add(new Point(nr, nc, nk));
+                    count[nk][nr][nc] = count[p.k][p.r][p.c] + 1;
+                }
             }
         }
         System.out.println(-1);
-    }
-
-    private static boolean isInBoundary(int nx, int ny) {
-        return nx >= 0 && nx < H && ny >= 0 && ny < W;
-    }
-
-    private static class Pair {
-        int x;
-        int y;
-        int horse;
-
-        public Pair(int x, int y, int horse) {
-            this.x = x;
-            this.y = y;
-            this.horse = horse;
-        }
     }
 }
