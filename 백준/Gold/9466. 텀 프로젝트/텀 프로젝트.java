@@ -1,54 +1,67 @@
-import java.io.*;
 import java.util.*;
 
 public class Main {
-    static StringBuilder sb = new StringBuilder();
-    static StringTokenizer st;
-    static int[] students = new int[100005];
-    static int[] state = new int[100005];
 
-    private static final int NOT_VISITED = 0;
-    private static final int CYCLE_IN = -1;
+    static int[] s;
+    static State[] v;
+    static boolean[] f;
+    static int count = 0;
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    static enum State {
+        VISITED, NOT_VISITED, CYCLE_IN, NOT_CYCLE_IN
+    }
 
-        int T = Integer.parseInt(br.readLine());
+    public static void main(String[] args) throws Exception {
+        Scanner sc = new Scanner(System.in);
+
+        int T = sc.nextInt();
 
         while (T-- > 0) {
+            int n = sc.nextInt();
+            s = new int[n+1];
+            v = new State[n+1];
+            count = 0;
 
-            int n = Integer.parseInt(br.readLine());
-            st = new StringTokenizer(br.readLine());
+            for (int i = 1; i <= n; i++) {
+                s[i] = sc.nextInt();
+                v[i] = State.NOT_VISITED;
+            }
 
-            Arrays.fill(state, 1, n + 1, 0);
-            for (int i = 1; i <= n; i++)
-                students[i] = Integer.parseInt(st.nextToken());
-
-            for (int i = 1; i <= n; i++)
-                if (state[i] == NOT_VISITED) run(i);
-
-            int cnt = 0;
-            for (int i = 1; i <= n; i++)
-                if (state[i] != CYCLE_IN) cnt++;
-
-            sb.append(cnt).append("\n");
-        }
-        System.out.print(sb);
-    }
-
-    private static void run(int x) {
-        int cur = x;
-        while (true) {
-            state[cur] = x;
-            cur = students[cur];
-
-            if (state[cur] == x) {
-                while (state[cur] != CYCLE_IN) {
-                    state[cur] = CYCLE_IN;
-                    cur = students[cur];
+            for (int i = 1; i <= n; i++) {
+                if (v[i] == State.NOT_VISITED) {
+                    run(i);
                 }
-                return;
-            } else if (state[cur] != 0) return;
+            }
+
+            System.out.println(n - count);
         }
     }
-}
+
+    private static void run(int start) {
+        int cur = start;
+        
+        // 1. 탐색 (임시 방문 표시)
+        while (v[cur] == State.NOT_VISITED) {
+            v[cur] = State.VISITED;
+            cur = s[cur];
+        }
+
+        // 2. 사이클 발견 시 처리
+        if (v[cur] == State.VISITED) {
+            int temp = cur;
+            // 사이클을 한 바퀴 돌며 CYCLE_IN으로 바꾸고 개수 세기
+            while (v[temp] != State.CYCLE_IN) {
+                v[temp] = State.CYCLE_IN;
+                count++; // 여기서 팀이 된 사람을 직접 카운트
+                temp = s[temp];
+            }
+        }
+
+        // 3. 나머지(진입로 등)는 NOT_CYCLE_IN으로 정리
+        int temp = start;
+        while (v[temp] == State.VISITED) {
+            v[temp] = State.NOT_CYCLE_IN;
+            temp = s[temp];
+        }
+    }
+} 
