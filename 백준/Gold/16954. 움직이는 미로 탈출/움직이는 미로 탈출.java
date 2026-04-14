@@ -1,7 +1,9 @@
 import java.util.*;
 
 public class Main {
+
     static int[][][] map;
+    static boolean[][][] vis;
 
     static class Info {
         int r, c, t;
@@ -19,6 +21,7 @@ public class Main {
         Scanner sc = new Scanner(System.in);
 
         map = new int[8][8][8];
+        vis = new boolean[8][8][8];
 
         for (int i = 7; i >= 0; i--) {
             String line = sc.nextLine();
@@ -46,6 +49,7 @@ public class Main {
                 int nc = info.c + dc[d];
 
                 if (nr < 0 || nr > 7 || nc < 0 || nc > 7) continue;
+                if (info.t < 8 && vis[nr][nc][info.t]) continue;
                 if (info.t < 8 && map[nr][nc][info.t] == 1 
                     || (info.t < 7 && map[nr][nc][info.t + 1] == 1)) continue;
                 
