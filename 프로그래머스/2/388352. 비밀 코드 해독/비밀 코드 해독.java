@@ -29,13 +29,16 @@ class Solution {
         if (k == 5) {
             for (int i = 0; i < ans.length; i++) {
                 // 원본유지를 위해 복사본 생성
-                Set<Integer> Ap = new HashSet<>(A);
                 Set<Integer> B = setList.get(i);
 
-                // 교집합
-                Ap.retainAll(B);
+                int c = 0;
+                for (int num : A) {
+                    if (B.contains(num)) {
+                        c++;
+                    }
+                }
                 
-                if (Ap.size() != ans[i]) {
+                if (c != ans[i]) {
                     return;
                 }
             }
