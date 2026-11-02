@@ -15,7 +15,7 @@ class Solution {
         dp[0][0] = 0;
         
         for (int i = 0; i < dp.length-1; i++) {
-            for (int j = 0; j < 118; j++) {
+            for (int j = 0; j < m; j++) {
                 if (dp[i][j] == INF) continue;
                 // A가 번째 물건을 훔침.
                 dp[i+1][j] = Math.min(dp[i+1][j], dp[i][j] + info[i][0]);
