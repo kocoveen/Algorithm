@@ -6,8 +6,8 @@ class Solution {
         int[][] down = new int[m][n];
 
         // 출발점은 이미 그 자리에 도달한 차량이 1대 있다고 가정합니다.
-        right[0][0] = 1;
-        down[0][0] = 0;
+        right[0][0] = 0;
+        down[0][0] = 1;
 
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
