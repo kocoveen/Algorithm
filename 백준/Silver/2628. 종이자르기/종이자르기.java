@@ -2,57 +2,37 @@ import java.util.*;
 
 public class Main {
 
-
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-
         int w = sc.nextInt();
         int h = sc.nextInt();
 
-        Queue<Rectangle> rectangles = new ArrayDeque<>();
-        rectangles.add(new Rectangle(0, 0, h, w));
+        List<Integer> height = new ArrayList<>(List.of(0, h));
+        List<Integer> width = new ArrayList<>(List.of(0, w));
 
         int c = sc.nextInt();
         while (c-- > 0) {
             int cmd = sc.nextInt();
             int pos = sc.nextInt();
-
-            int size = rectangles.size();
-            for (int i = 0; i < size; i++) {
-                Rectangle r = rectangles.poll();
-                rectangles.addAll(r.cut(cmd, pos));
-            }
+            if (cmd == 0) height.add(pos);
+            else width.add(pos);
         }
 
-        List<Rectangle> result = new ArrayList<>(rectangles);
-        result.sort((r1, r2) -> r2.getArea() - r1.getArea());
+        Collections.sort(height);
+        Collections.sort(width);
 
-        System.out.println(result.get(0).getArea());
+        // 인접한 좌표 간의 최대 간격
+        int maxWidth = getMaxGap(height);
+        int maxHeight = getMaxGap(width);
+        
+        System.out.println(maxWidth * maxHeight);
     }
 
-    static class Rectangle {
-        int sh, sw;
-        int eh, ew;
-
-        Rectangle(int sh, int sw, int eh, int ew) {
-            this.sh = sh;
-            this.sw = sw;
-            this.eh = eh;
-            this.ew = ew;
+    static int getMaxGap(List<Integer> cuts) {
+        int maxGap = 0;
+        for (int i = 1; i < cuts.size(); i++) {
+            maxGap = Math.max(maxGap, cuts.get(i) - cuts.get(i-1));
         }
-
-        Collection<Rectangle> cut(int cmd, int pos) {
-            if (cmd == 0) {
-                if (pos <= sh || pos >= eh) return List.of(this);
-                return List.of(new Rectangle(sh, sw, pos, ew), new Rectangle(pos, sw, eh, ew));
-            } else {
-                if (pos <= sw || pos >= ew) return List.of(this);
-                return List.of(new Rectangle(sh, pos, eh, ew), new Rectangle(sh, sw, eh, pos));
-            }
-        }
-
-        int getArea() {
-            return (eh - sh) * (ew - sw);
-        }
+        return maxGap;
     }
 }
