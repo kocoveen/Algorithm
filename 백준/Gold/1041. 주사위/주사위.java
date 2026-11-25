@@ -1,36 +1,61 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-	<title>Baekjoon Online Judge</title><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta charset="utf-8"><meta name="author" content="스타트링크 (Startlink)"><meta name="keywords" content="ACM-ICPC, ICPC, 프로그래밍, 온라인 저지, 정보올림피아드, 코딩, 알고리즘, 대회, 올림피아드, 자료구조"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta property="og:type" content="website"><meta property="og:image" content="https://storage.googleapis.com/gcs-boj-onlinejudgeimages-production/images/boj-og.png"><meta property="og:site_name" content="Baekjoon Online Judge"><meta name="format-detection" content = "telephone=no"><meta name="msapplication-config" content="none"><meta name="pusher-key" content="bb605b8608c52b9605f9"><meta name="pusher-cluster" content="ap3"><meta name="site-help" content="https://help.acmicpc.net"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="manifest" href="/site.webmanifest"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#0076c0"><meta name="msapplication-TileColor" content="#00aba9"><meta name="theme-color" content="#ffffff"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/css/bootstrap.min.css"><link rel="stylesheet" href="https://storage.googleapis.com/gcs-boj-onlinejudgeassets-production/unify/css/style.css?version=2026111301"><link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:400,700|Open+Sans:400,400i,700,700i|Source+Code+Pro&amp;subset=korean" rel="stylesheet"><link rel="stylesheet" href="https://storage.googleapis.com/gcs-boj-onlinejudgeassets-production/css/connect.css?version=2026111301"><link rel="stylesheet" href="https://storage.googleapis.com/gcs-boj-onlinejudgeassets-production/css/result.css?version=2026111301"><link rel="stylesheet" href="https://storage.googleapis.com/gcs-boj-onlinejudgeassets-production/css/label.css?version=2026111301"><link rel="stylesheet" href="https://storage.googleapis.com/gcs-boj-onlinejudgeassets-production/unify/css/custom.css?version=2026111301"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.css"><link rel="stylesheet" href="https://storage.googleapis.com/gcs-boj-onlinejudgeassets-production/unify/css/theme-colors/blue.css?version=2026111301"><link rel="stylesheet" href="https://storage.googleapis.com/gcs-boj-onlinejudgeassets-production/css/pace.css"><script>window.dataLayer=window.dataLayer||[];window.dataLayer.push({'gtm.blocklist':['customScripts','customPixels','nonGoogleScripts','nonGooglePixels','nonGoogleIframes']});</script>
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-W7KMJHTD');</script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.css" /><meta name="username" content="">    
-<link rel="stylesheet" href="https://storage.googleapis.com/gcs-boj-onlinejudgeassets-production/unify/css/pages/page_404_error.css">
+import java.util.*;
 
-</head>
-<body >
-    <div class="wrapper">
-        <div class="header no-print"><div class="topbar"><div class="container"><ul class="loginbar pull-right"><li><a href="/register">회원가입</a></li><li class="topbar-devider"></li><li><a href="/login?next=%2Fsource%2Fdownload%2F105246124">로그인</a></li></ul></div></div><div class="navbar navbar-default mega-menu" role="navigation"><div class="container"><div class="navbar-header"><button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-responsive-collapse"><span class="sr-only">Toggle navigation</span><span class="fa fa-bars"></span></button><a class="navbar-brand" href="/"><img id="logo-header" src="https://storage.googleapis.com/gcs-boj-onlinejudgeimages-production/images/logo@2x.png" alt="Logo" data-retina></a></div><div class="collapse navbar-collapse navbar-responsive-collapse"><ul class="nav navbar-nav"><li class="dropdown mega-menu-fullwidth "><a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">문제</a><ul class="dropdown-menu"><li><div class="mega-menu-content"><div class="container"><div class="row equal-height"><div class="col-md-3 equal-height-in"><ul class="list-unstyled equal-height-list"><li><h3>문제</h3></li><li><a href="/problemset">전체 문제</a></li><li><a href="/category">문제 출처</a></li><li><a href="/step">단계별로 풀어보기</a></li><li><a href="/problem/tags">알고리즘 분류</a></li><li><a href="/problem/added">추가된 문제</a></li><li><a href="/problem/ranking">문제 순위</a></li></ul></div><div class="col-md-3 equal-height-in"><ul class="list-unstyled equal-height-list"><li><h3>문제</h3></li><li><a href="/problem/only">푼 사람이 한 명인 문제</a></li><li><a href="/problem/nobody">아무도 못 푼 문제</a></li><li><a href="/problem/recent/submit">최근 제출된 문제</a></li><li><a href="/problem/recent/accepted">최근 풀린 문제</a></li><li><a href="/problem/random">랜덤</a></li></ul></div><div class="col-md-3 equal-height-in"><ul class="list-unstyled equal-height-list"><li><h3>출처</h3></li><li><a href="/category/1">ICPC</a></li><li><a href="/category/2">Olympiad</a></li><li><a href="/category/55">한국정보올림피아드</a></li><li><a href="/category/57">한국정보올림피아드시․도지역본선</a></li><li><a href="/category/318">전국 대학생 프로그래밍 대회 동아리 연합</a></li><li><a href="/category/5">대학교 대회</a></li><li><a href="/category/428">카카오 코드 페스티벌</a></li><li><a href="/category/215">Coder's High</a></li></ul></div><div class="col-md-3 equal-height-in"><ul class="list-unstyled equal-height-list"><li><h3>ICPC</h3></li><li><a href="/category/7">Regionals</a></li><li><a href="/category/4">World Finals</a></li><li><a href="/category/211">Korea Regional</a></li><li><a href="/category/34">Africa and the Middle East Regionals</a></li><li><a href="/category/10">Europe Regionals</a></li><li><a href="/category/103">Latin America Regionals</a></li><li><a href="/category/8">North America Regionals</a></li><li><a href="/category/92">South Pacific Regionals</a></li></ul></div></div></div></div></li></ul></li><li><a href="/workbook/top"  >문제집</a></li><li><a href="/contest/official/list"  >대회</a></li><li><a href="/status"  >채점 현황</a></li><li><a href="/board/list/all"  >게시판</a></li><li><a href="/group/list/all"  >그룹</a></li><li class="dropdown "><a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">더 보기</a><ul class="dropdown-menu"><li><a href="/change"  >재채점 기록</a></li><li><a href="/blog/list"  >블로그</a></li><li><a href="https://help.acmicpc.net/" target="_blank" >도움말 &nbsp;<i class="fa fa-external-link"></i></a></li></ul></li><li><a href="/search"  ><i class="fa fa-search search-btn"></i></a></li></ul></div></div></div></div><form action="/logout" method="post" id="logout_form"><input type='hidden' value='%2Fsource%2Fdownload%2F105246124' name="next"></form>        
-<div class="container content">
-	<div class="col-md-8 col-md-offset-2">
-        <div class="error-v1">
-            <span class="error-v1-title">404</span>
-            <span>Not found</span>
-            <div class="margin-bottom-20"></div>
-        </div>
-        <div class="text-center">
-	        <span style="font-size:18px;">강의 슬라이드의 첨부 소스 코드가 404 에러가 뜨는 경우에는 링크를 복사/붙여넣기 해주세요.</span>
-        </div>
-        <div class="margin-bottom-40"></div>
-    </div>
-</div>
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        long n = sc.nextLong();
+        long[] dice = new long[6];
 
-        <div class="footer-v3 no-print"><div class="footer"><div class="container"><div class="row"><div class="col-sm-4 md-margin-bottom-40"><div class="thumb-headline"><h2>BOJ 소개</h2></div><ul class="list-unstyled simple-list margin-bottom-10"><li><a href="/about">소개</a></li><li><a href="/news">업데이트</a></li></ul></div><div class="col-sm-4 md-margin-bottom-40"><div class="thumb-headline"><h2>대회 출처</h2></div><ul class="list-unstyled simple-list margin-bottom-10"><li><a href="/category/1">ICPC</a></li><li><a href="/category/2">Olympiad</a></li><li><a href="/category/5">대학교 대회 (University)</a></li><li><a href="/category/97">고등학교 대회 (School)</a></li><li><a href="/category/45">대회·컵 (Contest)</a></li><li><a href="/category/220">캠프 (Camp)</a></li></ul></div><div class="col-sm-4 md-margin-bottom-40"><div class="thumb-headline"><h2><a href="https://help.acmicpc.net">도움말</a></h2></div><ul class="list-unstyled simple-list margin-bottom-10"><li><a href="https://help.acmicpc.net">도움말 홈</a></li><li><a href="https://help.acmicpc.net/judge/info">채점 환경·재채점</a></li><li><a href="https://help.acmicpc.net/judge/rte">런타임 에러</a></li><li><a href="https://help.acmicpc.net/problem/style">문제 스타일</a></li><li><a href="https://help.acmicpc.net/language/info">언어·컴파일 옵션</a></li><li><a href="https://help.acmicpc.net/stats">문제집·통계</a></li><li><a href="https://help.acmicpc.net/rule">이용 규칙</a></li><li><a href="https://help.acmicpc.net/faq">자주묻는 질문</a></li></ul></div></div></div></div><div class="copyright"><div class="container"><div class="footer-info-wrap"><ul class="list-inline footer-info"><li>상호 : <strong>(주)데이원컴퍼니</strong></li><li>공동대표이사 : <strong>신해동, 김동혁</strong></li><li>개인정보책임관리자 : <strong>김동혁</strong></li><li>사업자번호 : <strong>810-86-00658</strong></li><li>통신판매업 신고번호 : <strong>제2017-서울강남-01977호</strong></li><li>원격평생교육원 : <a href="https://storage.googleapis.com/static.fastcampus.co.kr/prod/uploads/202110/151443-146/%5B%E1%84%91%E1%85%A7%E1%86%BC%E1%84%89%E1%85%A2%E1%86%BC%E1%84%80%E1%85%AD%E1%84%8B%E1%85%B2%E1%86%A8%E1%84%89%E1%85%B5%E1%84%89%E1%85%A5%E1%86%AF%E1%84%89%E1%85%B5%E1%86%AB%E1%84%80%E1%85%A9%E1%84%8C%E1%85%B3%E1%86%BC%5D-%E1%84%83%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%8B%E1%85%AF%E1%86%AB%E1%84%8F%E1%85%A5%E1%86%B7%E1%84%91%E1%85%A5%E1%84%82%E1%85%B5-%E1%84%8B%E1%85%AF%E1%86%AB%E1%84%80%E1%85%A7%E1%86%A8%E1%84%91%E1%85%A7%E1%86%BC%E1%84%89%E1%85%A2%E1%86%BC%E1%84%80%E1%85%AD%E1%84%8B%E1%85%B2%E1%86%A8%E1%84%8B%E1%85%AF%E1%86%AB.pdf" class="footer-info-emphasis" target="_blank" rel="noopener noreferrer">제 572호</a></li></ul><ul class="list-inline footer-info footer-info-links"><li><a href="/terms">서비스 약관</a></li><li><a href="/privacy" class="footer-info-privacy">개인정보처리방침</a></li><li><a href="/board/list/notice">공지사항</a></li></ul><ul class="list-inline footer-info"><li>이메일 <a href="mailto:help-tech@day1company.co.kr" class="footer-info-value">help-tech@day1company.co.kr</a></li><li>운영시간 <strong>주중 10시~18시 (점심시간 12~13시 / 주말 및 공휴일 제외)</strong></li></ul></div><div class="footer-info-bottom"><div class="row"><div class="col-sm-9"><p id="no-acm-icpc"></p></div><div class="col-sm-3"><p class="pull-right"><a href="/lang?lang=0&next=%2Fsource%2Fdownload%2F105246124">한국어</a>&nbsp;|&nbsp;<a href="/lang?lang=1&next=%2Fsource%2Fdownload%2F105246124">English (Beta)</a></p></div></div><p>&copy; 2026 주식회사 데이원컴퍼니. All Rights Reserved.</p></div></div></div></div>    </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-migrate/3.0.1/jquery-migrate.min.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/js/bootstrap.min.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/locale/ko.js"></script>
-<script type="text/javascript" src="https://storage.googleapis.com/gcs-boj-onlinejudgeassets-production/unify/js/app.min.js?version=2026111301"></script><script type="text/javascript">jQuery(document).ready(function() {App.init(0);});</script><!--[if lt IE 9]><script src="https://storage.googleapis.com/gcs-boj-onlinejudgeassets-production/unify/plugins/respond.js"></script><script src="https://storage.googleapis.com/gcs-boj-onlinejudgeassets-production/unify/plugins/html5shiv.js"></script><script src="https://storage.googleapis.com/gcs-boj-onlinejudgeassets-production/unify/js/plugins/placeholder-IE-fixes.js"></script><![endif]--><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/pace.min.js"></script><script src="https://js.pusher.com/4.2/pusher.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.js"></script>    <script src="https://storage.googleapis.com/gcs-boj-onlinejudgeassets-production/js/mathjax.js"></script><script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>    
-</body>
-</html>
+        for (int i = 0; i < 6; i++) {
+            dice[i] = sc.nextLong();
+        }
+
+        // n이 1일때
+        if (n == 1) {
+            int idx = -1;
+            int mx = 0;
+            for (int i = 0; i < 6; i++) {
+                if (mx < dice[i]) {
+                    mx = (int) dice[i];
+                    idx = i;
+                }
+            }
+
+            int sum = 0;
+            for (int i = 0; i < 6; i++) {
+                if (i == idx) continue;
+                sum += dice[i];
+            }
+            System.out.println(sum);
+            return;
+        }
+
+        // 1. 3면이 보이는 경우의 최솟값 (마주 보는 면 중 작은 값들의 합)
+        // 4개
+        long a = Math.min(dice[0], dice[5])
+               + Math.min(dice[1], dice[4])
+               + Math.min(dice[2], dice[3]);
+
+        // 2. 2면이 보이는 경우의 최솟값 (마주 보지 않는 두 면의 합 중 최소)
+        // (2 * n - 3) * 4 개
+        long b = Long.MAX_VALUE;
+        for (int i = 0; i < 6; i++) {
+            for (int j = i + 1; j < 6; j++) {
+                if (i + j == 5) continue; // 마주 보는 면 제외
+                b = Math.min(b, dice[i] + dice[j]);
+            }
+        }
+
+        // 3. 1면만 보이는 경우는 가장 최솟값 (주사위 면의 최솟값)
+        // (n - 2) * (n - 2) + (n - 2) * (n - 1) * 4 개
+        long c = Long.MAX_VALUE;
+        for (int i = 0; i < 6; i++) {
+            if (c > dice[i]) {
+                c = dice[i];
+            }
+        }
+
+        long answer = a * 4 + (b * (2 * n - 3) * 4) + (c * ((n - 2) * (n - 2) + (n - 2) * (n - 1) * 4));
+        System.out.println(answer);
+    }
+}
